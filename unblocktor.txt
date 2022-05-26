@@ -1,0 +1,3 @@
+myip.ru
+check.torproject.org
+onion
