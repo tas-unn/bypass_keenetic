@@ -1,0 +1,16 @@
+User root
+PidFile /opt/var/run/tor.pid
+ExcludeExitNodes {RU},{UA},{AM},{KG},{BY}
+StrictNodes 1
+TransPort 0.0.0.0:9141
+ExitRelay 0
+ExitPolicy reject *:*
+ExitPolicy reject6 *:*
+GeoIPFile /opt/share/tor/geoip
+GeoIPv6File /opt/share/tor/geoip6
+DataDirectory /tmp/tor
+VirtualAddrNetwork 10.254.0.0/16
+DNSPort 127.0.0.1:9053
+AutomapHostsOnResolve 1
+UseBridges 1
+ClientTransportPlugin obfs4 exec /opt/sbin/obfs4proxy managed
