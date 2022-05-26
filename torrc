@@ -8,7 +8,7 @@ ExitPolicy reject *:*
 ExitPolicy reject6 *:*
 GeoIPFile /opt/share/tor/geoip
 GeoIPv6File /opt/share/tor/geoip6
-DataDirectory /tmp/tor
+DataDirectory /opt/tmp/tor
 VirtualAddrNetwork 10.254.0.0/16
 DNSPort 127.0.0.1:9053
 AutomapHostsOnResolve 1
