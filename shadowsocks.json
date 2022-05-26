@@ -1,0 +1,12 @@
+{
+    "server":["srv"],
+    "mode":"tcp_and_udp",
+    "server_port":prt,
+    "password":"pwd",
+    "timeout":86400,
+    "method":"chacha20-ietf-poly1305",
+    "local_address": "::",
+    "local_port": 1082,
+    "fast_open": false,
+    "ipv6_first": true
+}
