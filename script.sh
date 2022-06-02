@@ -2,8 +2,7 @@
 
 if [ "$1" == "remove" ]
 then
-	pip uninstall pytelegrambotapi paramiko
-	opkg remove wget wget-ssl python3 python3-setuptools python3-pkg-resources python3-pip mc tor tor-geoip bind-dig cron dnsmasq-full ipset iptables dnscrypt-proxy2 obfs4 shadowsocks-libev-ss-redir shadowsocks-libev-config
+	opkg remove wget wget-ssl mc tor tor-geoip bind-dig cron dnsmasq-full ipset iptables obfs4 shadowsocks-libev-ss-redir shadowsocks-libev-config
 	rmdir /opt/tmp/tor
   exit 0
 fi
@@ -12,7 +11,7 @@ if [ "$1" == "install" ]
 then
 	echo "Начинаем установку"
 	opkg update
-	opkg install wget wget-ssl python3 python3-pip mc tor tor-geoip bind-dig cron dnsmasq-full ipset iptables dnscrypt-proxy2 obfs4 shadowsocks-libev-ss-redir shadowsocks-libev-config
+	opkg install wget wget-sslmc tor tor-geoip bind-dig cron dnsmasq-full ipset iptables obfs4 shadowsocks-libev-ss-redir shadowsocks-libev-config
 	#pip install --upgrade pip
 	#pip install pytelegrambotapi
 	#pip install paramiko
