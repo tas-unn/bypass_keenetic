@@ -14,3 +14,5 @@ DNSPort 127.0.0.1:9053
 AutomapHostsOnResolve 1
 UseBridges 1
 ClientTransportPlugin obfs4 exec /opt/sbin/obfs4proxy managed
+Bridge obfs4 15.188.221.15:883 C06700D83A206E896EB548445C8D cert=qo4/V7446JX1jfQ+hrUxw6uedGHAELwB+BO9jFwBZWr7vZPhNfA iat-mode=0
+Bridge obfs4 179.97.16.9:1044 C60CAF61C92103D7638ED00092CD cert=qXMCiA4u/80ecbInGRtKAUvKruHbhOHJJMdXeEw1a4tfZaA iat-mode=0
