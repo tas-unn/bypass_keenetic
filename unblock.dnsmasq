@@ -9,7 +9,7 @@ while read line || [ -n "$line" ]; do
 
   echo "ipset=/$line/unblocktor" >> /opt/etc/unblock.dnsmasq
   echo "server=/$line/127.0.0.1#40500" >> /opt/etc/unblock.dnsmasq
-done < /opt/etc/unblock/unblocktor.txt
+done < /opt/etc/unblock/tor.txt
 
 
 while read line || [ -n "$line" ]; do
@@ -21,7 +21,7 @@ while read line || [ -n "$line" ]; do
 
   echo "ipset=/$line/unblocksh" >> /opt/etc/unblock.dnsmasq
   echo "server=/$line/127.0.0.1#40500" >> /opt/etc/unblock.dnsmasq
-done < /opt/etc/unblock/unblocksh.txt
+done < /opt/etc/unblock/shadowsocks.txt
 
 #script0
 #script1
