@@ -35,7 +35,7 @@ while read line || [ -n "$line" ]; do
 
   dig +short $line @localhost -p 40500 | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | awk '{system("ipset -exist add unblocksh "$1)}'
 
-done < /opt/etc/unblock/unblocksh.txt
+done < /opt/etc/unblock/shadowsocks.txt
 
 
 
@@ -71,7 +71,7 @@ while read line || [ -n "$line" ]; do
   dig +short $line @localhost -p 40500 | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | awk '{system("ipset -exist add unblocktor "$1)}'
 
 
-done < /opt/etc/unblock/unblocktor.txt
+done < /opt/etc/unblock/tor.txt
 
 #script0
 #script1
