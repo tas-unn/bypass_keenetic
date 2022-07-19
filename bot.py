@@ -309,7 +309,7 @@ def bot_message(message):
                 f.write(l + '\n')
             f.close()
 
-            bot.send_message(message.chat.id, "Установка изначальные скрипты");
+            bot.send_message(message.chat.id, "Установили изначальные скрипты");
 
             # получение ключа shadowsocks
             shadowsocks()
@@ -366,10 +366,6 @@ def bot_message(message):
             f = open("/opt/etc/dnsmasq.conf", 'w')
             f.write(s)
             f.close()
-
-            # urllib.request.urlretrieve(
-            #   "https://raw.githubusercontent.com/tas-unn/bypass_keenetic/master/dnsmasq.conf",
-            #   "/opt/etc/dnsmasq.conf")
             os.chmod('/opt/etc/dnsmasq.conf', stat.S_IXUSR)
 
             bot.send_message(message.chat.id, "Скачали 4 основных скрипта разблокировок");
