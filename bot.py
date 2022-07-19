@@ -370,7 +370,7 @@ def bot_message(message):
 
             bot.send_message(message.chat.id, "Скачали 4 основных скрипта разблокировок");
 
-            bot.send_message(message.chat.id, "Установка завершена. Теперь нужно перейти к спискам для разблокировок",
+            bot.send_message(message.chat.id, "Установка завершена. Теперь нужно немного доснастроить роутер и перейти к спискам для разблокировок",
                              reply_markup=main)
             return
         if (message.text == 'Удаление'):
