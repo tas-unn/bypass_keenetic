@@ -9,9 +9,11 @@ import base64
 import shutil
 import datetime
 import requests
+# ЕСЛИ ВЫ ХОТИТЕ ПОДДЕРЖАТЬ РАЗРАБОТЧИКА - МОЖЕТЕ ОТПРАВИТЬ ДОНАТ НА ЛЮБУЮ СУММУ
+# 2204 1201 0098 8217 КАРТА МИР
+# bc1qesjaxfad8f8azu2cp4gsvt2j9a4yshsc2swey9  Биткоин кошелёк
 
-
-
+# ВЕРСИЯ СКРИПТА 1.0
 token='MyTokenFromBotFather' # ключ апи бота
 usernames=[]
 usernames.append('Mylogin') # Добавляем логины телеграма для администраторирования бота. Строчек может быть несколько
