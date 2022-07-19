@@ -37,7 +37,6 @@ if [ -z "$(iptables-save 2>/dev/null | grep unblocktor)" ]; then
     iptables -t nat -A PREROUTING -i sstp0 -p tcp -m set --match-set unblocktor dst -j REDIRECT --to-port 9141
 
 fi
-exit 0
 
 
 
@@ -51,3 +50,4 @@ exit 0
 #script7
 #script8
 #script9
+exit 0
