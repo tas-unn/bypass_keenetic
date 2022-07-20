@@ -442,7 +442,7 @@ def shadowsocks():
     server = str(key).split('@')[1].split('/')[0].split(':')[0]
     port = str(key).split('@')[1].split('/')[0].split(':')[1]
     f = open('/opt/etc/shadowsocks.json', 'w')
-    sh = '{"server": ["' + server + '"], "mode": "tcp_and_udp", "server_port": ' + str( port) + ', "password": "' + password + '", "timeout": 86400,"method": "chacha20-ietf-poly1305", "local_address": "::", "local_port": ' + str(localpor
+    sh = '{"server": ["' + server + '"], "mode": "tcp_and_udp", "server_port": ' + str( port) + ', "password": "' + password + '", "timeout": 86400,"method": "chacha20-ietf-poly1305", "local_address": "::", "local_port": ' + str(localportsh) +', "fast_open": false,    "ipv6_first": true}'
 
     f.write(sh)
     f.close()
