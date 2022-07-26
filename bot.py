@@ -14,7 +14,7 @@ import requests
 # 410017539693882 Юмани
 # bc1qesjaxfad8f8azu2cp4gsvt2j9a4yshsc2swey9  Биткоин кошелёк
 
-# ВЕРСИЯ СКРИПТА 1.0
+# ВЕРСИЯ СКРИПТА 1.1
 token='MyTokenFromBotFather' # ключ апи бота
 usernames=[]
 usernames.append('Mylogin') # Добавляем логины телеграма для администраторирования бота. Строчек может быть несколько
@@ -97,13 +97,20 @@ def bot_message(message):
         if level==2 and message.text=="Показать список":
             f=open('/opt/etc/unblock/'+bypass+'.txt')
             flag=True
+            s=''
+            sites=[]
             for l in f:
-                bot.send_message(message.chat.id, l)
+                sites.append(l)
                 flag=False
             if flag:
                 s='Список пуст'
             f.close()
+            sites.sort()
+            if not(flag):
+                for l in sites:
+                    s=str(s)+'\n'+l.replace("\n","")
 
+            bot.send_message(message.chat.id, s)
             markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
             item1 = types.KeyboardButton("Показать список")
             item2 = types.KeyboardButton("Добавить в список")
@@ -151,7 +158,9 @@ def bot_message(message):
                         mylist.add(l.replace('\n', ''))
             else:
                 if len(message.text) > 1:
-                    mylist.add(message.text.replace('\n', ''))
+                    mas=message.text.split('\n')
+                    for site in mas:
+                        mylist.add(site)
             sortlist = []
             for l in mylist:
                 sortlist.append(l)
@@ -183,15 +192,14 @@ def bot_message(message):
             for l in f:
                 mylist.add(l.replace('\n', ''))
             f.close()
-            newlist = set()
-            for l in mylist:
-                if l != message.text:
-                    newlist.add(l)
+            mas=message.text.split('\n')
+            for site in mas:
+                mylist.discard(site)
             f = open('/opt/etc/unblock/' + bypass + '.txt', 'w')
-            for l in newlist:
+            for l in mylist:
                 f.write(l + '\n')
             f.close()
-            if (k != len(newlist)):
+            if (k != len(mylist)):
                 bot.send_message(message.chat.id, "Успешно удалено")
             else:
                 bot.send_message(message.chat.id, "Не найдено в списке")
@@ -306,10 +314,15 @@ def bot_message(message):
             f = open('/opt/etc/crontab')
             lines = f.readlines()
             f.close()
-            lines.append('00 06 * * * root /opt/bin/unblock_ipset.sh')
+            newline='00 06 * * * root /opt/bin/unblock_ipset.sh';
             f = open('/opt/etc/crontab', 'w')
+            isnewline=True
             for l in lines:
-                f.write(l + '\n')
+                if l.replace("\n","")==newline:
+                    isnewline=False
+                f.write(l.replace("\n","") + '\n')
+            if isnewline:
+                f.write(newline + '\n')
             f.close()
 
             bot.send_message(message.chat.id, "Установили изначальные скрипты");
@@ -477,4 +490,10 @@ ClientTransportPlugin obfs4 exec /opt/sbin/obfs4proxy managed\n' + message1.text
             f.close()
             break
 
-bot.polling(none_stop=True)
+#bot.polling(none_stop=True)
+try:
+    bot.infinity_polling()
+except Exception as err:
+    fl=open("/opt/etc/error.log","w")
+    fl.write(err)
+    fl.close()
