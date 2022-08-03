@@ -14,7 +14,7 @@ import requests
 # 410017539693882 Юмани
 # bc1qesjaxfad8f8azu2cp4gsvt2j9a4yshsc2swey9  Биткоин кошелёк
 
-# ВЕРСИЯ СКРИПТА 1.1
+# ВЕРСИЯ СКРИПТА 1.11
 token='MyTokenFromBotFather' # ключ апи бота
 usernames=[]
 usernames.append('Mylogin') # Добавляем логины телеграма для администраторирования бота. Строчек может быть несколько
@@ -54,383 +54,388 @@ def start(message):
 
 @bot.message_handler(content_types=['text'])
 def bot_message(message):
-    main = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    m1 = types.KeyboardButton("Установка и удаление")
-    m2 = types.KeyboardButton("Списки обхода")
-    main.add(m1, m2)
-    if message.from_user.username not in usernames:
-        bot.send_message(message.chat.id, 'Вы не являетесь автором канала')
-        return
-    if message.chat.type=='private':
-        global level,bypass
-
-        if (message.text == 'Назад'):
-            bot.send_message(message.chat.id, 'Добро пожаловать в меню!', reply_markup=main)
-            level=0
-            bypass =-1
+    try:
+        main = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        m1 = types.KeyboardButton("Установка и удаление")
+        m2 = types.KeyboardButton("Списки обхода")
+        main.add(m1, m2)
+        if message.from_user.username not in usernames:
+            bot.send_message(message.chat.id, 'Вы не являетесь автором канала')
             return
-        if level == 1:
-            # значит это список обхода блокировок
-            dirname = '/opt/etc/unblock/'
-            dirfiles = os.listdir(dirname)
+        if message.chat.type=='private':
+            global level,bypass
 
-            for fln in dirfiles:
-                if fln == message.text+'.txt':
-                    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-                    item1 = types.KeyboardButton("Показать список")
-                    item2 = types.KeyboardButton("Добавить в список")
-                    item3 = types.KeyboardButton("Удалить из списка")
-                    back = types.KeyboardButton("Назад")
-                    markup.row(item1, item2, item3)
-                    markup.row(back)
-                    level = 2
-                    bypass = message.text
-                    bot.send_message(message.chat.id, "Меню " + bypass, reply_markup=markup)
-                    return
+            if (message.text == 'Назад'):
+                bot.send_message(message.chat.id, 'Добро пожаловать в меню!', reply_markup=main)
+                level=0
+                bypass =-1
+                return
+            if level == 1:
+                # значит это список обхода блокировок
+                dirname = '/opt/etc/unblock/'
+                dirfiles = os.listdir(dirname)
 
-            markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-            back = types.KeyboardButton("Назад")
-            markup.add(back)
-            bot.send_message(message.chat.id, "Не найден", reply_markup=markup)
-            return
+                for fln in dirfiles:
+                    if fln == message.text+'.txt':
+                        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+                        item1 = types.KeyboardButton("Показать список")
+                        item2 = types.KeyboardButton("Добавить в список")
+                        item3 = types.KeyboardButton("Удалить из списка")
+                        back = types.KeyboardButton("Назад")
+                        markup.row(item1, item2, item3)
+                        markup.row(back)
+                        level = 2
+                        bypass = message.text
+                        bot.send_message(message.chat.id, "Меню " + bypass, reply_markup=markup)
+                        return
 
-        if level==2 and message.text=="Показать список":
-            f=open('/opt/etc/unblock/'+bypass+'.txt')
-            flag=True
-            s=''
-            sites=[]
-            for l in f:
-                sites.append(l)
-                flag=False
-            if flag:
-                s='Список пуст'
-            f.close()
-            sites.sort()
-            if not(flag):
-                for l in sites:
-                    s=str(s)+'\n'+l.replace("\n","")
+                markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+                back = types.KeyboardButton("Назад")
+                markup.add(back)
+                bot.send_message(message.chat.id, "Не найден", reply_markup=markup)
+                return
 
-            bot.send_message(message.chat.id, s)
-            markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-            item1 = types.KeyboardButton("Показать список")
-            item2 = types.KeyboardButton("Добавить в список")
-            item3 = types.KeyboardButton("Удалить из списка")
-            back = types.KeyboardButton("Назад")
-            markup.row(item1, item2, item3)
-            markup.row(back)
-            bot.send_message(message.chat.id, "Меню " + bypass, reply_markup=markup)
-            return
+            if level==2 and message.text=="Показать список":
+                f=open('/opt/etc/unblock/'+bypass+'.txt')
+                flag=True
+                s=''
+                sites=[]
+                for l in f:
+                    sites.append(l)
+                    flag=False
+                if flag:
+                    s='Список пуст'
+                f.close()
+                sites.sort()
+                if not(flag):
+                    for l in sites:
+                        s=str(s)+'\n'+l.replace("\n","")
 
-        if level == 2 and message.text == "Добавить в список":
-            bot.send_message(message.chat.id,
-                             "Введите имя сайта или домена для разблокировки, либо воспользуйтесь меню для других действий")
-            markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-            item1 = types.KeyboardButton("Добавить обход блокировок соцсетей")
-            back = types.KeyboardButton("Назад")
-            markup.add(item1, back)
-            level = 3
-            bot.send_message(message.chat.id, "Меню " + bypass, reply_markup=markup)
-            return
+                bot.send_message(message.chat.id, s)
+                markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+                item1 = types.KeyboardButton("Показать список")
+                item2 = types.KeyboardButton("Добавить в список")
+                item3 = types.KeyboardButton("Удалить из списка")
+                back = types.KeyboardButton("Назад")
+                markup.row(item1, item2, item3)
+                markup.row(back)
+                bot.send_message(message.chat.id, "Меню " + bypass, reply_markup=markup)
+                return
 
-        if level == 2 and message.text == "Удалить из списка":
-            bot.send_message(message.chat.id,
-                             "Введите имя сайта или домена для удаления из листа разблокировки, либо возвратитесь в главное меню")
-            markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-            back = types.KeyboardButton("Назад")
-            markup.add(back)
-            level = 4
-            bot.send_message(message.chat.id, "Меню " + bypass, reply_markup=markup)
-            return
+            if level == 2 and message.text == "Добавить в список":
+                bot.send_message(message.chat.id,
+                                 "Введите имя сайта или домена для разблокировки, либо воспользуйтесь меню для других действий")
+                markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+                item1 = types.KeyboardButton("Добавить обход блокировок соцсетей")
+                back = types.KeyboardButton("Назад")
+                markup.add(item1, back)
+                level = 3
+                bot.send_message(message.chat.id, "Меню " + bypass, reply_markup=markup)
+                return
 
-        if level == 3:
-            f = open('/opt/etc/unblock/' + bypass + '.txt')
-            mylist = set()
-            k = len(mylist)
-            for l in f:
-                mylist.add(l.replace('\n', ''))
-            f.close()
-            if (message.text == "Добавить обход блокировок соцсетей"):
-                url = "https://raw.githubusercontent.com/tas-unn/bypass_keenetic/master/socialnet.txt"
-                s = requests.get(url).text
-                lst = s.split('\n')
-                for l in lst:
-                    if len(l) > 1:
-                        mylist.add(l.replace('\n', ''))
-            else:
-                if len(message.text) > 1:
-                    mas=message.text.split('\n')
-                    for site in mas:
-                        mylist.add(site)
-            sortlist = []
-            for l in mylist:
-                sortlist.append(l)
-            sortlist.sort()
-            f = open('/opt/etc/unblock/' + bypass + '.txt', 'w')
-            for l in sortlist:
-                f.write(l + '\n')
-            f.close()
-            if (k != len(sortlist)):
-                bot.send_message(message.chat.id, "Успешно добавлено")
-            else:
-                bot.send_message(message.chat.id, "Было добавлено ранее")
-            markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-            item1 = types.KeyboardButton("Показать список")
-            item2 = types.KeyboardButton("Добавить в список")
-            item3 = types.KeyboardButton("Удалить из списка")
-            back = types.KeyboardButton("Назад")
-            markup.row(item1, item2, item3)
-            markup.row(back)
-            subprocess.call(["/opt/bin/unblock_update.sh"])
-            level = 2
-            bot.send_message(message.chat.id, "Меню " + bypass, reply_markup=markup)
-            return
+            if level == 2 and message.text == "Удалить из списка":
+                bot.send_message(message.chat.id,
+                                 "Введите имя сайта или домена для удаления из листа разблокировки, либо возвратитесь в главное меню")
+                markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+                back = types.KeyboardButton("Назад")
+                markup.add(back)
+                level = 4
+                bot.send_message(message.chat.id, "Меню " + bypass, reply_markup=markup)
+                return
 
-        if level == 4:
-            f = open('/opt/etc/unblock/' + bypass + '.txt')
-            mylist = set()
-            k = len(mylist)
-            for l in f:
-                mylist.add(l.replace('\n', ''))
-            f.close()
-            mas=message.text.split('\n')
-            for site in mas:
-                mylist.discard(site)
-            f = open('/opt/etc/unblock/' + bypass + '.txt', 'w')
-            for l in mylist:
-                f.write(l + '\n')
-            f.close()
-            if (k != len(mylist)):
-                bot.send_message(message.chat.id, "Успешно удалено")
-            else:
-                bot.send_message(message.chat.id, "Не найдено в списке")
-            markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-            item1 = types.KeyboardButton("Показать список")
-            item2 = types.KeyboardButton("Добавить в список")
-            item3 = types.KeyboardButton("Удалить из списка")
-            back = types.KeyboardButton("Назад")
-            markup.row(item1, item2, item3)
-            markup.row(back)
-            level = 2
-            subprocess.call(["/opt/bin/unblock_update.sh"])
-            bot.send_message(message.chat.id, "Меню " + bypass, reply_markup=markup)
-            return
-
-
-        if (message.text == 'Установка и удаление'):
-            markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-            item1 = types.KeyboardButton("Установка \ переустановка")
-            item2 = types.KeyboardButton("Удаление")
-            item3 = types.KeyboardButton("Переустановить ТОР")
-            item4 = types.KeyboardButton("Переустановить Shadowsocks")
-            back = types.KeyboardButton("Назад")
-            markup.row(item1, item2)
-            markup.row(item3, item4)
-            markup.row(back)
-            bot.send_message(message.chat.id, 'Установка и удаление', reply_markup=markup)
-            return
-        if (message.text == 'Переустановить ТОР'):
-            tor()
-            subprocess.call(["/opt/etc/init.d/S35tor", "restart"])
-
-            markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-            item1 = types.KeyboardButton("Установка \ переустановка")
-            item2 = types.KeyboardButton("Удаление")
-            item3 = types.KeyboardButton("Переустановить ТОР")
-            item4 = types.KeyboardButton("Переустановить Shadowsocks")
-            back = types.KeyboardButton("Назад")
-            markup.row(item1, item2)
-            markup.row(item3, item4)
-            markup.row(back)
-            bot.send_message(message.chat.id, 'Установка и удаление', reply_markup=markup)
-            return
-        if (message.text == 'Переустановить Shadowsocks'):
-            shadowsocks()
-            subprocess.call(["/opt/etc/init.d/S22shadowsocks", "restart"])
-            markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-            item1 = types.KeyboardButton("Установка \ переустановка")
-            item2 = types.KeyboardButton("Удаление")
-            item3 = types.KeyboardButton("Переустановить ТОР")
-            item4 = types.KeyboardButton("Переустановить Shadowsocks")
-            back = types.KeyboardButton("Назад")
-            markup.row(item1, item2)
-            markup.row(item3, item4)
-            markup.row(back)
-            bot.send_message(message.chat.id, 'Установка и удаление', reply_markup=markup)
-            return
-        if (message.text == 'Установка \ переустановка'):
-            bot.send_message(message.chat.id, "Начинаем установку");
-            # создаём скрипт установки
-            script = '#!/bin/sh'
-            script += '\nopkg update'  # Обновим opkg
-            # установим пакеты
-            script += '\nopkg install mc tor tor-geoip bind-dig cron dnsmasq-full ipset iptables obfs4 shadowsocks-libev-ss-redir shadowsocks-libev-config'
-            script += '\nipset create test hash:net'
-            script += '\nmkdir /opt/etc/unblock/'
-            f = open('/opt/etc/install.sh', 'w')
-            f.write(script)
-            f.close()
-            os.chmod('/opt/etc/install.sh', stat.S_IXUSR)
-            subprocess.call(["/opt/etc/install.sh"])
-            os.remove("/opt/etc/install.sh")
-            bot.send_message(message.chat.id, "Установка пакетов завершена. Продолжаем установку");
-            # файл для создания множеств для обхода блокировок
-            f = open('/opt/etc/ndm/fs.d/100-ipset.sh', 'w')
-            f.write('#!/bin/sh\n\
-            [ "$1" != "start" ] && exit 0\n\
-            ipset create unblocksh hash:net -exist\n\
-            ipset create unblocktor hash:net -exist\n\
-            #script0\n\
-            #script1\n\
-            #script2\n\
-            #script3\n\
-            #script4\n\
-            #script5\n\
-            #script6\n\
-            #script7\n\
-            #script8\n\
-            #script9\n\
-            exit 0')
-            f.close()
-            os.chmod("/opt/etc/ndm/fs.d/100-ipset.sh", stat.S_IXUSR)
-
-            f = open('/opt/bin/unblock_update.sh', 'w')
-            f.write('#!/bin/sh\n\
-            ipset flush unblocktor\n\
-            ipset flush unblocksh\n\
-            /opt/bin/unblock_dnsmasq.sh\n\
-            /opt/etc/init.d/S56dnsmasq restart\n\
-            /opt/bin/unblock_ipset.sh &')
-            f.close()
-            os.chmod("/opt/bin/unblock_update.sh", stat.S_IXUSR)
-
-            f = open('/opt/etc/init.d/S99unblock', 'w')
-            f.write('#!/bin/sh\n\
-            [ "$1" != "start" ] && exit 0\n\
-            /opt/bin/unblock_ipset.sh\n\
-            python /opt/etc/bot.py &')
-            f.close()
-            os.chmod("/opt/etc/init.d/S99unblock", stat.S_IXUSR)
-
-            f = open('/opt/etc/crontab')
-            lines = f.readlines()
-            f.close()
-            newline='00 06 * * * root /opt/bin/unblock_ipset.sh';
-            f = open('/opt/etc/crontab', 'w')
-            isnewline=True
-            for l in lines:
-                if l.replace("\n","")==newline:
-                    isnewline=False
-                f.write(l.replace("\n","") + '\n')
-            if isnewline:
-                f.write(newline + '\n')
-            f.close()
-
-            bot.send_message(message.chat.id, "Установили изначальные скрипты");
-
-            # получение ключа shadowsocks
-            shadowsocks()
-            bot.send_message(message.chat.id, "Установили ключ shadowsocks");
-            f = open("/opt/etc/unblock/shadowsocks.txt", 'w')
-            f.close()
-            f = open('/opt/etc/init.d/S22shadowsocks', 'w')
-            f.write('#!/bin/sh\n\
-            \n\
-            ENABLED=yes\n\
-            PROCS=ss-redir\n\
-            ARGS="-c /opt/etc/shadowsocks.json"\n\
-            PREARGS=""\n\
-            DESC=$PROCS\n\
-            PATH=/opt/sbin:/opt/bin:/opt/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\n\
-            \n\
-            [ -z "$(which $PROCS)" ] && exit 0\n\
-            \n\
-            . /opt/etc/init.d/rc.func')
-            f.close()
-
-            # получение мостов tor
-            tor()
-            bot.send_message(message.chat.id, "Установили мосты tor");
-            f = open("/opt/etc/unblock/tor.txt", 'w')
-            f.close()
-            url = "https://raw.githubusercontent.com/tas-unn/bypass_keenetic/master/unblock_ipset.sh"
-            s = requests.get(url).text
-            s = s.replace("40500", dnsovertlsport)
-            f = open("/opt/bin/unblock_ipset.sh", 'w')
-            f.write(s)
-            f.close()
-            os.chmod('/opt/bin/unblock_ipset.sh', stat.S_IXUSR)
-
-            url = "https://raw.githubusercontent.com/tas-unn/bypass_keenetic/master/unblock.dnsmasq"
-            s = requests.get(url).text
-            s = s.replace("40500", dnsovertlsport)
-            f = open("/opt/bin/unblock_dnsmasq.sh", 'w')
-            f.write(s)
-            f.close()
-            os.chmod('/opt/bin/unblock_dnsmasq.sh', stat.S_IXUSR)
-
-            url = "https://raw.githubusercontent.com/tas-unn/bypass_keenetic/master/100-redirect.sh"
-            s = requests.get(url).text
-            s = s.replace("1082", localportsh).replace("9141", localporttor).replace("192.168.1.1", routerip)
-            f = open("/opt/etc/ndm/netfilter.d/100-redirect.sh", 'w')
-            f.write(s)
-            f.close()
-            os.chmod('/opt/etc/ndm/netfilter.d/100-redirect.sh', stat.S_IXUSR)
-
-            url = "https://raw.githubusercontent.com/tas-unn/bypass_keenetic/master/dnsmasq.conf"
-            s = requests.get(url).text
-            s = s.replace("40500", dnsovertlsport).replace("40508", dnsoverhttpsport).replace("192.168.1.1", routerip)
-            f = open("/opt/etc/dnsmasq.conf", 'w')
-            f.write(s)
-            f.close()
-            os.chmod('/opt/etc/dnsmasq.conf', stat.S_IXUSR)
-
-            bot.send_message(message.chat.id, "Скачали 4 основных скрипта разблокировок");
-
-            bot.send_message(message.chat.id, "Установка завершена. Теперь нужно немного доснастроить роутер и перейти к спискам для разблокировок",
-                             reply_markup=main)
-            return
-        if (message.text == 'Удаление'):
-            os.remove('/opt/etc/ndm/fs.d/100-ipset.sh')
-            os.remove('/opt/bin/unblock_update.sh')
-            os.remove('/opt/etc/init.d/S99unblock')
-            os.remove('/opt/bin/unblock_ipset.sh')
-            os.remove('/opt/etc/ndm/netfilter.d/100-redirect.sh')
-            os.remove('/opt/bin/unblock_dnsmasq.sh')
-            shutil.rmtree('/opt/etc/unblock/')
-            f = open('/opt/etc/crontab')
-            lines = f.readlines()
-            f.close()
-            f = open('/opt/etc/crontab', 'w')
-            for l in lines:
-                if l != '00 06 * * * root /opt/bin/unblock_ipset.sh':
+            if level == 3:
+                f = open('/opt/etc/unblock/' + bypass + '.txt')
+                mylist = set()
+                k = len(mylist)
+                for l in f:
+                    mylist.add(l.replace('\n', ''))
+                f.close()
+                if (message.text == "Добавить обход блокировок соцсетей"):
+                    url = "https://raw.githubusercontent.com/tas-unn/bypass_keenetic/master/socialnet.txt"
+                    s = requests.get(url).text
+                    lst = s.split('\n')
+                    for l in lst:
+                        if len(l) > 1:
+                            mylist.add(l.replace('\n', ''))
+                else:
+                    if len(message.text) > 1:
+                        mas=message.text.split('\n')
+                        for site in mas:
+                            mylist.add(site)
+                sortlist = []
+                for l in mylist:
+                    sortlist.append(l)
+                sortlist.sort()
+                f = open('/opt/etc/unblock/' + bypass + '.txt', 'w')
+                for l in sortlist:
                     f.write(l + '\n')
-            f.close()
-            script = '#!/bin/sh'
-            script += '\nopkg update'  # Обновим opkg
-            # установим пакеты
-            script += '\nopkg remove  mc tor tor-geoip bind-dig cron dnsmasq-full ipset iptables obfs4 shadowsocks-libev-ss-redir shadowsocks-libev-config'
-            f = open('/opt/etc/remove.sh', 'w')
-            f.write(script)
-            f.close()
-            os.chmod('/opt/etc/remove.sh', stat.S_IXUSR)
-            subprocess.call(["/opt/etc/remove.sh"])
-            os.remove("/opt/etc/remove.sh")
-            bot.send_message(message.chat.id, 'Успешно удалено', reply_markup=main)
-            return
-        if (message.text == 'Добавление других подключений'):
-            bot.send_message(message.chat.id, 'Когда-нибудь позже', reply_markup=main)
-            return
-        if (message.text == "Списки обхода"):
-            level = 1
-            dirname = '/opt/etc/unblock/'
-            dirfiles = os.listdir(dirname)
-            markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-            for fln in dirfiles:
-                markup.add(fln.replace(".txt", ""))
-            back = types.KeyboardButton("Назад")
-            markup.add(back)
-            bot.send_message(message.chat.id, "Списки обхода", reply_markup=markup)
-            return
+                f.close()
+                if (k != len(sortlist)):
+                    bot.send_message(message.chat.id, "Успешно добавлено")
+                else:
+                    bot.send_message(message.chat.id, "Было добавлено ранее")
+                markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+                item1 = types.KeyboardButton("Показать список")
+                item2 = types.KeyboardButton("Добавить в список")
+                item3 = types.KeyboardButton("Удалить из списка")
+                back = types.KeyboardButton("Назад")
+                markup.row(item1, item2, item3)
+                markup.row(back)
+                subprocess.call(["/opt/bin/unblock_update.sh"])
+                level = 2
+                bot.send_message(message.chat.id, "Меню " + bypass, reply_markup=markup)
+                return
+
+            if level == 4:
+                f = open('/opt/etc/unblock/' + bypass + '.txt')
+                mylist = set()
+                k = len(mylist)
+                for l in f:
+                    mylist.add(l.replace('\n', ''))
+                f.close()
+                mas=message.text.split('\n')
+                for site in mas:
+                    mylist.discard(site)
+                f = open('/opt/etc/unblock/' + bypass + '.txt', 'w')
+                for l in mylist:
+                    f.write(l + '\n')
+                f.close()
+                if (k != len(mylist)):
+                    bot.send_message(message.chat.id, "Успешно удалено")
+                else:
+                    bot.send_message(message.chat.id, "Не найдено в списке")
+                markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+                item1 = types.KeyboardButton("Показать список")
+                item2 = types.KeyboardButton("Добавить в список")
+                item3 = types.KeyboardButton("Удалить из списка")
+                back = types.KeyboardButton("Назад")
+                markup.row(item1, item2, item3)
+                markup.row(back)
+                level = 2
+                subprocess.call(["/opt/bin/unblock_update.sh"])
+                bot.send_message(message.chat.id, "Меню " + bypass, reply_markup=markup)
+                return
+
+
+            if (message.text == 'Установка и удаление'):
+                markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+                item1 = types.KeyboardButton("Установка \ переустановка")
+                item2 = types.KeyboardButton("Удаление")
+                item3 = types.KeyboardButton("Переустановить ТОР")
+                item4 = types.KeyboardButton("Переустановить Shadowsocks")
+                back = types.KeyboardButton("Назад")
+                markup.row(item1, item2)
+                markup.row(item3, item4)
+                markup.row(back)
+                bot.send_message(message.chat.id, 'Установка и удаление', reply_markup=markup)
+                return
+            if (message.text == 'Переустановить ТОР'):
+                tor()
+                subprocess.call(["/opt/etc/init.d/S35tor", "restart"])
+
+                markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+                item1 = types.KeyboardButton("Установка \ переустановка")
+                item2 = types.KeyboardButton("Удаление")
+                item3 = types.KeyboardButton("Переустановить ТОР")
+                item4 = types.KeyboardButton("Переустановить Shadowsocks")
+                back = types.KeyboardButton("Назад")
+                markup.row(item1, item2)
+                markup.row(item3, item4)
+                markup.row(back)
+                bot.send_message(message.chat.id, 'Установка и удаление', reply_markup=markup)
+                return
+            if (message.text == 'Переустановить Shadowsocks'):
+                shadowsocks()
+                subprocess.call(["/opt/etc/init.d/S22shadowsocks", "restart"])
+                markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+                item1 = types.KeyboardButton("Установка \ переустановка")
+                item2 = types.KeyboardButton("Удаление")
+                item3 = types.KeyboardButton("Переустановить ТОР")
+                item4 = types.KeyboardButton("Переустановить Shadowsocks")
+                back = types.KeyboardButton("Назад")
+                markup.row(item1, item2)
+                markup.row(item3, item4)
+                markup.row(back)
+                bot.send_message(message.chat.id, 'Установка и удаление', reply_markup=markup)
+                return
+            if (message.text == 'Установка \ переустановка'):
+                bot.send_message(message.chat.id, "Начинаем установку");
+                # создаём скрипт установки
+                script = '#!/bin/sh'
+                script += '\nopkg update'  # Обновим opkg
+                # установим пакеты
+                script += '\nopkg install mc tor tor-geoip bind-dig cron dnsmasq-full ipset iptables obfs4 shadowsocks-libev-ss-redir shadowsocks-libev-config'
+                script += '\nipset create test hash:net'
+                script += '\nmkdir /opt/etc/unblock/'
+                f = open('/opt/etc/install.sh', 'w')
+                f.write(script)
+                f.close()
+                os.chmod('/opt/etc/install.sh', stat.S_IXUSR)
+                subprocess.call(["/opt/etc/install.sh"])
+                os.remove("/opt/etc/install.sh")
+                bot.send_message(message.chat.id, "Установка пакетов завершена. Продолжаем установку");
+                # файл для создания множеств для обхода блокировок
+                f = open('/opt/etc/ndm/fs.d/100-ipset.sh', 'w')
+                f.write('#!/bin/sh\n\
+                [ "$1" != "start" ] && exit 0\n\
+                ipset create unblocksh hash:net -exist\n\
+                ipset create unblocktor hash:net -exist\n\
+                #script0\n\
+                #script1\n\
+                #script2\n\
+                #script3\n\
+                #script4\n\
+                #script5\n\
+                #script6\n\
+                #script7\n\
+                #script8\n\
+                #script9\n\
+                exit 0')
+                f.close()
+                os.chmod("/opt/etc/ndm/fs.d/100-ipset.sh", stat.S_IXUSR)
+
+                f = open('/opt/bin/unblock_update.sh', 'w')
+                f.write('#!/bin/sh\n\
+                ipset flush unblocktor\n\
+                ipset flush unblocksh\n\
+                /opt/bin/unblock_dnsmasq.sh\n\
+                /opt/etc/init.d/S56dnsmasq restart\n\
+                /opt/bin/unblock_ipset.sh &')
+                f.close()
+                os.chmod("/opt/bin/unblock_update.sh", stat.S_IXUSR)
+
+                f = open('/opt/etc/init.d/S99unblock', 'w')
+                f.write('#!/bin/sh\n\
+                [ "$1" != "start" ] && exit 0\n\
+                /opt/bin/unblock_ipset.sh\n\
+                python /opt/etc/bot.py &')
+                f.close()
+                os.chmod("/opt/etc/init.d/S99unblock", stat.S_IXUSR)
+
+                f = open('/opt/etc/crontab')
+                lines = f.readlines()
+                f.close()
+                newline='00 06 * * * root /opt/bin/unblock_ipset.sh';
+                f = open('/opt/etc/crontab', 'w')
+                isnewline=True
+                for l in lines:
+                    if l.replace("\n","")==newline:
+                        isnewline=False
+                    f.write(l.replace("\n","") + '\n')
+                if isnewline:
+                    f.write(newline + '\n')
+                f.close()
+
+                bot.send_message(message.chat.id, "Установили изначальные скрипты");
+
+                # получение ключа shadowsocks
+                shadowsocks()
+                bot.send_message(message.chat.id, "Установили ключ shadowsocks");
+                f = open("/opt/etc/unblock/shadowsocks.txt", 'w')
+                f.close()
+                f = open('/opt/etc/init.d/S22shadowsocks', 'w')
+                f.write('#!/bin/sh\n\
+                \n\
+                ENABLED=yes\n\
+                PROCS=ss-redir\n\
+                ARGS="-c /opt/etc/shadowsocks.json"\n\
+                PREARGS=""\n\
+                DESC=$PROCS\n\
+                PATH=/opt/sbin:/opt/bin:/opt/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\n\
+                \n\
+                [ -z "$(which $PROCS)" ] && exit 0\n\
+                \n\
+                . /opt/etc/init.d/rc.func')
+                f.close()
+
+                # получение мостов tor
+                tor()
+                bot.send_message(message.chat.id, "Установили мосты tor");
+                f = open("/opt/etc/unblock/tor.txt", 'w')
+                f.close()
+                url = "https://raw.githubusercontent.com/tas-unn/bypass_keenetic/master/unblock_ipset.sh"
+                s = requests.get(url).text
+                s = s.replace("40500", dnsovertlsport)
+                f = open("/opt/bin/unblock_ipset.sh", 'w')
+                f.write(s)
+                f.close()
+                os.chmod('/opt/bin/unblock_ipset.sh', stat.S_IXUSR)
+
+                url = "https://raw.githubusercontent.com/tas-unn/bypass_keenetic/master/unblock.dnsmasq"
+                s = requests.get(url).text
+                s = s.replace("40500", dnsovertlsport)
+                f = open("/opt/bin/unblock_dnsmasq.sh", 'w')
+                f.write(s)
+                f.close()
+                os.chmod('/opt/bin/unblock_dnsmasq.sh', stat.S_IXUSR)
+
+                url = "https://raw.githubusercontent.com/tas-unn/bypass_keenetic/master/100-redirect.sh"
+                s = requests.get(url).text
+                s = s.replace("1082", localportsh).replace("9141", localporttor).replace("192.168.1.1", routerip)
+                f = open("/opt/etc/ndm/netfilter.d/100-redirect.sh", 'w')
+                f.write(s)
+                f.close()
+                os.chmod('/opt/etc/ndm/netfilter.d/100-redirect.sh', stat.S_IXUSR)
+
+                url = "https://raw.githubusercontent.com/tas-unn/bypass_keenetic/master/dnsmasq.conf"
+                s = requests.get(url).text
+                s = s.replace("40500", dnsovertlsport).replace("40508", dnsoverhttpsport).replace("192.168.1.1", routerip)
+                f = open("/opt/etc/dnsmasq.conf", 'w')
+                f.write(s)
+                f.close()
+                os.chmod('/opt/etc/dnsmasq.conf', stat.S_IXUSR)
+
+                bot.send_message(message.chat.id, "Скачали 4 основных скрипта разблокировок");
+
+                bot.send_message(message.chat.id, "Установка завершена. Теперь нужно немного доснастроить роутер и перейти к спискам для разблокировок",
+                                 reply_markup=main)
+                return
+            if (message.text == 'Удаление'):
+                os.remove('/opt/etc/ndm/fs.d/100-ipset.sh')
+                os.remove('/opt/bin/unblock_update.sh')
+                os.remove('/opt/etc/init.d/S99unblock')
+                os.remove('/opt/bin/unblock_ipset.sh')
+                os.remove('/opt/etc/ndm/netfilter.d/100-redirect.sh')
+                os.remove('/opt/bin/unblock_dnsmasq.sh')
+                shutil.rmtree('/opt/etc/unblock/')
+                f = open('/opt/etc/crontab')
+                lines = f.readlines()
+                f.close()
+                f = open('/opt/etc/crontab', 'w')
+                for l in lines:
+                    if l != '00 06 * * * root /opt/bin/unblock_ipset.sh':
+                        f.write(l + '\n')
+                f.close()
+                script = '#!/bin/sh'
+                script += '\nopkg update'  # Обновим opkg
+                # установим пакеты
+                script += '\nopkg remove  mc tor tor-geoip bind-dig cron dnsmasq-full ipset iptables obfs4 shadowsocks-libev-ss-redir shadowsocks-libev-config'
+                f = open('/opt/etc/remove.sh', 'w')
+                f.write(script)
+                f.close()
+                os.chmod('/opt/etc/remove.sh', stat.S_IXUSR)
+                subprocess.call(["/opt/etc/remove.sh"])
+                os.remove("/opt/etc/remove.sh")
+                bot.send_message(message.chat.id, 'Успешно удалено', reply_markup=main)
+                return
+            if (message.text == 'Добавление других подключений'):
+                bot.send_message(message.chat.id, 'Когда-нибудь позже', reply_markup=main)
+                return
+            if (message.text == "Списки обхода"):
+                level = 1
+                dirname = '/opt/etc/unblock/'
+                dirfiles = os.listdir(dirname)
+                markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+                for fln in dirfiles:
+                    markup.add(fln.replace(".txt", ""))
+                back = types.KeyboardButton("Назад")
+                markup.add(back)
+                bot.send_message(message.chat.id, "Списки обхода", reply_markup=markup)
+                return
+    except Exception as err:
+        fl=open("/opt/etc/error.log","w")
+        fl.write(err)
+        fl.close()
 
 def shadowsocks():
     global appapiid, appapihash,password,localportsh
