@@ -14,7 +14,7 @@ import requests
 # 410017539693882 Юмани
 # bc1qesjaxfad8f8azu2cp4gsvt2j9a4yshsc2swey9  Биткоин кошелёк
 
-# ВЕРСИЯ СКРИПТА 1.11
+# ВЕРСИЯ СКРИПТА 1.2
 token='MyTokenFromBotFather' # ключ апи бота
 usernames=[]
 usernames.append('Mylogin') # Добавляем логины телеграма для администраторирования бота. Строчек может быть несколько
@@ -215,17 +215,32 @@ def bot_message(message):
                 subprocess.call(["/opt/bin/unblock_update.sh"])
                 bot.send_message(message.chat.id, "Меню " + bypass, reply_markup=markup)
                 return
-
-
+            if level == 5:
+                shadowsocks(message.text)
+                subprocess.call(["/opt/etc/init.d/S22shadowsocks", "restart"])
+                level=0
+                bot.send_message(message.chat.id, 'Успешно обновлено', reply_markup=main)
+                return
+            if level == 6:
+                tormanually(message.text)
+                subprocess.call(["/opt/etc/init.d/S35tor", "restart"])
+                level=0
+                bot.send_message(message.chat.id, 'Успешно обновлено', reply_markup=main)
+                return
             if (message.text == 'Установка и удаление'):
                 markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
                 item1 = types.KeyboardButton("Установка \ переустановка")
                 item2 = types.KeyboardButton("Удаление")
                 item3 = types.KeyboardButton("Переустановить ТОР")
                 item4 = types.KeyboardButton("Переустановить Shadowsocks")
+                item5 = types.KeyboardButton("Переустановить ТОР вручную")
+                item6 = types.KeyboardButton("Переустановить Shadowsocks вручную")
+
                 back = types.KeyboardButton("Назад")
                 markup.row(item1, item2)
                 markup.row(item3, item4)
+                markup.row(item5)
+                markup.row(item6)
                 markup.row(back)
                 bot.send_message(message.chat.id, 'Установка и удаление', reply_markup=markup)
                 return
@@ -238,9 +253,14 @@ def bot_message(message):
                 item2 = types.KeyboardButton("Удаление")
                 item3 = types.KeyboardButton("Переустановить ТОР")
                 item4 = types.KeyboardButton("Переустановить Shadowsocks")
+                item5 = types.KeyboardButton("Переустановить ТОР вручную")
+                item6 = types.KeyboardButton("Переустановить Shadowsocks вручную")
+
                 back = types.KeyboardButton("Назад")
                 markup.row(item1, item2)
                 markup.row(item3, item4)
+                markup.row(item5)
+                markup.row(item6)
                 markup.row(back)
                 bot.send_message(message.chat.id, 'Установка и удаление', reply_markup=markup)
                 return
@@ -252,11 +272,34 @@ def bot_message(message):
                 item2 = types.KeyboardButton("Удаление")
                 item3 = types.KeyboardButton("Переустановить ТОР")
                 item4 = types.KeyboardButton("Переустановить Shadowsocks")
+                item5 = types.KeyboardButton("Переустановить ТОР вручную")
+                item6 = types.KeyboardButton("Переустановить Shadowsocks вручную")
+
                 back = types.KeyboardButton("Назад")
                 markup.row(item1, item2)
                 markup.row(item3, item4)
+                markup.row(item5)
+                markup.row(item6)
                 markup.row(back)
                 bot.send_message(message.chat.id, 'Установка и удаление', reply_markup=markup)
+                return
+            if (message.text == 'Переустановить Shadowsocks вручную'):
+                bot.send_message(message.chat.id,
+                                 "Скопируйте ключ сюда")
+                markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+                back = types.KeyboardButton("Назад")
+                markup.add(back)
+                level = 5
+                bot.send_message(message.chat.id, "Меню", reply_markup=markup)
+                return
+            if (message.text == 'Переустановить ТОР вручную'):
+                bot.send_message(message.chat.id,
+                                 "Скопируйте мосты сюда. Каждая новая строка - новый мост. Мост должен начинаться с obfs4")
+                markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+                back = types.KeyboardButton("Назад")
+                markup.add(back)
+                level = 6
+                bot.send_message(message.chat.id, "Меню", reply_markup=markup)
                 return
             if (message.text == 'Установка \ переустановка'):
                 bot.send_message(message.chat.id, "Начинаем установку");
@@ -437,24 +480,25 @@ def bot_message(message):
         fl.write(err)
         fl.close()
 
-def shadowsocks():
+def shadowsocks(key=None):
     global appapiid, appapihash,password,localportsh
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    with TelegramClient('hlvpnbot', appapiid, appapihash) as client:
-        client.send_message('hlvpnbot', 'Хочу ключ')
-    now = datetime.datetime.now().timestamp()
-    k = ''
-    with TelegramClient('hlvpnbot', appapiid, appapihash) as client:
-        while 'ss://' not in k:
-            for message1 in client.iter_messages('hlvpnbot'):
-                if now > message1.date.timestamp():
-                    break
-                k = message1.text
-                if 'ss://' in k:
-                    break
-            continue
-    key = k[k.find('ss:'):k.find('?outline')]
+    if (key is None):
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        with TelegramClient('hlvpnbot', appapiid, appapihash) as client:
+            client.send_message('hlvpnbot', 'Хочу ключ')
+        now = datetime.datetime.now().timestamp()
+        k = ''
+        with TelegramClient('hlvpnbot', appapiid, appapihash) as client:
+            while 'ss://' not in k:
+                for message1 in client.iter_messages('hlvpnbot'):
+                    if now > message1.date.timestamp():
+                        break
+                    k = message1.text
+                    if 'ss://' in k:
+                        break
+                continue
+        key = k[k.find('ss:'):k.find('?outline')]
     encodedkey = str(key).split('//')[1].split('@')[0] + '=='
     password = str(str(base64.b64decode(encodedkey)[2:]).split(':')[1])[:-1]
     server = str(key).split('@')[1].split('/')[0].split(':')[0]
@@ -464,9 +508,31 @@ def shadowsocks():
 
     f.write(sh)
     f.close()
+def tormanually(bridges):
+    global localporttor, dnsporttor
+    f = open('/opt/etc/tor/torrc', 'w')
+    f.write('User root\n\
+PidFile /opt/var/run/tor.pid\n\
+ExcludeExitNodes {RU},{UA},{AM},{KG},{BY}\n\
+StrictNodes 1\n\
+TransPort 0.0.0.0:' + localporttor + '\n\
+ExitRelay 0\n\
+ExitPolicy reject *:*\n\
+ExitPolicy reject6 *:*\n\
+GeoIPFile /opt/share/tor/geoip\n\
+GeoIPv6File /opt/share/tor/geoip6\n\
+DataDirectory /opt/tmp/tor\n\
+VirtualAddrNetwork 10.254.0.0/16\n\
+DNSPort 127.0.0.1:' + dnsporttor + '\n\
+AutomapHostsOnResolve 1\n\
+UseBridges 1\n\
+ClientTransportPlugin obfs4 exec /opt/sbin/obfs4proxy managed\n' + bridges.replace("obfs4", "Bridge obfs4"))
+    f.close()
+
 
 def tor():
     global appapiid, appapihash
+    global localporttor, dnsporttor
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     f = open('/opt/etc/tor/torrc', 'w')
