@@ -15,13 +15,13 @@ import requests
 # bc1qesjaxfad8f8azu2cp4gsvt2j9a4yshsc2swey9  Биткоин кошелёк
 
 # ВЕРСИЯ СКРИПТА 1.2
-token='MyTokenFromBotFather' # ключ апи бота
+token='5705507756:AAFxNjlkARbXOqcAiZLijGNNJRSukH43e3g' # ключ апи бота
 usernames=[]
-usernames.append('Mylogin') # Добавляем логины телеграма для администраторирования бота. Строчек может быть несколько
+usernames.append('matkarimov') # Добавляем логины телеграма для администраторирования бота. Строчек может быть несколько
 # следующие две строки заполняются с сайта https://my.telegram.org/apps
 # вместо вас запрос будет посылать бот, оттуда и будут запрашиваться ключи
-appapiid='myapiid'
-appapihash='myiphash'
+appapiid='14154441'
+appapihash='47dab1104130aa482b4afdf1f5cf7907'
 
 # следующие настройки могут быть оставлены по умолчанию, но можно будет что-то поменять
 routerip='192.168.1.1' # ip роутера
