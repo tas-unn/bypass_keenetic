@@ -14,7 +14,7 @@ import requests
 # 410017539693882 Юмани
 # bc1qesjaxfad8f8azu2cp4gsvt2j9a4yshsc2swey9  Биткоин кошелёк
 
-# ВЕРСИЯ СКРИПТА 1.2
+# ВЕРСИЯ СКРИПТА 1.3
 token='MyTokenFromBotFather' # ключ апи бота
 usernames=[]
 usernames.append('Mylogin') # Добавляем логины телеграма для администраторирования бота. Строчек может быть несколько
@@ -39,7 +39,7 @@ dnsoverhttpsport='40508' # можно посмотреть номер порта
 bot=telebot.TeleBot(token)
 level=0
 bypass=-1
-
+sid="0"
 @bot.message_handler(commands=['start'])
 def start(message):
     if message.from_user.username not in usernames:
@@ -227,6 +227,21 @@ def bot_message(message):
                 level=0
                 bot.send_message(message.chat.id, 'Успешно обновлено', reply_markup=main)
                 return
+            if level == 7:
+                global sid
+                mydata={'sid':sid,'answer':message.text,'mark':'Y'};
+                req = requests.post('https://hi-l.im/web.php', data = mydata)
+                soup = BeautifulSoup(req.text, 'html.parser')
+                try:
+                    mykey=soup.find(attrs={"id": "myInput"})["value"]
+                    shadowsocks(mykey)
+                    subprocess.call(["/opt/etc/init.d/S22shadowsocks", "restart"])
+                    level=0
+                    bot.send_message(message.chat.id, 'Успешно обновлено', reply_markup=main)
+                except Exception as err:
+                    level=0
+                    bot.send_message(message.chat.id, 'Ошибка ответа. Попробуйте ещё раз', reply_markup=main)
+                return
             if (message.text == 'Установка и удаление'):
                 markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
                 item1 = types.KeyboardButton("Установка \ переустановка")
@@ -234,13 +249,14 @@ def bot_message(message):
                 item3 = types.KeyboardButton("Переустановить ТОР")
                 item4 = types.KeyboardButton("Переустановить Shadowsocks")
                 item5 = types.KeyboardButton("Переустановить ТОР вручную")
-                item6 = types.KeyboardButton("Переустановить Shadowsocks вручную")
+                item6 = types.KeyboardButton("Shadowsocks вручную")
+                item7 = types.KeyboardButton("Shadowsocks через сайт")
 
                 back = types.KeyboardButton("Назад")
                 markup.row(item1, item2)
                 markup.row(item3, item4)
                 markup.row(item5)
-                markup.row(item6)
+                markup.row(item6,item7)
                 markup.row(back)
                 bot.send_message(message.chat.id, 'Установка и удаление', reply_markup=markup)
                 return
@@ -254,13 +270,14 @@ def bot_message(message):
                 item3 = types.KeyboardButton("Переустановить ТОР")
                 item4 = types.KeyboardButton("Переустановить Shadowsocks")
                 item5 = types.KeyboardButton("Переустановить ТОР вручную")
-                item6 = types.KeyboardButton("Переустановить Shadowsocks вручную")
+                item6 = types.KeyboardButton("Shadowsocks вручную")
+                item7 = types.KeyboardButton("Shadowsocks через сайт")
 
                 back = types.KeyboardButton("Назад")
                 markup.row(item1, item2)
                 markup.row(item3, item4)
                 markup.row(item5)
-                markup.row(item6)
+                markup.row(item6,item7)
                 markup.row(back)
                 bot.send_message(message.chat.id, 'Установка и удаление', reply_markup=markup)
                 return
@@ -273,17 +290,18 @@ def bot_message(message):
                 item3 = types.KeyboardButton("Переустановить ТОР")
                 item4 = types.KeyboardButton("Переустановить Shadowsocks")
                 item5 = types.KeyboardButton("Переустановить ТОР вручную")
-                item6 = types.KeyboardButton("Переустановить Shadowsocks вручную")
+                item6 = types.KeyboardButton("Shadowsocks вручную")
+                item7 = types.KeyboardButton("Shadowsocks через сайт")
 
                 back = types.KeyboardButton("Назад")
                 markup.row(item1, item2)
                 markup.row(item3, item4)
                 markup.row(item5)
-                markup.row(item6)
+                markup.row(item6,item7)
                 markup.row(back)
                 bot.send_message(message.chat.id, 'Установка и удаление', reply_markup=markup)
                 return
-            if (message.text == 'Переустановить Shadowsocks вручную'):
+            if (message.text == 'Shadowsocks вручную'):
                 bot.send_message(message.chat.id,
                                  "Скопируйте ключ сюда")
                 markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -299,6 +317,21 @@ def bot_message(message):
                 back = types.KeyboardButton("Назад")
                 markup.add(back)
                 level = 6
+                bot.send_message(message.chat.id, "Меню", reply_markup=markup)
+                return
+            if (message.text == 'Shadowsocks через сайт'):
+                r=requests.get("https://hi-l.im/web.php?sid=001")
+                soup = BeautifulSoup(r.text, 'html.parser')
+                i=0
+                for link in soup.find_all('p', {"class": "lead"}):
+                    i+=1
+                    if (i==2):
+                        bot.send_message(message.chat.id,link.text.strip())
+                sid=soup.find(attrs={"name": "sid"})["value"]
+                markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+                back = types.KeyboardButton("Назад")
+                markup.add(back)
+                level = 7
                 bot.send_message(message.chat.id, "Меню", reply_markup=markup)
                 return
             if (message.text == 'Установка \ переустановка'):
@@ -368,7 +401,7 @@ def bot_message(message):
                 if isnewline:
                     f.write(newline + '\n')
                 f.close()
-
+                subprocess.call(["/opt/bin/unblock_update.sh"])
                 bot.send_message(message.chat.id, "Установили изначальные скрипты");
 
                 # получение ключа shadowsocks
@@ -477,7 +510,7 @@ def bot_message(message):
                 return
     except Exception as err:
         fl=open("/opt/etc/error.log","w")
-        fl.write(err)
+        fl.write(str(err))
         fl.close()
 
 def shadowsocks(key=None):
@@ -486,13 +519,14 @@ def shadowsocks(key=None):
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         with TelegramClient('hlvpnbot', appapiid, appapihash) as client:
-            client.send_message('hlvpnbot', 'Хочу ключ')
+            client.send_message('hlvpnbot', '🔓 Любой ключ')
         now = datetime.datetime.now().timestamp()
         k = ''
         with TelegramClient('hlvpnbot', appapiid, appapihash) as client:
             while 'ss://' not in k:
                 for message1 in client.iter_messages('hlvpnbot'):
                     if now > message1.date.timestamp():
+
                         break
                     k = message1.text
                     if 'ss://' in k:
@@ -566,5 +600,5 @@ try:
     bot.infinity_polling()
 except Exception as err:
     fl=open("/opt/etc/error.log","w")
-    fl.write(err)
+    fl.write(str(err))
     fl.close()
