@@ -1,3 +1,4 @@
 #!/bin/sh
 [ "$1" != "start" ] && exit 0
+cd /opt/etc
 /opt/bin/unblock_ipset.sh &
