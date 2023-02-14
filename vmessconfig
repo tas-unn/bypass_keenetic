@@ -1,0 +1,69 @@
+{
+    "log": {
+        "access": "",
+        "error": "",
+        "loglevel": "none"
+    },
+    "inbounds": [
+        {
+            "port": 10810,
+            "listen": "::",
+            "protocol": "dokodemo-door",
+            "settings": {
+                "network": "tcp",
+                "followRedirect": true
+            }
+        }
+    ],
+    "outbounds": [
+        {
+            "tag": "proxy",
+            "protocol": "vmess",
+            "settings": {
+                "vnext": [
+                    {
+                        "address": "ownaddress",
+                        "port": 443,
+                        "users": [
+                            {
+                                "id": "ownid",
+                                "alterId": ownalterid,
+                                "email": "t@t.tt",
+                                "security": "auto"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "ws",
+                "security": "tls",
+                "tlsSettings": {
+                    "allowInsecure": true,
+                    "serverName": "ownaddress"
+                },
+                "wsSettings": {
+                    "path": "\/ownpath",
+                    "headers": {
+                        "Host": "ownaddress"
+                    }
+                },
+                "tls": "tls"
+            },
+            "mux": {
+                "enabled": false,
+                "concurrency": -1
+            }
+        }
+    ],
+    "routing": {
+        "domainStrategy": "IPIfNonMatch",
+        "rules": [
+            {
+                "type": "field",
+                "port": "0-65535",
+                "outboundTag": "proxy",
+                "enabled": true
+            }
+        ]
+    }
