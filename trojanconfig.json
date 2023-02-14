@@ -1,0 +1,13 @@
+{
+    "run_type": "nat",
+    "local_addr": "::",
+    "local_port": 10829,
+    "remote_addr": "ownade",
+    "remote_port": ownport,
+     "password": [
+        "pw"
+    ],
+ "ssl": {
+         "verify": false,
+                 "verify_hostname":false
+}
