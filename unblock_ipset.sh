@@ -64,13 +64,67 @@ while read line || [ -n "$line" ]; do
 
 done < /opt/etc/unblock/tor.txt
 
+while read line || [ -n "$line" ]; do
+
+  [ -z "$line" ] && continue
+  [ "${line:0:1}" = "#" ] && continue
+
+  cidr=$(echo $line | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}/[0-9]{1,2}')
+
+  if [ ! -z "$cidr" ]; then
+    ipset -exist add unblockvmess $cidr
+    continue
+  fi
+
+  range=$(echo $line | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}-[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
+
+  if [ ! -z "$range" ]; then
+    ipset -exist add unblockvmess $range
+    continue
+  fi
+
+  addr=$(echo $line | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
+
+  if [ ! -z "$addr" ]; then
+    ipset -exist add unblockvmess $addr
+    continue
+  fi
+
+  dig +short $line @localhost -p 40500 | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | awk '{system("ipset -exist add unblockvmess "$1)}'
+
+
+
+done < /opt/etc/unblock/vmess.txt
+
+while read line || [ -n "$line" ]; do
+
+  [ -z "$line" ] && continue
+  [ "${line:0:1}" = "#" ] && continue
+
+  cidr=$(echo $line | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}/[0-9]{1,2}')
+
+  if [ ! -z "$cidr" ]; then
+    ipset -exist add unblocktroj $cidr
+    continue
+  fi
+
+  range=$(echo $line | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}-[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
+
+  if [ ! -z "$range" ]; then
+    ipset -exist add unblocktroj $range
+    continue
+  fi
+
+  addr=$(echo $line | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
+
+  if [ ! -z "$addr" ]; then
+    ipset -exist add unblocktroj $addr
+    continue
+  fi
+
+  dig +short $line @localhost -p 40500 | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | awk '{system("ipset -exist add unblocktroj "$1)}'
+
+
+
+done < /opt/etc/unblock/trojan.txt
 #script0
-#script1
-#script2
-#script3
-#script4
-#script5
-#script6
-#script7
-#script8
-#script9
