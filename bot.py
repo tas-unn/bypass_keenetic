@@ -33,9 +33,6 @@ localporttrojan='10810' # локальный порт для shadowsocks
 dnsovertlsport='40500' # можно посмотреть номер порта командой "cat /tmp/ndnproxymain.stat"
 dnsoverhttpsport='40508' # можно посмотреть номер порта командой "cat /tmp/ndnproxymain.stat"
 
-
-
-
 # Начало работы программы
 
 bot=telebot.TeleBot(token)
