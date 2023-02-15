@@ -325,7 +325,6 @@ def bot_message(message):
                 script += '\nopkg update'  # Обновим opkg
                 # установим пакеты
                 script += '\nopkg install mc tor tor-geoip bind-dig cron dnsmasq-full ipset iptables obfs4 shadowsocks-libev-ss-redir shadowsocks-libev-config v2ray trojan'
-                script += '\nipset create test hash:net'
                 script += '\nmkdir -p /opt/etc/unblock/'
                 f = open('/opt/etc/install.sh', 'w')
                 f.write(script)
