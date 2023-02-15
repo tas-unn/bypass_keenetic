@@ -14,7 +14,7 @@ import requests
 # 410017539693882 Юмани
 # bc1qesjaxfad8f8azu2cp4gsvt2j9a4yshsc2swey9  Биткоин кошелёк
 
-# ВЕРСИЯ СКРИПТА 1.3
+# ВЕРСИЯ СКРИПТА 2.0
 token='MyTokenFromBotFather' # ключ апи бота
 usernames=[]
 usernames.append('Mylogin') # Добавляем логины телеграма для администраторирования бота. Строчек может быть несколько
@@ -28,11 +28,10 @@ routerip='192.168.1.1' # ip роутера
 localportsh='1082' # локальный порт для shadowsocks
 dnsporttor='9053' # чтобы onion сайты открывался через любой браузер - любой открытый порт
 localporttor='9141' # локальный порт для тор
+localportvmess='10810' # локальный порт для shadowsocks
+localporttrojan='10810' # локальный порт для shadowsocks
 dnsovertlsport='40500' # можно посмотреть номер порта командой "cat /tmp/ndnproxymain.stat"
 dnsoverhttpsport='40508' # можно посмотреть номер порта командой "cat /tmp/ndnproxymain.stat"
-
-
-
 
 # Начало работы программы
 
@@ -47,8 +46,9 @@ def start(message):
         return
     markup=types.ReplyKeyboardMarkup(resize_keyboard=True)
     item1=types.KeyboardButton("Установка и удаление")
-    item2 = types.KeyboardButton("Списки обхода")
-    markup.add(item1,item2)
+    item2=types.KeyboardButton("Ключи и мосты")
+    item3 = types.KeyboardButton("Списки обхода")
+    markup.add(item1,item2,item3)
     bot.send_message(message.chat.id,'Добро пожаловать в меню!',reply_markup=markup)
 
 
@@ -57,8 +57,9 @@ def bot_message(message):
     try:
         main = types.ReplyKeyboardMarkup(resize_keyboard=True)
         m1 = types.KeyboardButton("Установка и удаление")
-        m2 = types.KeyboardButton("Списки обхода")
-        main.add(m1, m2)
+        m2 = types.KeyboardButton("Ключи и мосты")
+        m3 = types.KeyboardButton("Списки обхода")
+        main.add(m1, m2,m3)
         if message.from_user.username not in usernames:
             bot.send_message(message.chat.id, 'Вы не являетесь автором канала')
             return
@@ -146,10 +147,10 @@ def bot_message(message):
             if level == 3:
                 f = open('/opt/etc/unblock/' + bypass + '.txt')
                 mylist = set()
-                k = len(mylist)
                 for l in f:
                     mylist.add(l.replace('\n', ''))
                 f.close()
+                k = len(mylist)
                 if (message.text == "Добавить обход блокировок соцсетей"):
                     url = "https://raw.githubusercontent.com/tas-unn/bypass_keenetic/master/socialnet.txt"
                     s = requests.get(url).text
@@ -189,10 +190,10 @@ def bot_message(message):
             if level == 4:
                 f = open('/opt/etc/unblock/' + bypass + '.txt')
                 mylist = set()
-                k = len(mylist)
                 for l in f:
                     mylist.add(l.replace('\n', ''))
                 f.close()
+                k = len(mylist)
                 mas=message.text.split('\n')
                 for site in mas:
                     mylist.discard(site)
@@ -242,97 +243,77 @@ def bot_message(message):
                     level=0
                     bot.send_message(message.chat.id, 'Ошибка ответа. Попробуйте ещё раз', reply_markup=main)
                 return
-            if (message.text == 'Установка и удаление'):
-                markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-                item1 = types.KeyboardButton("Установка \ переустановка")
-                item2 = types.KeyboardButton("Удаление")
-                item3 = types.KeyboardButton("Переустановить ТОР")
-                item4 = types.KeyboardButton("Переустановить Shadowsocks")
-                item5 = types.KeyboardButton("Переустановить ТОР вручную")
-                item6 = types.KeyboardButton("Shadowsocks вручную")
-                item7 = types.KeyboardButton("Shadowsocks через сайт")
-
-                back = types.KeyboardButton("Назад")
-                markup.row(item1, item2)
-                markup.row(item3, item4)
-                markup.row(item5)
-                markup.row(item6,item7)
-                markup.row(back)
-                bot.send_message(message.chat.id, 'Установка и удаление', reply_markup=markup)
-                return
-            if (message.text == 'Переустановить ТОР'):
-                tor()
-                subprocess.call(["/opt/etc/init.d/S35tor", "restart"])
-
-                markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-                item1 = types.KeyboardButton("Установка \ переустановка")
-                item2 = types.KeyboardButton("Удаление")
-                item3 = types.KeyboardButton("Переустановить ТОР")
-                item4 = types.KeyboardButton("Переустановить Shadowsocks")
-                item5 = types.KeyboardButton("Переустановить ТОР вручную")
-                item6 = types.KeyboardButton("Shadowsocks вручную")
-                item7 = types.KeyboardButton("Shadowsocks через сайт")
-
-                back = types.KeyboardButton("Назад")
-                markup.row(item1, item2)
-                markup.row(item3, item4)
-                markup.row(item5)
-                markup.row(item6,item7)
-                markup.row(back)
-                bot.send_message(message.chat.id, 'Установка и удаление', reply_markup=markup)
-                return
-            if (message.text == 'Переустановить Shadowsocks'):
-                shadowsocks()
-                subprocess.call(["/opt/etc/init.d/S22shadowsocks", "restart"])
-                markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-                item1 = types.KeyboardButton("Установка \ переустановка")
-                item2 = types.KeyboardButton("Удаление")
-                item3 = types.KeyboardButton("Переустановить ТОР")
-                item4 = types.KeyboardButton("Переустановить Shadowsocks")
-                item5 = types.KeyboardButton("Переустановить ТОР вручную")
-                item6 = types.KeyboardButton("Shadowsocks вручную")
-                item7 = types.KeyboardButton("Shadowsocks через сайт")
-
-                back = types.KeyboardButton("Назад")
-                markup.row(item1, item2)
-                markup.row(item3, item4)
-                markup.row(item5)
-                markup.row(item6,item7)
-                markup.row(back)
-                bot.send_message(message.chat.id, 'Установка и удаление', reply_markup=markup)
-                return
-            if (message.text == 'Shadowsocks вручную'):
+            if level == 8:
+                # значит это ключи и мосты
+                if message.text=='Tor':
+                    markup=types.ReplyKeyboardMarkup(resize_keyboard=True)
+                    item1=types.KeyboardButton("Tor вручную")
+                    item2=types.KeyboardButton("Tor через telegram")
+                    markup.add(item1,item2)
+                    back = types.KeyboardButton("Назад")
+                    markup.add(back)
+                    bot.send_message(message.chat.id,'Добро пожаловать в меню Tor!',reply_markup=markup)
+                if (message.text == 'Shadowsocks'):
+                    bot.send_message(message.chat.id,
+                                     "Скопируйте ключ сюда")
+                    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+                    back = types.KeyboardButton("Назад")
+                    markup.add(back)
+                    level = 5
+                    bot.send_message(message.chat.id, "Меню", reply_markup=markup)
+                    return
+                if (message.text == 'Vmess'):
+                    bot.send_message(message.chat.id,
+                                     "Скопируйте ключ сюда")
+                    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+                    back = types.KeyboardButton("Назад")
+                    markup.add(back)
+                    level = 9
+                    bot.send_message(message.chat.id, "Меню", reply_markup=markup)
+                    return
+                if (message.text == 'Trojan'):
+                    bot.send_message(message.chat.id,
+                                     "Скопируйте ключ сюда")
+                    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+                    back = types.KeyboardButton("Назад")
+                    markup.add(back)
+                    level = 10
+                    bot.send_message(message.chat.id, "Меню", reply_markup=markup)
+                    return
+            if level == 9:
+                vmess(message.text)
+                subprocess.call(["/opt/etc/init.d/S24v2ray", "restart"])
+                level=0
+                bot.send_message(message.chat.id, 'Успешно обновлено', reply_markup=main)
+            if level == 10:
+                trojan(message.text)
+                subprocess.call(["/opt/etc/init.d/S22trojan", "restart"])
+                level=0
+                bot.send_message(message.chat.id, 'Успешно обновлено', reply_markup=main)
+                
+            if (message.text == 'Tor вручную'):
                 bot.send_message(message.chat.id,
                                  "Скопируйте ключ сюда")
-                markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-                back = types.KeyboardButton("Назад")
-                markup.add(back)
-                level = 5
-                bot.send_message(message.chat.id, "Меню", reply_markup=markup)
-                return
-            if (message.text == 'Переустановить ТОР вручную'):
-                bot.send_message(message.chat.id,
-                                 "Скопируйте мосты сюда. Каждая новая строка - новый мост. Мост должен начинаться с obfs4")
                 markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
                 back = types.KeyboardButton("Назад")
                 markup.add(back)
                 level = 6
                 bot.send_message(message.chat.id, "Меню", reply_markup=markup)
                 return
-            if (message.text == 'Shadowsocks через сайт'):
-                r=requests.get("https://hi-l.im/web.php?sid=001")
-                soup = BeautifulSoup(r.text, 'html.parser')
-                i=0
-                for link in soup.find_all('p', {"class": "lead"}):
-                    i+=1
-                    if (i==2):
-                        bot.send_message(message.chat.id,link.text.strip())
-                sid=soup.find(attrs={"name": "sid"})["value"]
+            if (message.text == 'Tor через telegram'):
+                tor()
+                subprocess.call(["/opt/etc/init.d/S35tor", "restart"])
+                level=0
+                bot.send_message(message.chat.id, 'Успешно обновлено', reply_markup=main)
+                return
+            if (message.text == 'Установка и удаление'):
                 markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+                item1 = types.KeyboardButton("Установка \ переустановка")
+                item2 = types.KeyboardButton("Удаление")
                 back = types.KeyboardButton("Назад")
-                markup.add(back)
-                level = 7
-                bot.send_message(message.chat.id, "Меню", reply_markup=markup)
+                markup.row(item1, item2)
+                markup.row(back)
+                bot.send_message(message.chat.id, 'Установка и удаление', reply_markup=markup)
                 return
             if (message.text == 'Установка \ переустановка'):
                 bot.send_message(message.chat.id, "Начинаем установку");
@@ -340,7 +321,7 @@ def bot_message(message):
                 script = '#!/bin/sh'
                 script += '\nopkg update'  # Обновим opkg
                 # установим пакеты
-                script += '\nopkg install mc tor tor-geoip bind-dig cron dnsmasq-full ipset iptables obfs4 shadowsocks-libev-ss-redir shadowsocks-libev-config'
+                script += '\nopkg install mc tor tor-geoip bind-dig cron dnsmasq-full ipset iptables obfs4 shadowsocks-libev-ss-redir shadowsocks-libev-config v2ray trojan'
                 script += '\nipset create test hash:net'
                 script += '\nmkdir /opt/etc/unblock/'
                 f = open('/opt/etc/install.sh', 'w')
@@ -350,12 +331,27 @@ def bot_message(message):
                 subprocess.call(["/opt/etc/install.sh"])
                 os.remove("/opt/etc/install.sh")
                 bot.send_message(message.chat.id, "Установка пакетов завершена. Продолжаем установку");
+                f = open('/opt/unblock/tor.txt', 'w')
+                f.close()
+                os.chmod("/opt/unblock/tor.txt", stat.S_IXUSR)
+                f = open('/opt/unblock/shadowsocks.txt', 'w')
+                f.close()
+                os.chmod("/opt/unblock/shadowsocks.txt", stat.S_IXUSR)
+                f = open('/opt/unblock/trojan.txt', 'w')
+                f.close()
+                os.chmod("/opt/unblock/trojan.txt", stat.S_IXUSR)
+                f = open('/opt/unblock/vmess.txt', 'w')
+                f.close()
+                os.chmod("/opt/unblock/vmess.txt", stat.S_IXUSR)
+                bot.send_message(message.chat.id, "Создали файлы под множества");
                 # файл для создания множеств для обхода блокировок
                 f = open('/opt/etc/ndm/fs.d/100-ipset.sh', 'w')
                 f.write('#!/bin/sh\n\
                 [ "$1" != "start" ] && exit 0\n\
                 ipset create unblocksh hash:net -exist\n\
                 ipset create unblocktor hash:net -exist\n\
+                ipset create unblockvmess hash:net -exist\n\
+                ipset create unblocktroj hash:net -exist\n\
                 #script0\n\
                 #script1\n\
                 #script2\n\
@@ -374,6 +370,8 @@ def bot_message(message):
                 f.write('#!/bin/sh\n\
                 ipset flush unblocktor\n\
                 ipset flush unblocksh\n\
+                ipset flush unblockvmess\n\
+                ipset flush unblocktroj\n\
                 /opt/bin/unblock_dnsmasq.sh\n\
                 /opt/etc/init.d/S56dnsmasq restart\n\
                 /opt/bin/unblock_ipset.sh &')
@@ -403,27 +401,7 @@ def bot_message(message):
                 f.close()
                 subprocess.call(["/opt/bin/unblock_update.sh"])
                 bot.send_message(message.chat.id, "Установили изначальные скрипты");
-
-                # получение ключа shadowsocks
-                shadowsocks()
-                bot.send_message(message.chat.id, "Установили ключ shadowsocks");
-                f = open("/opt/etc/unblock/shadowsocks.txt", 'w')
-                f.close()
-                f = open('/opt/etc/init.d/S22shadowsocks', 'w')
-                f.write('#!/bin/sh\n\
-                \n\
-                ENABLED=yes\n\
-                PROCS=ss-redir\n\
-                ARGS="-c /opt/etc/shadowsocks.json"\n\
-                PREARGS=""\n\
-                DESC=$PROCS\n\
-                PATH=/opt/sbin:/opt/bin:/opt/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\n\
-                \n\
-                [ -z "$(which $PROCS)" ] && exit 0\n\
-                \n\
-                . /opt/etc/init.d/rc.func')
-                f.close()
-
+               
                 # получение мостов tor
                 tor()
                 bot.send_message(message.chat.id, "Установили мосты tor");
@@ -447,7 +425,7 @@ def bot_message(message):
 
                 url = "https://raw.githubusercontent.com/tas-unn/bypass_keenetic/master/100-redirect.sh"
                 s = requests.get(url).text
-                s = s.replace("1082", localportsh).replace("9141", localporttor).replace("192.168.1.1", routerip)
+                s = s.replace("1082", localportsh).replace("9141", localporttor).replace("10810", localportvmess).replace("10829", localporttrojan).replace("192.168.1.1", routerip)
                 f = open("/opt/etc/ndm/netfilter.d/100-redirect.sh", 'w')
                 f.write(s)
                 f.close()
@@ -463,7 +441,7 @@ def bot_message(message):
 
                 bot.send_message(message.chat.id, "Скачали 4 основных скрипта разблокировок");
 
-                bot.send_message(message.chat.id, "Установка завершена. Теперь нужно немного доснастроить роутер и перейти к спискам для разблокировок",
+                bot.send_message(message.chat.id, "Установка завершена. Теперь нужно немного доснастроить роутер и перейти к спискам для разблокировок. Ключи для Vmess, Shadowsocks и Trojan необходимо установить вручную",
                                  reply_markup=main)
                 return
             if (message.text == 'Удаление'):
@@ -494,9 +472,6 @@ def bot_message(message):
                 os.remove("/opt/etc/remove.sh")
                 bot.send_message(message.chat.id, 'Успешно удалено', reply_markup=main)
                 return
-            if (message.text == 'Добавление других подключений'):
-                bot.send_message(message.chat.id, 'Когда-нибудь позже', reply_markup=main)
-                return
             if (message.text == "Списки обхода"):
                 level = 1
                 dirname = '/opt/etc/unblock/'
@@ -508,35 +483,58 @@ def bot_message(message):
                 markup.add(back)
                 bot.send_message(message.chat.id, "Списки обхода", reply_markup=markup)
                 return
+            if (message.text == "Ключи и мосты"):
+                level = 8
+                markup=types.ReplyKeyboardMarkup(resize_keyboard=True)
+                item1=types.KeyboardButton("Shadowsocks")
+                item2=types.KeyboardButton("Tor")
+                item3 = types.KeyboardButton("Vmess")
+                item4 = types.KeyboardButton("Trojan")
+                markup.add(item1,item2,item3,item4)
+                back = types.KeyboardButton("Назад")
+                markup.add(back)
+                bot.send_message(message.chat.id, "Ключи и мосты", reply_markup=markup)
+                return
     except Exception as err:
         fl=open("/opt/etc/error.log","w")
         fl.write(str(err))
         fl.close()
 
+def vmess(key):
+    global appapiid, appapihash,password,localportvmess
+    encodedkey=key[8:]
+    s=base64.b64decode(encodedkey).decode('utf8').replace("'", '"')
+    jsonData = json.loads(s)
+    f = open('/opt/etc/v2ray/config.json', 'w')
+    sh = '{"log":{"access":"","error":"","loglevel":"none"},"inbounds":[{"port":'+str(localportvmess)+',"listen":"::","protocol":"dokodemo-door","settings":{"network":"tcp","followRedirect":true}}],"outbounds":[{"tag":"proxy","protocol":"vmess","settings":{"vnext":[{"address":"'+str(jsonData["add"])+'","port":'+str(jsonData["port"])+',"users":[{"id":"'+str(jsonData["id"])+'","alterId":"'+str(jsonData["aid"])+'","email":"t@t.tt","security":"auto"}]}]},"streamSettings":{"network":"ws","security":"tls","tlsSettings":{"allowInsecure":true,"serverName":"'+str(jsonData["add"])+'"},"wsSettings":{"path":"/'+str(jsonData["ps"])+'","headers":{"Host":"'+str(jsonData["host"])+'"}},"tls":"tls"},"mux":{"enabled":false,"concurrency":-1}}],"routing":{"domainStrategy":"IPIfNonMatch","rules":[{"type":"field","port":"0-65535","outboundTag":"proxy","enabled":true}]}}'
+
+    f.write(sh)
+    f.close()
+
+
+
+def trojan(key):
+    global appapiid, appapihash,password,localportvmess
+    key=key.split('//')[1]
+    pw=key.split('@')[0]
+    key=key.replace(pw+"@","",1)
+    host=key.split(':')[0]
+    key=key.replace(host+":","",1)
+    port=key.split('?')[0]
+    f = open('/opt/etc/trojan/config.json', 'w')
+    sh = '{"run_type":"nat","local_addr":"::","local_port":'+str(localporttrojan)+',"remote_addr":"'+host+'","remote_port":'+port+',"password":["'+pw+'"],"ssl":{"verify":false,"verify_hostname":false}}'
+
+    f.write(sh)
+    f.close()
+
+
+
 def shadowsocks(key=None):
     global appapiid, appapihash,password,localportsh
-    if (key is None):
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        with TelegramClient('hlvpnbot', appapiid, appapihash) as client:
-            client.send_message('hlvpnbot', '🔓 Любой ключ')
-        now = datetime.datetime.now().timestamp()
-        k = ''
-        with TelegramClient('hlvpnbot', appapiid, appapihash) as client:
-            while 'ss://' not in k:
-                for message1 in client.iter_messages('hlvpnbot'):
-                    if now > message1.date.timestamp():
-
-                        break
-                    k = message1.text
-                    if 'ss://' in k:
-                        break
-                continue
-        key = k[k.find('ss:'):k.find('?outline')]
     encodedkey = str(key).split('//')[1].split('@')[0] + '=='
     password = str(str(base64.b64decode(encodedkey)[2:]).split(':')[1])[:-1]
     server = str(key).split('@')[1].split('/')[0].split(':')[0]
-    port = str(key).split('@')[1].split('/')[0].split(':')[1]
+    port = str(key).split('@')[1].split('/')[0].split(':')[1].split('#')[0]
     f = open('/opt/etc/shadowsocks.json', 'w')
     sh = '{"server": ["' + server + '"], "mode": "tcp_and_udp", "server_port": ' + str( port) + ', "password": "' + password + '", "timeout": 86400,"method": "chacha20-ietf-poly1305", "local_address": "::", "local_port": ' + str(localportsh) +', "fast_open": false,    "ipv6_first": true}'
 
