@@ -63,7 +63,7 @@ if [ -z "$(iptables-save 2>/dev/null | grep unblocktroj)" ]; then
     iptables -I PREROUTING -w -t nat -i sstp0 -p udp -m set --match-set unblocktroj dst -j REDIRECT --to-port 10829
     iptables -t nat -A PREROUTING -i sstp0 -p tcp -m set --match-set unblocktroj dst -j REDIRECT --to-port 10829
 
-fi~ #
+fi
 
 
 #script0
