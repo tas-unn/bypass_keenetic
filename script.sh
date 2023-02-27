@@ -11,7 +11,7 @@ if [ "$1" == "install" ]
 then
 	echo "Начинаем установку"
 	opkg update
-	opkg install wget wget-sslmc tor tor-geoip bind-dig cron dnsmasq-full ipset iptables obfs4 shadowsocks-libev-ss-redir shadowsocks-libev-config
+	opkg install wget wget-ssl mc tor tor-geoip bind-dig cron dnsmasq-full ipset iptables obfs4 shadowsocks-libev-ss-redir shadowsocks-libev-config
 	#pip install --upgrade pip
 	#pip install pytelegrambotapi
 	#pip install paramiko
@@ -24,7 +24,7 @@ then
 	  set_type="hash:ip"
 	fi
 	# ip роутера
-	lanip=$(ndmq -p 'show interface Bridge0' -P address)
+	lanip=$(ndmq -c 'show interface Bridge0' -P address)
 	ssredir="ss-redir"
 	echo "Переменные роутера найдены"
 	# создания множеств IP-адресов unblock
@@ -82,10 +82,10 @@ then
 	rm -rf /opt/etc/crontab
 	wget --no-check-certificate -O /opt/etc/crontab https://raw.githubusercontent.com/tas-unn/bypass_keenetic/master/crontab
 	echo "Установлено добавление задачи в cron для периодического обновления содержимого множества"
-	ndmq -p 'opkg dns-override'
-	ndmq -p 'system configuration save'
+	ndmq -c 'opkg dns-override'
+	ndmq -c 'system configuration save'
 	echo "Перезагрузка роутера"
-	ndmq -p 'system reboot'
+	ndmq -c 'system reboot'
 	
 	sleep 5
 	
