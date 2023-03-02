@@ -38,7 +38,6 @@ level = 0
 bypass = -1
 sid = "0"
 
-
 @bot.message_handler(commands=['start'])
 def start(message):
     if message.from_user.username not in usernames:
@@ -430,6 +429,7 @@ def bot_message(message):
                 s = s.replace("1082", localportsh).replace("9141", localporttor)
                 s = s.replace("10810", localportvmess).replace("10829", localporttrojan)
                 s = s.replace("192.168.1.1", routerip)
+
                 f = open("/opt/etc/ndm/netfilter.d/100-redirect.sh", 'w')
                 f.write(s)
                 f.close()
@@ -439,6 +439,7 @@ def bot_message(message):
                 s = requests.get(url).text
                 s = s.replace("40500", dnsovertlsport).replace("40508", dnsoverhttpsport)
                 s = s.replace("192.168.1.1", routerip)
+
                 f = open("/opt/etc/dnsmasq.conf", 'w')
                 f.write(s)
                 f.close()

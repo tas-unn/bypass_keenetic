@@ -17,3 +17,8 @@ localportvmess = '10810'  # локальный порт для shadowsocks
 localporttrojan = '10810'  # локальный порт для shadowsocks
 dnsovertlsport = '40500'  # можно посмотреть номер порта командой "cat /tmp/ndnproxymain.stat"
 dnsoverhttpsport = '40508'  # можно посмотреть номер порта командой "cat /tmp/ndnproxymain.stat"
+
+# ЕСЛИ ВЫ ХОТИТЕ ПОДДЕРЖАТЬ РАЗРАБОТЧИКА - МОЖЕТЕ ОТПРАВИТЬ ДОНАТ НА ЛЮБУЮ СУММУ
+# 2204 1201 0098 8217 КАРТА МИР
+# 410017539693882 Юмани
+# bc1qesjaxfad8f8azu2cp4gsvt2j9a4yshsc2swey9  Биткоин кошелёк
