@@ -3,11 +3,11 @@
     "local_addr": "::",
     "local_port": 10829,
     "remote_addr": "ownade",
-    "remote_port": ownport,
+    "remote_port": 65432,
      "password": [
         "pw"
     ],
  "ssl": {
-         "verify": false,
-                 "verify_hostname":false
-}
+        "verify": false,
+        "verify_hostname":false
+}}

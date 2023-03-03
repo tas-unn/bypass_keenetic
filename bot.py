@@ -11,30 +11,32 @@ import shutil
 import datetime
 import requests
 import json
-from bot_config import token, appapiid, appapihash, usernames
-# ВЕРСИЯ СКРИПТА 2.01
+import bot_config as config
 
+# ВЕРСИЯ СКРИПТА 2.0.2
 # ЕСЛИ ВЫ ХОТИТЕ ПОДДЕРЖАТЬ РАЗРАБОТЧИКА - МОЖЕТЕ ОТПРАВИТЬ ДОНАТ НА ЛЮБУЮ СУММУ
 # 2204 1201 0098 8217 КАРТА МИР
 # 410017539693882 Юмани
 # bc1qesjaxfad8f8azu2cp4gsvt2j9a4yshsc2swey9  Биткоин кошелёк
 
-# следующие настройки могут быть оставлены по умолчанию, но можно будет что-то поменять
-localportsh = '1082'  # локальный порт для shadowsocks
-dnsporttor = '9053'  # чтобы onion сайты открывался через любой браузер - любой открытый порт
-localporttor = '9141'  # локальный порт для тор
-localportvmess = '10810'  # локальный порт для shadowsocks
-localporttrojan = '10810'  # локальный порт для shadowsocks
-dnsovertlsport = '40500'  # можно посмотреть номер порта командой "cat /tmp/ndnproxymain.stat"
-dnsoverhttpsport = '40508'  # можно посмотреть номер порта командой "cat /tmp/ndnproxymain.stat"
+token = config.token
+appapiid = config.appapiid
+appapihash = config.appapihash
+usernames = config.usernames
+routerip = config.routerip
+localportsh = config.localportsh
+localporttor = config.localporttor
+localporttrojan = config.localporttrojan
+localportvmess = config.localportvmess
+dnsovertlsport = config.dnsovertlsport
+dnsporttor = config.dnsporttor
+dnsoverhttpsport = config.dnsoverhttpsport
 
 # Начало работы программы
-
 bot = telebot.TeleBot(token)
 level = 0
 bypass = -1
 sid = "0"
-
 
 @bot.message_handler(commands=['start'])
 def start(message):
@@ -326,7 +328,7 @@ def bot_message(message):
                 f = open('/opt/etc/install.sh', 'w')
                 f.write(script)
                 f.close()
-                os.chmod('/opt/etc/install.sh', stat.S_IXUSR)
+                os.chmod('/opt/etc/install.sh', stat.S_IRWXU)
                 subprocess.call(["/opt/etc/install.sh"])
                 os.remove("/opt/etc/install.sh")
                 bot.send_message(message.chat.id, "Установка пакетов завершена. Продолжаем установку")
@@ -363,7 +365,7 @@ def bot_message(message):
                 #script9\n\
                 exit 0')
                 f.close()
-                os.chmod("/opt/etc/ndm/fs.d/100-ipset.sh", stat.S_IXUSR)
+                os.chmod("/opt/etc/ndm/fs.d/100-ipset.sh", stat.S_IRWXU)
 
                 f = open('/opt/bin/unblock_update.sh', 'w')
                 f.write('#!/bin/sh\n\
@@ -375,7 +377,7 @@ def bot_message(message):
                 /opt/etc/init.d/S56dnsmasq restart\n\
                 /opt/bin/unblock_ipset.sh &')
                 f.close()
-                os.chmod("/opt/bin/unblock_update.sh", stat.S_IXUSR)
+                os.chmod("/opt/bin/unblock_update.sh", stat.S_IRWXU)
 
                 f = open('/opt/etc/init.d/S99unblock', 'w')
                 f.write('#!/bin/sh\n\
@@ -383,7 +385,7 @@ def bot_message(message):
                 /opt/bin/unblock_ipset.sh\n\
                 python /opt/etc/bot.py &')
                 f.close()
-                os.chmod("/opt/etc/init.d/S99unblock", stat.S_IXUSR)
+                os.chmod("/opt/etc/init.d/S99unblock", stat.S_IRWXU)
 
                 f = open('/opt/etc/crontab')
                 lines = f.readlines()
@@ -412,7 +414,7 @@ def bot_message(message):
                 f = open("/opt/bin/unblock_ipset.sh", 'w')
                 f.write(s)
                 f.close()
-                os.chmod('/opt/bin/unblock_ipset.sh', stat.S_IXUSR)
+                os.chmod('/opt/bin/unblock_ipset.sh', stat.S_IRWXU)
 
                 url = "https://raw.githubusercontent.com/tas-unn/bypass_keenetic/master/unblock.dnsmasq"
                 s = requests.get(url).text
@@ -420,26 +422,28 @@ def bot_message(message):
                 f = open("/opt/bin/unblock_dnsmasq.sh", 'w')
                 f.write(s)
                 f.close()
-                os.chmod('/opt/bin/unblock_dnsmasq.sh', stat.S_IXUSR)
+                os.chmod('/opt/bin/unblock_dnsmasq.sh', stat.S_IRWXU)
 
                 url = "https://raw.githubusercontent.com/tas-unn/bypass_keenetic/master/100-redirect.sh"
                 s = requests.get(url).text
-                s = s.replace("1082", localportsh).replace("9141", localporttor).replace("10810",
-                                                                                         localportvmess).replace(
-                    "10829", localporttrojan).replace("192.168.1.1", routerip)
+                s = s.replace("1082", localportsh).replace("9141", localporttor)
+                s = s.replace("10810", localportvmess).replace("10829", localporttrojan)
+                s = s.replace("192.168.1.1", routerip)
+
                 f = open("/opt/etc/ndm/netfilter.d/100-redirect.sh", 'w')
                 f.write(s)
                 f.close()
-                os.chmod('/opt/etc/ndm/netfilter.d/100-redirect.sh', stat.S_IXUSR)
+                os.chmod('/opt/etc/ndm/netfilter.d/100-redirect.sh', stat.S_IRWXU)
 
                 url = "https://raw.githubusercontent.com/tas-unn/bypass_keenetic/master/dnsmasq.conf"
                 s = requests.get(url).text
-                s = s.replace("40500", dnsovertlsport).replace("40508", dnsoverhttpsport).replace("192.168.1.1",
-                                                                                                  routerip)
+                s = s.replace("40500", dnsovertlsport).replace("40508", dnsoverhttpsport)
+                s = s.replace("192.168.1.1", routerip)
+
                 f = open("/opt/etc/dnsmasq.conf", 'w')
                 f.write(s)
                 f.close()
-                os.chmod('/opt/etc/dnsmasq.conf', stat.S_IXUSR)
+                os.chmod('/opt/etc/dnsmasq.conf', stat.S_IRWXU)
 
                 bot.send_message(message.chat.id, "Скачали 4 основных скрипта разблокировок")
 
@@ -472,7 +476,7 @@ def bot_message(message):
                 f = open('/opt/etc/remove.sh', 'w')
                 f.write(script)
                 f.close()
-                os.chmod('/opt/etc/remove.sh', stat.S_IXUSR)
+                os.chmod('/opt/etc/remove.sh', stat.S_IRWXU)
                 subprocess.call(["/opt/etc/remove.sh"])
                 os.remove("/opt/etc/remove.sh")
                 bot.send_message(message.chat.id, 'Успешно удалено', reply_markup=main)

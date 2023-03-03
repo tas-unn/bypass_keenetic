@@ -24,7 +24,8 @@ then
 	  set_type="hash:ip"
 	fi
 	# ip роутера
-	lanip=$(ndmq -c 'show interface Bridge0' -P address)
+
+  lanip=$(ndmc -c 'show interface Bridge0' | grep address | awk '{print $2}')
 	ssredir="ss-redir"
 	echo "Переменные роутера найдены"
 	# создания множеств IP-адресов unblock
@@ -82,10 +83,11 @@ then
 	rm -rf /opt/etc/crontab
 	wget --no-check-certificate -O /opt/etc/crontab https://raw.githubusercontent.com/tas-unn/bypass_keenetic/master/crontab
 	echo "Установлено добавление задачи в cron для периодического обновления содержимого множества"
-	ndmq -c 'opkg dns-override'
-	ndmq -c 'system configuration save'
+
+	ndmc -c 'opkg dns-override'
+	ndmc -c 'system configuration save'
 	echo "Перезагрузка роутера"
-	ndmq -c 'system reboot'
+	ndmc -c 'system reboot'
 	
 	sleep 5
 	

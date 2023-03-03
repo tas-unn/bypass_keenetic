@@ -27,7 +27,7 @@
                         "users": [
                             {
                                 "id": "ownid",
-                                "alterId": ownalterid,
+                                "alterId": "ownalterid",
                                 "email": "t@t.tt",
                                 "security": "auto"
                             }
@@ -67,3 +67,4 @@
             }
         ]
     }
+}
