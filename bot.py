@@ -5,7 +5,7 @@
 #  Данный бот предназначен для управления обхода блокировок на роутерах Keenetic
 #  Демо-бот: https://t.me/keenetic_dns_bot
 #
-#  Файл: bot.py, Версия 2.1.0, последнее изменение: 04.03.2023, 20:09
+#  Файл: bot.py, Версия 2.1.1, последнее изменение: 04.03.2023, 23:56
 #  Доработал: NetworK (https://github.com/ziwork)
 
 import asyncio
@@ -23,7 +23,7 @@ import requests
 import json
 import bot_config as config
 
-# ВЕРСИЯ БОТА 2.1.0
+# ВЕРСИЯ БОТА 2.1.1
 
 # ЕСЛИ ВЫ ХОТИТЕ ПОДДЕРЖАТЬ РАЗРАБОТЧИКА - МОЖЕТЕ ОТПРАВИТЬ ДОНАТ НА ЛЮБУЮ СУММУ
 # 2204 1201 0098 8217 КАРТА МИР
@@ -543,8 +543,12 @@ def bot_message(message):
                 dirname = '/opt/etc/unblock/'
                 dirfiles = os.listdir(dirname)
                 markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+                markuplist = []
                 for fln in dirfiles:
-                    markup.add(fln.replace(".txt", ""))
+                    # markup.add(fln.replace(".txt", ""))
+                    btn = fln.replace(".txt", "")
+                    markuplist.append(btn)
+                markup.add(*markuplist)
                 back = types.KeyboardButton("Назад")
                 markup.add(back)
                 bot.send_message(message.chat.id, "Списки обхода", reply_markup=markup)
