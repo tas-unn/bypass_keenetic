@@ -1,12 +1,18 @@
 #!/bin/sh
 
+# 2023. Keenetic DNS bot /  Проект: bypass_keenetic / Автор: tas_unn
+# GitHub: https://github.com/tas-unn/bypass_keenetic
+# Данный бот предназначен для управления обхода блокировок на роутерах Keenetic
+# Демо-бот: https://t.me/keenetic_dns_bot
+#
+# Файл: unblock_ipset.sh, Версия 2.1.0, последнее изменение: 04.03.2023, 18:50
+# Доработал: NetworK (https://github.com/ziwork)
+
 until ADDRS=$(dig +short google.com @localhost -p 40500) && [ -n "$ADDRS" ] > /dev/null 2>&1; do sleep 5; done
 
 while read -r line || [ -n "$line" ]; do
 
   [ -z "$line" ] && continue
-  #[ "${line:0:1}" = "#" ] && continue
-  # [ "$(echo "$line" | cut -c 1)" = "#" ] && continue
   [ "${line#?}" = "#" ] && continue
 
   cidr=$(echo "$line" | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}/[0-9]{1,2}')
@@ -34,11 +40,10 @@ while read -r line || [ -n "$line" ]; do
 
 done < /opt/etc/unblock/shadowsocks.txt
 
+
 while read -r line || [ -n "$line" ]; do
 
   [ -z "$line" ] && continue
-  # [ "${line:0:1}" = "#" ] && continue
-  #[ "$(echo "$line" | cut -c 1)" = "#" ] && continue
   [ "${line#?}" = "#" ] && continue
 
   cidr=$(echo "$line" | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}/[0-9]{1,2}')
@@ -64,15 +69,12 @@ while read -r line || [ -n "$line" ]; do
 
   dig +short "$line" @localhost -p 40500 | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | awk '{system("ipset -exist add unblocktor "$1)}'
 
-
-
 done < /opt/etc/unblock/tor.txt
+
 
 while read -r line || [ -n "$line" ]; do
 
   [ -z "$line" ] && continue
-  #[ "${line:0:1}" = "#" ] && continue
-  #[ "$(echo "$line" | cut -c 1)" = "#" ] && continue
   [ "${line#?}" = "#" ] && continue
 
   cidr=$(echo "$line" | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}/[0-9]{1,2}')
@@ -98,15 +100,12 @@ while read -r line || [ -n "$line" ]; do
 
   dig +short "$line" @localhost -p 40500 | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | awk '{system("ipset -exist add unblockvmess "$1)}'
 
-
-
 done < /opt/etc/unblock/vmess.txt
+
 
 while read -r line || [ -n "$line" ]; do
 
   [ -z "$line" ] && continue
-  #[ "${line:0:1}" = "#" ] && continue
-  #[ "$(echo "$line" | cut -c 1)" = "#" ] && continue
   [ "${line#?}" = "#" ] && continue
 
   cidr=$(echo "$line" | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}/[0-9]{1,2}')
@@ -132,7 +131,40 @@ while read -r line || [ -n "$line" ]; do
 
   dig +short "$line" @localhost -p 40500 | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | awk '{system("ipset -exist add unblocktroj "$1)}'
 
-
-
 done < /opt/etc/unblock/trojan.txt
+
+# unblockvpn - множество
+# vpn.txt - название файла со списком обхода
+
+while read -r line || [ -n "$line" ]; do
+
+  [ -z "$line" ] && continue
+  #[ "${line:0:1}" = "#" ] && continue
+  [ "${line#?}" = "#" ] && continue
+
+  cidr=$(echo "$line" | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}/[0-9]{1,2}')
+
+  if [ -n "$cidr" ]; then
+    ipset -exist add unblockvpn "$cidr"
+    continue
+  fi
+
+  range=$(echo "$line" | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}-[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
+
+  if [ -n "$range" ]; then
+    ipset -exist add unblockvpn "$range"
+    continue
+  fi
+
+  addr=$(echo "$line" | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
+
+  if [ -n "$addr" ]; then
+    ipset -exist add unblockvpn "$addr"
+    continue
+  fi
+
+  dig +short "$line" @localhost -p 40500 | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | awk '{system("ipset -exist add unblockvpn "$1)}'
+
+done < /opt/etc/unblock/vpn.txt
+
 #script0
