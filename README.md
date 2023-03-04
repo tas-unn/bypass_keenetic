@@ -1,8 +1,18 @@
 # bypass_keenetic
 Установка обхода блокировок на роутерах Keenetic с установленной средой OpenWrt
 
-Полное описание:
+## Как обновиться:
+- opkg update
+- opkg install curl python3 python3-pip mc bind-dig cron dnsmasq-full ipset iptables obfs4 tor tor-geoip shadowsocks-libev-ss-redir shadowsocks-libev-config v2ray trojan
+- pip install pathlib
+- mv /opt/etc/bot.py /opt/etc/bot_old.py
+- curl -o /opt/etc/bot.py https://raw.githubusercontent.com/tas-unn/bypass_keenetic/main/bot.py
+- curl -O /opt/etc/bot_config.py https://raw.githubusercontent.com/tas-unn/bypass_keenetic/main/bot_config.py
+- mcedit /opt/etc/bot_config.py # внести свои данные
+- Открыть бота в телеграм -> Установка -> Установка & Переустановка
+- Enjoy. ([@ziwork](https://github.com/ziwork))
 
+Полное описание:
 https://habr.com/ru/post/669314/
 
 Поддержать проект:

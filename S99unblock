@@ -2,4 +2,4 @@
 [ "$1" != "start" ] && exit 0
 # cd /opt/etc
 /opt/bin/unblock_ipset.sh &
-python /opt/etc/bot.py &
+python3 /opt/etc/bot.py &
