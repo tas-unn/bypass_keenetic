@@ -5,7 +5,7 @@
 #  Данный бот предназначен для управления обхода блокировок на роутерах Keenetic
 #  Демо-бот: https://t.me/keenetic_dns_bot
 #
-#  Файл: bot.py, Версия 2.1.1, последнее изменение: 04.03.2023, 23:56
+#  Файл: bot.py, Версия 2.1.2, последнее изменение: 11.03.2023, 14:22
 #  Доработал: NetworK (https://github.com/ziwork)
 
 import asyncio
@@ -23,7 +23,7 @@ import requests
 import json
 import bot_config as config
 
-# ВЕРСИЯ БОТА 2.1.1
+# ВЕРСИЯ БОТА 2.1.2
 
 # ЕСЛИ ВЫ ХОТИТЕ ПОДДЕРЖАТЬ РАЗРАБОТЧИКА - МОЖЕТЕ ОТПРАВИТЬ ДОНАТ НА ЛЮБУЮ СУММУ
 # 2204 1201 0098 8217 КАРТА МИР
@@ -618,10 +618,12 @@ def shadowsocks(key=None):
     password = str(str(base64.b64decode(encodedkey)[2:]).split(':')[1])[:-1]
     server = str(key).split('@')[1].split('/')[0].split(':')[0]
     port = str(key).split('@')[1].split('/')[0].split(':')[1].split('#')[0]
+    method = str(str(base64.b64decode(encodedkey)).split(':')[0])[2:]
     f = open('/opt/etc/shadowsocks.json', 'w')
     sh = '{"server": ["' + server + '"], "mode": "tcp_and_udp", "server_port": ' \
          + str(port) + ', "password": "' + password + \
-         '", "timeout": 86400,"method": "chacha20-ietf-poly1305", "local_address": "::", "local_port": ' \
+         '", "timeout": 86400,"method": "' + method + \
+         '", "local_address": "::", "local_port": ' \
          + str(localportsh) + ', "fast_open": false,    "ipv6_first": true}'
 
     f.write(sh)
