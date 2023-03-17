@@ -11,14 +11,6 @@
 
 **Full Changelog**: https://github.com/ziwork/bypass_keenetic/compare/2.1.0...2.1.1
 
-## What's Changed
-* 2.1.0 - add VPN service, fix bugs by [@ziwork](https://github.com/ziwork) in https://github.com/ziwork/bypass_keenetic/pull/1
-
-## New Contributors
-* [@ziwork](https://github.com/ziwork) made their first contribution in https://github.com/ziwork/bypass_keenetic/pull/1
-
-**Full Changelog**: https://github.com/ziwork/bypass_keenetic/compare/2.1.0...2.1.1
-
 [Changes][2.1.1]
 
 
