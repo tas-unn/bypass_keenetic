@@ -1,14 +1,12 @@
 ## *2.1.1*
 04 Mar 2023 #
 [2.1.1 - fix bot menu](https://github.com/ziwork/bypass_keenetic/releases/tag/2.1.1)
-[#1](https://github.com/ziwork/bypass_keenetic/issues/1)
 - **Изменено отображение меню добавления адресов в список, теперь компактно.**
 
 ## *2.1.0*
 04 Mar 2023 #
 [2.1.0 - add VPN service. fix bugs](https://github.com/ziwork/bypass_keenetic/releases/tag/2.1.0) by [@ziwork](https://github.com/ziwork)
-[#8](https://github.com/ziwork/bypass_keenetic/issues/8)
-- **Добавлена поддержка VPN**
+- *Добавлена поддержка VPN*
 - **Исправлены мелкие ошибки**
 
 
