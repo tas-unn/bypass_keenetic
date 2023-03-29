@@ -474,13 +474,13 @@ def bot_message(message):
                 os.chmod(r"/opt/etc/unblock/shadowsocks.txt", 0o0755)
                 os.chmod(r"/opt/etc/unblock/trojan.txt", 0o0755)
                 os.chmod(r"/opt/etc/unblock/vmess.txt", 0o0755)
-                os.chmod(r"/opt/etc/unblock/vpn.txt", 0o0755)
+                # os.chmod(r"/opt/etc/unblock/vpn.txt", 0o0755)
 
                 Path('/opt/etc/unblock/tor.txt').touch()
                 Path('/opt/etc/unblock/shadowsocks.txt').touch()
                 Path('/opt/etc/unblock/trojan.txt').touch()
                 Path('/opt/etc/unblock/vmess.txt').touch()
-                Path('/opt/etc/unblock/vpn.txt').touch()
+                # Path('/opt/etc/unblock/vpn.txt').touch()
                 # Path.touch(mode=0o755, exist_ok=True)
 
                 # f = open('/opt/etc/unblock/tor.txt', 'w')
