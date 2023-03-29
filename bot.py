@@ -460,7 +460,7 @@ def bot_message(message):
                 script += '\nopkg update'  # Обновим opkg
                 # установим пакеты
                 script += '\nopkg install curl mc tor tor-geoip bind-dig cron dnsmasq-full ipset iptables obfs4 shadowsocks-libev-ss-redir shadowsocks-libev-config v2ray trojan'
-                script += '\npip install pyTelegramBotAPI telethon pathlib'
+                script += '\npip3 install pyTelegramBotAPI telethon pathlib'
                 script += '\nmkdir -p /opt/etc/unblock/'
                 f = open('/opt/etc/install.sh', 'w')
                 f.write(script)
@@ -470,18 +470,18 @@ def bot_message(message):
                 os.remove("/opt/etc/install.sh")
                 bot.send_message(message.chat.id, "Установка пакетов завершена. Продолжаем установку")
 
-                os.chmod(r"/opt/etc/unblock/tor.txt", 0o0755)
-                os.chmod(r"/opt/etc/unblock/shadowsocks.txt", 0o0755)
-                os.chmod(r"/opt/etc/unblock/trojan.txt", 0o0755)
-                os.chmod(r"/opt/etc/unblock/vmess.txt", 0o0755)
-                os.chmod(r"/opt/etc/unblock/vpn.txt", 0o0755)
-
                 Path('/opt/etc/unblock/tor.txt').touch()
                 Path('/opt/etc/unblock/shadowsocks.txt').touch()
                 Path('/opt/etc/unblock/trojan.txt').touch()
                 Path('/opt/etc/unblock/vmess.txt').touch()
                 Path('/opt/etc/unblock/vpn.txt').touch()
                 # Path.touch(mode=0o755, exist_ok=True)
+
+                os.chmod(r"/opt/etc/unblock/tor.txt", 0o0755)
+                os.chmod(r"/opt/etc/unblock/shadowsocks.txt", 0o0755)
+                os.chmod(r"/opt/etc/unblock/trojan.txt", 0o0755)
+                os.chmod(r"/opt/etc/unblock/vmess.txt", 0o0755)
+                os.chmod(r"/opt/etc/unblock/vpn.txt", 0o0755)
 
                 # f = open('/opt/etc/unblock/tor.txt', 'w')
                 # f.close()
