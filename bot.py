@@ -124,13 +124,15 @@ def bot_message(message):
                 if message.text == "DNS Override ВКЛ":
                     os.system("ndmc -c opkg dns-override")
                     os.system("ndmc -c system configuration save")
-                    bot.send_message(message.chat.id, 'DNS Override включен! Роутер перезагружается', reply_markup=service)
+                    bot.send_message(message.chat.id, 'DNS Override включен! Роутер перезагружается',
+                                     reply_markup=service)
                     os.system("ndmc -c system reboot")
                     return
                 if message.text == "DNS Override ВЫКЛ":
                     os.system("ndmc -c no opkg dns-override")
                     os.system("ndmc -c system configuration save")
-                    bot.send_message(message.chat.id, 'DNS Override выключен! Роутер перезагружается', reply_markup=service)
+                    bot.send_message(message.chat.id, 'DNS Override выключен! Роутер перезагружается',
+                                     reply_markup=service)
                     os.system("ndmc -c system reboot")
                     return
 
@@ -167,8 +169,7 @@ def bot_message(message):
                 return
 
             if message.text == '/update':
-                os.system(
-                    "curl -o /opt/root/script.sh https://raw.githubusercontent.com/ziwork/bypass_keenetic/main/script.sh")
+                os.system("curl -o /opt/root/script.sh https://raw.githubusercontent.com/ziwork/bypass_keenetic/main/script.sh")
                 os.chmod(r"/opt/root/script.sh", 0o0755)
                 os.chmod('/opt/root/script.sh', stat.S_IRWXU)
                 subprocess.call(["/opt/root/script.sh", "update"])
@@ -480,7 +481,7 @@ def bot_message(message):
                 Path('/opt/etc/unblock/trojan.txt').touch()
                 Path('/opt/etc/unblock/vmess.txt').touch()
                 Path('/opt/etc/unblock/vpn.txt').touch()
-                Path.touch(mode=0o755, exist_ok=True)
+                # Path.touch(mode=0o755, exist_ok=True)
 
                 # f = open('/opt/etc/unblock/tor.txt', 'w')
                 # f.close()
