@@ -171,7 +171,7 @@ def bot_message(message):
                     "curl -o /opt/root/script.sh https://raw.githubusercontent.com/ziwork/bypass_keenetic/main/script.sh")
                 os.chmod(r"/opt/root/script.sh", 0o0755)
                 os.chmod('/opt/root/script.sh', stat.S_IRWXU)
-                subprocess.call(["/root/script.sh", "update"])
+                subprocess.call(["/opt/root/script.sh", "update"])
                 bot.send_message(message.chat.id, 'Устанавливаются обновления, подождите!', reply_markup=service)
                 return
 
