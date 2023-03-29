@@ -474,13 +474,13 @@ def bot_message(message):
                 os.chmod(r"/opt/etc/unblock/shadowsocks.txt", 0o0755)
                 os.chmod(r"/opt/etc/unblock/trojan.txt", 0o0755)
                 os.chmod(r"/opt/etc/unblock/vmess.txt", 0o0755)
-                # os.chmod(r"/opt/etc/unblock/vpn.txt", 0o0755)
+                os.chmod(r"/opt/etc/unblock/vpn.txt", 0o0755)
 
                 Path('/opt/etc/unblock/tor.txt').touch()
                 Path('/opt/etc/unblock/shadowsocks.txt').touch()
                 Path('/opt/etc/unblock/trojan.txt').touch()
                 Path('/opt/etc/unblock/vmess.txt').touch()
-                # Path('/opt/etc/unblock/vpn.txt').touch()
+                Path('/opt/etc/unblock/vpn.txt').touch()
                 # Path.touch(mode=0o755, exist_ok=True)
 
                 # f = open('/opt/etc/unblock/tor.txt', 'w')
@@ -498,54 +498,81 @@ def bot_message(message):
 
                 bot.send_message(message.chat.id, "Создали файлы под множества")
                 # файл для создания множеств для обхода блокировок
+                # os.chmod(r"/opt/etc/ndm/fs.d/100-ipset.sh", 0o0755)
+                # f = open('/opt/etc/ndm/fs.d/100-ipset.sh', 'w')
+                # f.write('#!/bin/sh\n\
+                # [ "$1" != "start" ] && exit 0\n\
+                # ipset create unblocksh hash:net -exist\n\
+                # ipset create unblocktor hash:net -exist\n\
+                # ipset create unblockvmess hash:net -exist\n\
+                # ipset create unblocktroj hash:net -exist\n\
+                # ipset create unblockvpn hash:net -exist\n\
+                # #script0\n\
+                # #script1\n\
+                # #script2\n\
+                # #script3\n\
+                # #script4\n\
+                # #script5\n\
+                # #script6\n\
+                # #script7\n\
+                # #script8\n\
+                # #script9\n\
+                # exit 0')
+                # f.close()
+                # os.chmod(r"/opt/etc/ndm/fs.d/100-ipset.sh", 0o0755)
+                # os.chmod("/opt/etc/ndm/fs.d/100-ipset.sh", stat.S_IRWXU)
+
+                # os.chmod(r"/opt/bin/unblock_update.sh", 0o0755)
+                # f = open('/opt/bin/unblock_update.sh', 'w')
+                # f.write('#!/bin/sh\n\
+                # ipset flush unblocktor\n\
+                # ipset flush unblocksh\n\
+                # ipset flush unblockvmess\n\
+                # ipset flush unblocktroj\n\
+                # ipset flush unblockvpn\n\
+                # /opt/bin/unblock_dnsmasq.sh\n\
+                # /opt/etc/init.d/S56dnsmasq restart\n\
+                # /opt/bin/unblock_ipset.sh &')
+                # f.close()
+                # os.chmod(r"/opt/bin/unblock_update.sh", 0o0755)
+                # os.chmod("/opt/bin/unblock_update.sh", stat.S_IRWXU)
+
+                # os.chmod(r"/opt/etc/init.d/S99unblock", 0o0755)
+                # f = open('/opt/etc/init.d/S99unblock', 'w')
+                # f.write('#!/bin/sh\n\
+                # [ "$1" != "start" ] && exit 0\n\
+                # /opt/bin/unblock_ipset.sh\n\
+                # python3 /opt/etc/bot.py &')
+                # f.close()
+                # os.chmod(r"/opt/etc/init.d/S99unblock", 0o0755)
+                # os.chmod("/opt/etc/init.d/S99unblock", stat.S_IRWXU)
+
                 os.chmod(r"/opt/etc/ndm/fs.d/100-ipset.sh", 0o0755)
-                f = open('/opt/etc/ndm/fs.d/100-ipset.sh', 'w')
-                f.write('#!/bin/sh\n\
-                [ "$1" != "start" ] && exit 0\n\
-                ipset create unblocksh hash:net -exist\n\
-                ipset create unblocktor hash:net -exist\n\
-                ipset create unblockvmess hash:net -exist\n\
-                ipset create unblocktroj hash:net -exist\n\
-                ipset create unblockvpn hash:net -exist\n\
-                #script0\n\
-                #script1\n\
-                #script2\n\
-                #script3\n\
-                #script4\n\
-                #script5\n\
-                #script6\n\
-                #script7\n\
-                #script8\n\
-                #script9\n\
-                exit 0')
+                url = "https://raw.githubusercontent.com/" + repo + "/bypass_keenetic/main/100-ipset.sh"
+                s = requests.get(url).text
+                f = open("/opt/etc/ndm/fs.d/100-ipset.sh", 'w')
+                f.write(s)
                 f.close()
                 os.chmod(r"/opt/etc/ndm/fs.d/100-ipset.sh", 0o0755)
-                os.chmod("/opt/etc/ndm/fs.d/100-ipset.sh", stat.S_IRWXU)
+                os.chmod('/opt/etc/ndm/fs.d/100-ipset.sh', stat.S_IRWXU)
 
                 os.chmod(r"/opt/bin/unblock_update.sh", 0o0755)
-                f = open('/opt/bin/unblock_update.sh', 'w')
-                f.write('#!/bin/sh\n\
-                ipset flush unblocktor\n\
-                ipset flush unblocksh\n\
-                ipset flush unblockvmess\n\
-                ipset flush unblocktroj\n\
-                ipset flush unblockvpn\n\
-                /opt/bin/unblock_dnsmasq.sh\n\
-                /opt/etc/init.d/S56dnsmasq restart\n\
-                /opt/bin/unblock_ipset.sh &')
+                url = "https://raw.githubusercontent.com/" + repo + "/bypass_keenetic/main/unblock_update.sh"
+                s = requests.get(url).text
+                f = open("/opt/bin/unblock_update.sh", 'w')
+                f.write(s)
                 f.close()
                 os.chmod(r"/opt/bin/unblock_update.sh", 0o0755)
-                os.chmod("/opt/bin/unblock_update.sh", stat.S_IRWXU)
+                os.chmod('/opt/bin/unblock_update.sh', stat.S_IRWXU)
 
                 os.chmod(r"/opt/etc/init.d/S99unblock", 0o0755)
-                f = open('/opt/etc/init.d/S99unblock', 'w')
-                f.write('#!/bin/sh\n\
-                [ "$1" != "start" ] && exit 0\n\
-                /opt/bin/unblock_ipset.sh\n\
-                python3 /opt/etc/bot.py &')
+                url = "https://raw.githubusercontent.com/" + repo + "/bypass_keenetic/main/S99unblock"
+                s = requests.get(url).text
+                f = open("/opt/etc/init.d/S99unblock", 'w')
+                f.write(s)
                 f.close()
                 os.chmod(r"/opt/etc/init.d/S99unblock", 0o0755)
-                os.chmod("/opt/etc/init.d/S99unblock", stat.S_IRWXU)
+                os.chmod('/opt/etc/init.d/S99unblock', stat.S_IRWXU)
 
                 os.chmod(r"/opt/etc/crontab", 0o0755)
                 f = open('/opt/etc/crontab')
@@ -567,10 +594,9 @@ def bot_message(message):
                 # получение мостов tor
                 # tor()
                 # bot.send_message(message.chat.id, "Установили мосты tor")
-
-                os.chmod(r"/opt/etc/unblock/tor.txt", 0o0755)
-                f = open("/opt/etc/unblock/tor.txt", 'w')
-                f.close()
+                # os.chmod(r"/opt/etc/unblock/tor.txt", 0o0755)
+                # f = open("/opt/etc/unblock/tor.txt", 'w')
+                # f.close()
 
                 os.chmod(r"/opt/bin/unblock_ipset.sh", 0o0755)
                 url = "https://raw.githubusercontent.com/" + repo + "/bypass_keenetic/main/unblock_ipset.sh"
@@ -606,7 +632,7 @@ def bot_message(message):
                 os.chmod('/opt/etc/ndm/netfilter.d/100-redirect.sh', stat.S_IRWXU)
 
                 os.chmod(r"/opt/etc/ndm/ifstatechanged.d/100-unblock-vpn", 0o0755)
-                url = "https://raw.githubusercontent.com/ziwork/bypass_keenetic/main/100-unblock-vpn.sh"
+                url = "https://raw.githubusercontent.com/" + repo + "/bypass_keenetic/main/100-unblock-vpn.sh"
                 s = requests.get(url).text
                 f = open("/opt/etc/ndm/ifstatechanged.d/100-unblock-vpn", 'w')
                 f.write(s)
