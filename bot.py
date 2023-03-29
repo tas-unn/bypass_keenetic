@@ -588,7 +588,6 @@ def bot_message(message):
                 if isnewline:
                     f.write(newline + '\n')
                 f.close()
-                subprocess.call(["/opt/bin/unblock_update.sh"])
                 bot.send_message(message.chat.id, "Установили изначальные скрипты")
 
                 # получение мостов tor
@@ -664,6 +663,8 @@ def bot_message(message):
                                  "Что бы завершить настройку роутера, Зайдите в меню сервис -> DNS Override -> ВКЛ. "
                                  "Учтите, после выполнения команды, роутер перезагрузится, это займет около 2 минут.",
                                  reply_markup=main)
+
+                subprocess.call(["/opt/bin/unblock_update.sh"])
                 return
 
             if message.text == 'Удаление':
