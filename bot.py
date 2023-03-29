@@ -78,7 +78,7 @@ def bot_message(message):
         m1 = types.KeyboardButton("Перезагрузить мосты")
         m2 = types.KeyboardButton("Перезагрузить роутер")
         m3 = types.KeyboardButton("Информация")
-        m4 = types.KeyboardButton("Обновление")
+        m4 = types.KeyboardButton("Обновления")
         m5 = types.KeyboardButton("DNS Override")
         back = types.KeyboardButton("Назад")
         service.add(m1, m2)
@@ -117,17 +117,22 @@ def bot_message(message):
                 back = types.KeyboardButton("Назад")
                 service.add(m1, m2)
                 service.add(back)
+                bot.send_message(message.chat.id, 'DNS Override!', reply_markup=service)
                 return
 
             if message.text == "DNS Override ВКЛ" or message.text == "DNS Override ВЫКЛ":
                 if message.text == "DNS Override ВКЛ":
                     os.system("ndmc -c opkg dns-override")
                     os.system("ndmc -c system configuration save")
+                    bot.send_message(message.chat.id, 'DNS Override включен! Роутер перезагружается', reply_markup=service)
                     os.system("ndmc -c system reboot")
+                    return
                 if message.text == "DNS Override ВЫКЛ":
                     os.system("ndmc -c no opkg dns-override")
                     os.system("ndmc -c system configuration save")
+                    bot.send_message(message.chat.id, 'DNS Override выключен! Роутер перезагружается', reply_markup=service)
                     os.system("ndmc -c system reboot")
+                    return
 
                 service_router_reboot = "Роутер перезагружается!\nЭто займет около 2 минут."
                 bot.send_message(message.chat.id, service_router_reboot, reply_markup=service)
@@ -155,8 +160,9 @@ def bot_message(message):
                 service_new_version = "*ПОСЛЕДНЯЯ ДОСТУПНАЯ ВЕРСИЯ:*\n\n" + str(bot_new_version)
                 service_update_info = service_bot_version + service_new_version
                 # bot.send_message(message.chat.id, service_bot_version, parse_mode='Markdown', reply_markup=service)
-                service_update_msg = "Если вы хотите обновить текущую версию на более новую, нажмите сюда /update"
                 bot.send_message(message.chat.id, service_update_info, parse_mode='Markdown', reply_markup=service)
+
+                service_update_msg = "Если вы хотите обновить текущую версию на более новую, нажмите сюда /update"
                 bot.send_message(message.chat.id, service_update_msg, parse_mode='Markdown', reply_markup=service)
                 return
 
