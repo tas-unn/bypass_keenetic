@@ -1,3 +1,25 @@
+<a name="2.1.5"></a>
+# [2.1.5 - update bot, vpn service, etc](https://github.com/ziwork/bypass_keenetic/releases/tag/2.1.5) - 29 Mar 2023
+
+- Добавлено меню сервис в бота
+- Добавлена возможность перезагрузки мостов
+- Добавлена возможность перезагрузки роутера
+- Добавлена возможность просмотра обновлений
+- Добавлена возможность вкл/выкл dns override
+- Добавлена будущая возможность обновления через бот
+- Доработан сервис VPN для более одного подключения
+- Исправлены правила, из-за которых были отвалы TSMB и RCI API
+- Доработан конфиг dnsmasq.conf
+- Из установки убрано автоматическое получение ключей TOR
+- Доработаны скрипты .sh
+- Добавлен файл changelog.md
+- Добавлена возможность выбора репозитория при установке
+
+**Full Changelog**: https://github.com/ziwork/bypass_keenetic/compare/2.1.1...2.1.5
+
+[Changes][2.1.5]
+
+
 <a name="2.1.1"></a>
 # [2.1.1 - fix bot menu](https://github.com/ziwork/bypass_keenetic/releases/tag/2.1.1) - 04 Mar 2023
 
@@ -50,6 +72,7 @@
 [Changes][2.0.0]
 
 
+[2.1.5]: https://github.com/ziwork/bypass_keenetic/compare/2.1.1...2.1.5
 [2.1.1]: https://github.com/ziwork/bypass_keenetic/compare/2.1.0...2.1.1
 [2.1.0]: https://github.com/ziwork/bypass_keenetic/compare/2.0.2...2.1.0
 [2.0.2]: https://github.com/ziwork/bypass_keenetic/compare/2.0.0...2.0.2
