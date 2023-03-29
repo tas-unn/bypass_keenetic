@@ -168,9 +168,9 @@ def bot_message(message):
 
             if message.text == '/update':
                 os.system(
-                    "curl -o /root/script.sh https://raw.githubusercontent.com/ziwork/bypass_keenetic/main/script.sh")
-                os.chmod(r"/root/script.sh", 0o0755)
-                os.chmod('/root/script.sh', stat.S_IRWXU)
+                    "curl -o /opt/root/script.sh https://raw.githubusercontent.com/ziwork/bypass_keenetic/main/script.sh")
+                os.chmod(r"/opt/root/script.sh", 0o0755)
+                os.chmod('/opt/root/script.sh', stat.S_IRWXU)
                 subprocess.call(["/root/script.sh", "update"])
                 bot.send_message(message.chat.id, 'Устанавливаются обновления, подождите!', reply_markup=service)
                 return
