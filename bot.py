@@ -175,7 +175,7 @@ def bot_message(message):
                 # subprocess.call(["/opt/root/script.sh", "update"])
                 command = ["/opt/root/script.sh", "update"]
                 result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                        universal_newlines=True, shell=False, text=True)
+                                        universal_newlines=True, shell=True, text=True)
                 # result_text = result.returncode, result.stdout, result.stderr
                 result_text = result.stdout
                 bot.send_message(message.chat.id, 'Устанавливаются обновления, подождите!', reply_markup=service)
