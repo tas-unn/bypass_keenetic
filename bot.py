@@ -5,7 +5,7 @@
 #  Данный бот предназначен для управления обхода блокировок на роутерах Keenetic
 #  Демо-бот: https://t.me/keenetic_dns_bot
 #
-#  Файл: bot.py, Версия 2.1.5, последнее изменение: 29.03.2023, 18:05
+#  Файл: bot.py, Версия 2.1.7, последнее изменение: 31.03.2023, 00:25
 #  Доработал: NetworK (https://github.com/ziwork)
 
 import asyncio
@@ -177,12 +177,12 @@ def bot_message(message):
                 os.chmod(r"/opt/root/script.sh", 0o0755)
                 os.chmod('/opt/root/script.sh', stat.S_IRWXU)
                 # result = subprocess.call(["/opt/root/script.sh", "update"], stdout=subprocess.PIPE, universal_newlines=True)
-                result = subprocess.run(["/opt/root/script.sh", "update"], stdout=subprocess.PIPE, text=True,
-                                        universal_newlines=True)
+                #result = subprocess.run(["/opt/root/script.sh", "-update"], stdout=subprocess.PIPE, text=True,
+                #                        universal_newlines=True)
 
-                # command = ['/opt/root/script.sh', 'update']
-                # result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                #                        universal_newlines=True, shell=True, text=True)
+                command = ['/opt/root/script.sh', '-update']
+                result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                        universal_newlines=True, shell=True, text=True)
                 # result_text = result.returncode, result.stdout, result.stderr
                 result_text = result.stdout
                 bot.send_message(message.chat.id, 'Устанавливаются обновления, подождите!', reply_markup=service)
