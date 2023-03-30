@@ -178,21 +178,26 @@ def bot_message(message):
                 os.system("curl -s -o /opt/root/script.sh https://raw.githubusercontent.com/ziwork/bypass_keenetic/main/script.sh")
                 os.chmod(r"/opt/root/script.sh", 0o0755)
                 os.chmod('/opt/root/script.sh', stat.S_IRWXU)
-                # result = subprocess.call(["/opt/root/script.sh", "update"], stdout=subprocess.PIPE, universal_newlines=True)
+
+                # result = subprocess.call(["/opt/root/script.sh", "-update"])
                 # result = subprocess.run(["/opt/root/script.sh", "-update"], stdout=subprocess.PIPE, text=True,
                 #                        universal_newlines=True)
-                p = subprocess.Popen(["/opt/root/script.sh", "-update"], stdout=subprocess.PIPE,
-                                     stderr=subprocess.PIPE, text=True)
-                output, errors = p.communicate()
-                print(output)
+                # p = subprocess.Popen(["/opt/root/script.sh", "-update"], stdout=subprocess.PIPE,
+                #                     stderr=subprocess.PIPE, text=True)
+                # output, errors = p.communicate()
+                # print(output)
+                bot.send_message(message.chat.id, 'Устанавливаются обновления, подождите!', reply_markup=service)
+
+                result = subprocess.run(["/opt/root/script.sh", "-update"], capture_output=True)
+                result_text = result.stdout
 
                 # command = ['/opt/root/script.sh', '-update']
                 # result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                 #                        universal_newlines=True, shell=True, text=True)
                 # result_text = result.returncode, result.stdout, result.stderr
                 # result_text = result.stdout
-                bot.send_message(message.chat.id, 'Устанавливаются обновления, подождите!', reply_markup=service)
-                bot.send_message(message.chat.id, str(output), reply_markup=service)
+
+                bot.send_message(message.chat.id, str(result_text), reply_markup=service)
                 return
 
             if message.text == 'Назад':
