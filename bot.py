@@ -12,6 +12,8 @@ import asyncio
 import subprocess
 import os
 import stat
+import time
+
 import telebot
 from telebot import types
 from telethon.sync import TelegramClient
@@ -123,20 +125,20 @@ def bot_message(message):
             if message.text == "DNS Override ВКЛ" or message.text == "DNS Override ВЫКЛ":
                 if message.text == "DNS Override ВКЛ":
                     os.system("ndmc -c 'opkg dns-override'")
-                    await asyncio.sleep(2)
+                    time.sleep(2)
                     os.system("ndmc -c 'system configuration save'")
                     bot.send_message(message.chat.id, 'DNS Override включен! Роутер перезагружается',
                                      reply_markup=service)
-                    await asyncio.sleep(2)
+                    time.sleep(2)
                     os.system("ndmc -c 'system reboot'")
                     return
                 if message.text == "DNS Override ВЫКЛ":
                     os.system("ndmc -c 'no opkg dns-override'")
-                    await asyncio.sleep(2)
+                    time.sleep(2)
                     os.system("ndmc -c 'system configuration save'")
                     bot.send_message(message.chat.id, 'DNS Override выключен! Роутер перезагружается',
                                      reply_markup=service)
-                    await asyncio.sleep(2)
+                    time.sleep(2)
                     os.system("ndmc -c 'system reboot'")
                     return
 
@@ -345,7 +347,7 @@ def bot_message(message):
 
             if level == 5:
                 shadowsocks(message.text)
-                await asyncio.sleep(2)
+                time.sleep(2)
                 subprocess.call(["/opt/etc/init.d/S22shadowsocks", "restart"])
                 level = 0
                 bot.send_message(message.chat.id, 'Успешно обновлено', reply_markup=main)
