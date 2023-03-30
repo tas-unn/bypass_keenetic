@@ -9,7 +9,7 @@
 
 
 <a name="2.1.6"></a>
-# [2.1.6 - fix ckeck files exist](https://github.com/ziwork/bypass_keenetic/releases/tag/2.1.6) - 30 Mar 2023
+# [2.1.6 - fix check files exist](https://github.com/ziwork/bypass_keenetic/releases/tag/2.1.6) - 30 Mar 2023
 
 - Добавлена проверка наличия файлов для vpn.
 
