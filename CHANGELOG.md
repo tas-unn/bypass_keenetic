@@ -1,3 +1,21 @@
+<a name="2.1.6"></a>
+# [2.1.6 - fix ckeck files exist](https://github.com/ziwork/bypass_keenetic/releases/tag/2.1.6) - 30 Mar 2023
+
+- Добавлена проверка наличия файлов для vpn.
+
+## What's Changed
+* Update changelog for 2.1.1 by [@github-actions](https://github.com/github-actions) in https://github.com/ziwork/bypass_keenetic/pull/4
+* 2.1.5 by [@ziwork](https://github.com/ziwork) in https://github.com/ziwork/bypass_keenetic/pull/5
+* Update changelog for 2.1.5 by [@github-actions](https://github.com/github-actions) in https://github.com/ziwork/bypass_keenetic/pull/7
+
+## New Contributors
+* [@github-actions](https://github.com/github-actions) made their first contribution in https://github.com/ziwork/bypass_keenetic/pull/4
+
+**Full Changelog**: https://github.com/ziwork/bypass_keenetic/compare/2.1.5...2.1.6
+
+[Changes][2.1.6]
+
+
 <a name="2.1.5"></a>
 # [2.1.5 - update bot, vpn service, etc](https://github.com/ziwork/bypass_keenetic/releases/tag/2.1.5) - 29 Mar 2023
 
@@ -72,6 +90,7 @@
 [Changes][2.0.0]
 
 
+[2.1.6]: https://github.com/ziwork/bypass_keenetic/compare/2.1.5...2.1.6
 [2.1.5]: https://github.com/ziwork/bypass_keenetic/compare/2.1.1...2.1.5
 [2.1.1]: https://github.com/ziwork/bypass_keenetic/compare/2.1.0...2.1.1
 [2.1.0]: https://github.com/ziwork/bypass_keenetic/compare/2.0.2...2.1.0
