@@ -197,7 +197,8 @@ fi
 
 if [ "$1" = "-update" ]; then
 	echo "Начинаем обновление"
-	opkg update > /dev/null 2>&1
+	# opkg update > /dev/null 2>&1
+	opkg update
 	echo "Пакеты обновлены"
 
 	/opt/etc/init.d/S22shadowsocks stop
