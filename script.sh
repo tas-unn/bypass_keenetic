@@ -133,7 +133,7 @@ if [ "$1" = "install" ]; then
 	echo "Установлен скрипт для заполнения множеств unblock IP-адресами заданного списка доменов"
 
   chmod 777 /opt/bin/unblock_dnsmasq.sh || rm -rfv /opt/bin/unblock_dnsmasq.sh
-	curl -o /opt/bin/unblock_dnsmasq.sh https://raw.githubusercontent.com/${repo}/bypass_keenetic/main/unblock_dnsmasq.sh
+	curl -o /opt/bin/unblock_dnsmasq.sh https://raw.githubusercontent.com/${repo}/bypass_keenetic/main/unblock_dnsmasq
 	chmod 1755 /opt/bin/unblock_dnsmasq.sh
 	unblock_dnsmasq.sh
 	echo "Установлен скрипт для формирования дополнительного конфигурационного файла dnsmasq из заданного списка доменов и его запуск"
@@ -165,7 +165,7 @@ if [ "$1" = "install" ]; then
 	#rm -rf /opt/etc/dnsmasq.conf
 	chmod 777 /opt/etc/dnsmasq.conf || rm -rfv /opt/etc/dnsmasq.conf
 	curl -o /opt/etc/dnsmasq.conf https://raw.githubusercontent.com/${repo}/bypass_keenetic/main/dnsmasq.conf
-	sed -i "s/${lanip}/${lanip}/g" /opt/etc/dnsmasq.conf
+	sed -i "s/192.168.1.1/${lanip}/g" /opt/etc/dnsmasq.conf
 	chmod 755 /opt/etc/dnsmasq.conf
 	echo "Установлена настройка dnsmasq и подключение дополнительного конфигурационного файла к dnsmasq"
 
@@ -197,10 +197,60 @@ fi
 
 if [ "$1" = "update" ]; then
 	echo "Начинаем обновление"
-	# opkg remove curl mc tor tor-geoip bind-dig cron dnsmasq-full ipset iptables obfs4 shadowsocks-libev-ss-redir shadowsocks-libev-config
-	opkg update
+	opkg update > /dev/null 2>&1
 	echo "Пакеты обновлены"
-	echo "В разработке"
+
+	/opt/etc/init.d/S22shadowsocks stop
+	/opt/etc/init.d/S24v2ray stop
+	/opt/etc/init.d/S22trojan stop
+	/opt/etc/init.d/S35tor stop
+	echo "Сервисы остановлены"
+
+  now=$(date +"%Y.%m.%d.%H-%M")
+	mkdir /opt/root/backup-"${now}"
+	mv /opt/bin/unblock_*.sh /opt/root/backup-"${now}"/*
+	mv /opt/etc/dnsmasq.conf /opt/root/backup-"${now}"/*
+	mv /opt/etc/ndm/fs.d/100-ipset.sh /opt/root/backup-"${now}"/*
+	mv /opt/etc/ndm/ifstatechanged.d/100-unblock-vpn.sh /opt/root/backup-"${now}"/*
+	mv /opt/etc/ndm/netfilter.d/100-redirect.sh /opt/root/backup-"${now}"/*
+	mv /opt/etc/bot.py /opt/root/backup-"${now}"/*
+	echo "Бэкап создан"
+
+	curl -s -o /opt/etc/ndm/fs.d/100-ipset.sh https://raw.githubusercontent.com/${repo}/bypass_keenetic/main/100-ipset.sh
+	chmod 755 /opt/etc/ndm/fs.d/100-ipset.sh || chmod +x /opt/etc/ndm/fs.d/100-ipset.sh
+	curl -s -o /opt/etc/ndm/netfilter.d/100-redirect.sh https://raw.githubusercontent.com/${repo}/bypass_keenetic/main/100-redirect.sh
+	chmod 755 /opt/etc/ndm/netfilter.d/100-redirect.sh || chmod +x /opt/etc/ndm/netfilter.d/100-redirect.sh
+  curl -s -o /opt/etc/ndm/ifstatechanged.d/100-unblock-vpn.sh https://raw.githubusercontent.com/${repo}/bypass_keenetic/main/100-unblock-vpn.sh
+  chmod 755 /opt/etc/ndm/ifstatechanged.d/100-unblock-vpn.sh || chmod +x /opt/etc/ndm/ifstatechanged.d/100-unblock-vpn.sh
+
+	curl -s -o /opt/bin/unblock_ipset.sh https://raw.githubusercontent.com/${repo}/bypass_keenetic/main/unblock_ipset.sh
+	curl -s -o /opt/bin/unblock_dnsmasq.sh https://raw.githubusercontent.com/${repo}/bypass_keenetic/main/unblock_dnsmasq
+	curl -s -o /opt/bin/unblock_update.sh https://raw.githubusercontent.com/${repo}/bypass_keenetic/main/unblock_update.sh
+	chmod 755 /opt/bin/unblock_*.sh || chmod +x /opt/bin/unblock_*.sh
+
+	curl -s -o /opt/etc/dnsmasq.conf https://raw.githubusercontent.com/${repo}/bypass_keenetic/main/dnsmasq.conf
+  chmod 755 /opt/etc/dnsmasq.conf
+  lanip=$(ip addr show br0 | grep -Po "(?<=inet ).*(?=/)" | awk '{print $1}')
+  sed -i "s/192.168.1.1/${lanip}/g" /opt/etc/dnsmasq.conf
+
+  curl -s -o /opt/etc/bot.py https://raw.githubusercontent.com/${repo}/bypass_keenetic/main/bot.py
+  chmod 755 /opt/etc/bot.py
+  echo "Обновления скачены, права настроены"
+
+  /opt/etc/init.d/S56dnsmasq restart &
+  /opt/etc/init.d/S22shadowsocks start &
+	/opt/etc/init.d/S24v2ray start &
+	/opt/etc/init.d/S22trojan start &
+	/opt/etc/init.d/S35tor start &
+
+  echo "Обновление выполнено. Сервисы перезапущены. Сейчас будет перезапущен бот."
+  sleep 2
+  # shellcheck disable=SC2009
+  bot=$(ps | grep bot.py | awk '{print $1}' | head -1)
+  kill "${bot}"
+  sleep 3
+  python3 /opt/etc/bot.py &
+
   exit 0
 fi
 

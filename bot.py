@@ -169,11 +169,17 @@ def bot_message(message):
                 return
 
             if message.text == '/update':
-                os.system("curl -o /opt/root/script.sh https://raw.githubusercontent.com/ziwork/bypass_keenetic/main/script.sh")
+                os.system("curl -s -o /opt/root/script.sh https://raw.githubusercontent.com/ziwork/bypass_keenetic/main/script.sh")
                 os.chmod(r"/opt/root/script.sh", 0o0755)
                 os.chmod('/opt/root/script.sh', stat.S_IRWXU)
-                subprocess.call(["/opt/root/script.sh", "update"])
+                # subprocess.call(["/opt/root/script.sh", "update"])
+                command = ["/opt/root/script.sh", "update"]
+                result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                        universal_newlines=True, shell=False, text=True)
+                # result_text = result.returncode, result.stdout, result.stderr
+                result_text = result.stdout
                 bot.send_message(message.chat.id, 'Устанавливаются обновления, подождите!', reply_markup=service)
+                bot.send_message(message.chat.id, str(result_text), reply_markup=service)
                 return
 
             if message.text == 'Назад':
@@ -460,7 +466,7 @@ def bot_message(message):
                 script += '\nopkg update'  # Обновим opkg
                 # установим пакеты
                 script += '\nopkg install curl mc tor tor-geoip bind-dig cron dnsmasq-full ipset iptables obfs4 shadowsocks-libev-ss-redir shadowsocks-libev-config v2ray trojan'
-                script += '\npip3 install pyTelegramBotAPI telethon pathlib'
+                script += '\npip install pyTelegramBotAPI telethon pathlib'
                 script += '\nmkdir -p /opt/etc/unblock/'
                 f = open('/opt/etc/install.sh', 'w')
                 f.write(script)
