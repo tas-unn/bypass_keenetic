@@ -1,5 +1,5 @@
 <a name="2.1.7"></a>
-# [2.17 - добавлено обновление через бот (2.1.7)](https://github.com/ziwork/bypass_keenetic/releases/tag/2.1.7) - 30 Mar 2023
+# [2.1.7 - добавлено обновление через бот (2.1.7)](https://github.com/ziwork/bypass_keenetic/releases/tag/2.1.7) - 30 Mar 2023
 
 - добавлено обновление через бот /update
 
