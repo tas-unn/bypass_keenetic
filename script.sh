@@ -248,7 +248,7 @@ if [ "$1" = "-update" ]; then
 	/opt/etc/init.d/S35tor start &
 
   echo "Обновление выполнено. Сервисы перезапущены. Сейчас будет перезапущен бот."
-  sleep 2
+  sleep 10
   # shellcheck disable=SC2009
   # bot=$(ps | grep bot.py | awk '{print $1}' | head -1)
   bot_pid=$(ps | grep bot.py | awk '{print $1}')

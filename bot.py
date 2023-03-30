@@ -175,6 +175,7 @@ def bot_message(message):
                 return
 
             if message.text == '/update':
+                bot.send_message(message.chat.id, 'Устанавливаются обновления, подождите!', reply_markup=service)
                 os.system("curl -s -o /opt/root/script.sh https://raw.githubusercontent.com/ziwork/bypass_keenetic/main/script.sh")
                 os.chmod(r"/opt/root/script.sh", 0o0755)
                 os.chmod('/opt/root/script.sh', stat.S_IRWXU)
@@ -186,7 +187,9 @@ def bot_message(message):
                 #                     stderr=subprocess.PIPE, text=True)
                 # output, errors = p.communicate()
                 # print(output)
-                bot.send_message(message.chat.id, 'Устанавливаются обновления, подождите!', reply_markup=service)
+
+                res = subprocess.check_output(['ls', '-l'])
+                bot.send_message(message.chat.id, res, reply_markup=service)
 
                 result = subprocess.run(["/opt/root/script.sh", "-update"], capture_output=True)
                 result_text = result.stdout
