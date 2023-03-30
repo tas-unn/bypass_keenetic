@@ -123,16 +123,20 @@ def bot_message(message):
             if message.text == "DNS Override ВКЛ" or message.text == "DNS Override ВЫКЛ":
                 if message.text == "DNS Override ВКЛ":
                     os.system("ndmc -c 'opkg dns-override'")
+                    asyncio.sleep(2)
                     os.system("ndmc -c 'system configuration save'")
                     bot.send_message(message.chat.id, 'DNS Override включен! Роутер перезагружается',
                                      reply_markup=service)
+                    asyncio.sleep(2)
                     os.system("ndmc -c 'system reboot'")
                     return
                 if message.text == "DNS Override ВЫКЛ":
                     os.system("ndmc -c 'no opkg dns-override'")
+                    asyncio.sleep(2)
                     os.system("ndmc -c 'system configuration save'")
                     bot.send_message(message.chat.id, 'DNS Override выключен! Роутер перезагружается',
                                      reply_markup=service)
+                    asyncio.sleep(2)
                     os.system("ndmc -c 'system reboot'")
                     return
 

@@ -208,8 +208,8 @@ if [ "$1" = "update" ]; then
 
   now=$(date +"%Y.%m.%d.%H-%M")
 	mkdir /opt/root/backup-"${now}"
-	mv /opt/bin/unblock_ipset.sh /opt/root/backup-"${now}"/unblock_update.sh
-	mv /opt/bin/unblock_dnsmasq.sh /opt/root/backup-"${now}"/unblock_update.sh
+	mv /opt/bin/unblock_ipset.sh /opt/root/backup-"${now}"/unblock_ipset.sh
+	mv /opt/bin/unblock_dnsmasq.sh /opt/root/backup-"${now}"/unblock_dnsmasq.sh
 	mv /opt/bin/unblock_update.sh /opt/root/backup-"${now}"/unblock_update.sh
 	mv /opt/etc/dnsmasq.conf /opt/root/backup-"${now}"/dnsmasq.conf
 	mv /opt/etc/ndm/fs.d/100-ipset.sh /opt/root/backup-"${now}"/100-ipset.sh
