@@ -216,6 +216,7 @@ if [ "$1" = "update" ]; then
 	mv /opt/etc/ndm/ifstatechanged.d/100-unblock-vpn.sh /opt/root/backup-"${now}"/100-unblock-vpn.sh
 	mv /opt/etc/ndm/netfilter.d/100-redirect.sh /opt/root/backup-"${now}"/100-redirect.sh
 	mv /opt/etc/bot.py /opt/root/backup-"${now}"/bot.py
+	chmod 755 /opt/root/backup-"${now}"/*
 	echo "Бэкап создан"
 
 	curl -s -o /opt/etc/ndm/fs.d/100-ipset.sh https://raw.githubusercontent.com/${repo}/bypass_keenetic/main/100-ipset.sh
