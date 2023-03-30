@@ -1,5 +1,5 @@
 *2.1.7 (30 Mar 2023) -* [added update via bot](https://github.com/ziwork/bypass_keenetic/releases/tag/2.1.7) by [@ziwork](https://github.com/ziwork)
-- *Добавлено меню сервис в бота*
+- *добавлено обновление через бот /update*
 
 *2.1.6 (30 Mar 2023) -* [fix check files exist](https://github.com/ziwork/bypass_keenetic/releases/tag/2.1.6) by [@ziwork](https://github.com/ziwork)
 - *Добавлена проверка наличия файлов для vpn*
