@@ -123,20 +123,20 @@ def bot_message(message):
             if message.text == "DNS Override ВКЛ" or message.text == "DNS Override ВЫКЛ":
                 if message.text == "DNS Override ВКЛ":
                     os.system("ndmc -c 'opkg dns-override'")
-                    asyncio.sleep(2)
+                    await asyncio.sleep(2)
                     os.system("ndmc -c 'system configuration save'")
                     bot.send_message(message.chat.id, 'DNS Override включен! Роутер перезагружается',
                                      reply_markup=service)
-                    asyncio.sleep(2)
+                    await asyncio.sleep(2)
                     os.system("ndmc -c 'system reboot'")
                     return
                 if message.text == "DNS Override ВЫКЛ":
                     os.system("ndmc -c 'no opkg dns-override'")
-                    asyncio.sleep(2)
+                    await asyncio.sleep(2)
                     os.system("ndmc -c 'system configuration save'")
                     bot.send_message(message.chat.id, 'DNS Override выключен! Роутер перезагружается',
                                      reply_markup=service)
-                    asyncio.sleep(2)
+                    await asyncio.sleep(2)
                     os.system("ndmc -c 'system reboot'")
                     return
 
@@ -176,10 +176,13 @@ def bot_message(message):
                 os.system("curl -s -o /opt/root/script.sh https://raw.githubusercontent.com/ziwork/bypass_keenetic/main/script.sh")
                 os.chmod(r"/opt/root/script.sh", 0o0755)
                 os.chmod('/opt/root/script.sh', stat.S_IRWXU)
-                # subprocess.call(["/opt/root/script.sh", "update"])
-                command = ["/opt/root/script.sh", "update"]
-                result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                        universal_newlines=True, shell=True, text=True)
+                # result = subprocess.call(["/opt/root/script.sh", "update"], stdout=subprocess.PIPE, universal_newlines=True)
+                result = subprocess.run(["/opt/root/script.sh", "update"], stdout=subprocess.PIPE, text=True,
+                                        universal_newlines=True)
+
+                # command = ['/opt/root/script.sh', 'update']
+                # result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                #                        universal_newlines=True, shell=True, text=True)
                 # result_text = result.returncode, result.stdout, result.stderr
                 result_text = result.stdout
                 bot.send_message(message.chat.id, 'Устанавливаются обновления, подождите!', reply_markup=service)
@@ -342,7 +345,7 @@ def bot_message(message):
 
             if level == 5:
                 shadowsocks(message.text)
-                asyncio.sleep(2)
+                await asyncio.sleep(2)
                 subprocess.call(["/opt/etc/init.d/S22shadowsocks", "restart"])
                 level = 0
                 bot.send_message(message.chat.id, 'Успешно обновлено', reply_markup=main)
@@ -484,14 +487,14 @@ def bot_message(message):
                 Path('/opt/etc/unblock/shadowsocks.txt').touch()
                 Path('/opt/etc/unblock/trojan.txt').touch()
                 Path('/opt/etc/unblock/vmess.txt').touch()
-                Path('/opt/etc/unblock/vpn.txt').touch()
+                # Path('/opt/etc/unblock/vpn.txt').touch()
                 # Path.touch(mode=0o755, exist_ok=True)
 
                 os.chmod(r"/opt/etc/unblock/tor.txt", 0o0755)
                 os.chmod(r"/opt/etc/unblock/shadowsocks.txt", 0o0755)
                 os.chmod(r"/opt/etc/unblock/trojan.txt", 0o0755)
                 os.chmod(r"/opt/etc/unblock/vmess.txt", 0o0755)
-                os.chmod(r"/opt/etc/unblock/vpn.txt", 0o0755)
+                # os.chmod(r"/opt/etc/unblock/vpn.txt", 0o0755)
 
                 bot.send_message(message.chat.id, "Создали файлы под множества")
                 # файл для создания множеств для обхода блокировок
@@ -538,6 +541,15 @@ def bot_message(message):
                 os.chmod(r"/opt/etc/init.d/S99unblock", 0o0755)
                 os.chmod("/opt/etc/init.d/S99unblock", stat.S_IRWXU)
 
+                # os.chmod(r"/opt/etc/init.d/S99unblock", 0o0755)
+                # url = "https://raw.githubusercontent.com/{0}/bypass_keenetic/main/S99unblock".format(repo)
+                # s = requests.get(url).text
+                # f = open("/opt/etc/init.d/S99unblock", 'w')
+                # f.write(s)
+                # f.close()
+                # os.chmod(r"/opt/etc/init.d/S99unblock", 0o0755)
+                # os.chmod('/opt/etc/init.d/S99unblock', stat.S_IRWXU)
+
                 # os.chmod(r"/opt/etc/ndm/fs.d/100-ipset.sh", 0o0755)
                 url = "https://raw.githubusercontent.com/{0}/bypass_keenetic/main/100-ipset.sh".format(repo)
                 s = requests.get(url).text
@@ -556,15 +568,6 @@ def bot_message(message):
                 os.chmod(r"/opt/bin/unblock_update.sh", 0o0755)
                 os.chmod('/opt/bin/unblock_update.sh', stat.S_IRWXU)
 
-                # os.chmod(r"/opt/etc/init.d/S99unblock", 0o0755)
-                url = "https://raw.githubusercontent.com/{0}/bypass_keenetic/main/S99unblock".format(repo)
-                s = requests.get(url).text
-                f = open("/opt/etc/init.d/S99unblock", 'w')
-                f.write(s)
-                f.close()
-                os.chmod(r"/opt/etc/init.d/S99unblock", 0o0755)
-                os.chmod('/opt/etc/init.d/S99unblock', stat.S_IRWXU)
-
                 # os.chmod(r"/opt/etc/crontab", 0o0755)
                 f = open('/opt/etc/crontab')
                 lines = f.readlines()
@@ -579,6 +582,13 @@ def bot_message(message):
                 if isnewline:
                     f.write(newline + '\n')
                 f.close()
+
+                with open('/opt/etc/init.d/S22shadowsock', 'r') as f:
+                    old_data = f.read()
+                new_data = old_data.replace('ss-local', 'ss-redir')
+                with open('/opt/etc/init.d/S22shadowsock', 'w') as f:
+                    f.write(new_data)
+
                 bot.send_message(message.chat.id, "Установили изначальные скрипты")
 
                 # получение мостов tor
@@ -643,7 +653,7 @@ def bot_message(message):
                 bot.send_message(message.chat.id, "Скачали 4 основных скрипта разблокировок")
 
                 bot.send_message(message.chat.id,
-                                 "Установка завершена. Теперь нужно немного настроить роутер и перейти к"
+                                 "Установка завершена. Теперь нужно немного настроить роутер и перейти к "
                                  "спискам для разблокировок. "
                                  "Ключи для Vmess, Shadowsocks и Trojan необходимо установить вручную, "
                                  "ключи для Tor можно установить автоматически: " 

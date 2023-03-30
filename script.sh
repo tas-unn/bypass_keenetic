@@ -14,7 +14,7 @@
 # FORK by NetworK
 repo="ziwork"
 
-if [ "$1" = "remove" ]; then
+if [ "$1" = "-remove" ]; then
 	echo "Начинаем удаление"
 	# opkg remove curl mc tor tor-geoip bind-dig cron dnsmasq-full ipset iptables obfs4 shadowsocks-libev-ss-redir shadowsocks-libev-config
 	opkg remove mc tor tor-geoip bind-dig cron dnsmasq-full ipset iptables obfs4 shadowsocks-libev-ss-redir shadowsocks-libev-config python3 python3-pip v2ray trojan
@@ -59,7 +59,7 @@ if [ "$1" = "remove" ]; then
   exit 0
 fi
 
-if [ "$1" = "install" ]; then
+if [ "$1" = "-install" ]; then
 	echo "Начинаем установку"
 	opkg update
 	# opkg install curl mc tor tor-geoip bind-dig cron dnsmasq-full ipset iptables obfs4 shadowsocks-libev-ss-redir shadowsocks-libev-config
@@ -186,7 +186,7 @@ if [ "$1" = "install" ]; then
 	exit 0
 fi
 
-if [ "$1" = "reinstall" ]; then
+if [ "$1" = "-reinstall" ]; then
 	echo "Начинаем переустановку"
 	# opkg remove curl mc tor tor-geoip bind-dig cron dnsmasq-full ipset iptables obfs4 shadowsocks-libev-ss-redir shadowsocks-libev-config
 	opkg update
@@ -195,7 +195,7 @@ if [ "$1" = "reinstall" ]; then
 fi
 
 
-if [ "$1" = "update" ]; then
+if [ "$1" = "-update" ]; then
 	echo "Начинаем обновление"
 	opkg update > /dev/null 2>&1
 	echo "Пакеты обновлены"
@@ -259,13 +259,13 @@ fi
 
 if [ -n "$1" ]; then
   echo not found "$1".
-  echo "install    - use for install all needs for work"
-  echo "remove     - use for remove all files script"
-  echo "update     - use for get update files"
-  echo "reinstall  - use for reinstall all files script"
+  echo "-install    - use for install all needs for work"
+  echo "-remove     - use for remove all files script"
+  echo "-update     - use for get update files"
+  echo "-reinstall  - use for reinstall all files script"
 else
-  echo "install    - use for install all needs for work"
-  echo "remove     - use for remove all files script"
-  echo "update     - use for get update files"
-  echo "reinstall  - use for reinstall all files script"
+  echo "-install    - use for install all needs for work"
+  echo "-remove     - use for remove all files script"
+  echo "-update     - use for get update files"
+  echo "-reinstall  - use for reinstall all files script"
 fi
