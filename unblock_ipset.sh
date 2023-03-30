@@ -138,7 +138,7 @@ while read -r line || [ -n "$line" ]; do
 
 done < /opt/etc/unblock/trojan.txt
 
-
+if ls -d /opt/etc/unblock/vpn1-*.txt >/dev/null 2>&1; then
 for vpn_file_names in /opt/etc/unblock/vpn-*; do
 vpn_file_name=$(echo "$vpn_file_names" | awk -F '/' '{print $5}' | sed 's/.txt//')
 unblockvpn=$(echo unblock"$vpn_file_name")
@@ -168,6 +168,7 @@ cat "$vpn_file_names" | while read -r line || [ -n "$line" ]; do
   dig +short "$line" @localhost -p 40500 | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | awk -v unblockvpn="$unblockvpn" '{system("ipset -exist add " unblockvpn " " $1)}'
 done
 done
+fi
 
 # unblockvpn - множество
 # vpn1.txt - название файла со списком обхода

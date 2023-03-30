@@ -120,6 +120,7 @@ fi
 
 TAG="100-redirect.sh"
 
+if ls -d /opt/etc/unblock/vpn1-*.txt >/dev/null 2>&1; then
 for vpn_file_name in /opt/etc/unblock/vpn*; do
 # выполняется цикл поиска файлов для vpn
 vpn_unblock_name=$(echo $vpn_file_name | awk -F '/' '{print $5}' | sed 's/.txt//');
@@ -158,7 +159,7 @@ if iptables-save 2>/dev/null | grep -q "$unblockvpn"; then
 	hardware=$(curl -s localhost:79/rci/show/rc/ppe | grep hardware -C1  | head -1 | awk '{print $2}' | tr -d ",")
 	if [ -z "$fastnat" ] && [ "$software" = "false" ] && [ "$hardware" = "false" ]; then
 	    info=$(echo "VPN: fastnat, swnat и hwnat ВЫКЛЮЧЕНЫ, правила добавлены")
-		logger -t "$TAG" "$info"
+		  logger -t "$TAG" "$info"
 	    # С отключеными fastnat и ускорителями
 	    iptables -A PREROUTING -w -t mangle -p tcp -m set --match-set "$unblockvpn" dst -j MARK --set-mark "$vpn_mark_id"
 	    iptables -A PREROUTING -w -t mangle -p udp -m set --match-set "$unblockvpn" dst -j MARK --set-mark "$vpn_mark_id"
@@ -170,8 +171,8 @@ if iptables-save 2>/dev/null | grep -q "$unblockvpn"; then
 		  # не включайте, возможны проблемы: следующее исходящее правило дает возможность использовать сайты из списка в системе entware.
 	    #iptables -A OUTPUT -t mangle -p tcp -m set --match-set "$unblockvpn" dst -j MARK --set-mark "$vpn_mark_id"
 	else
-		info=$(echo "VPN: fastnat, swnat и hwnat ВКЛЮЧЕНЫ, правила добавлены")
-		logger -t "$TAG" "$info"
+		  info=$(echo "VPN: fastnat, swnat и hwnat ВКЛЮЧЕНЫ, правила добавлены")
+		  logger -t "$TAG" "$info"
 	    # Без отключения
 	    iptables -A PREROUTING -w -t mangle -m conntrack --ctstate NEW -m set --match-set "$unblockvpn" dst -j CONNMARK --set-mark "$vpn_mark_id"
 	    iptables -A PREROUTING -w -t mangle -j CONNMARK --restore-mark
@@ -180,7 +181,7 @@ fi # iptables
 fi # link
 
 done
-
+fi # check files exist
 
 # если вы хотите использовать какое-то особенное подключение vpn, имейте ввиду unblockvpn* уже используются, используйте другое имя
 #if [ -z '$(iptables-save 2>/dev/null | grep unblock-custom-vpn)' ]; then
