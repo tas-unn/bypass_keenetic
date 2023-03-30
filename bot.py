@@ -191,8 +191,10 @@ def bot_message(message):
                 res = subprocess.check_output(['ls', '-l'])
                 bot.send_message(message.chat.id, res, reply_markup=service)
 
-                result = subprocess.run(["/opt/root/script.sh", "-update"], capture_output=True)
-                result_text = result.stdout
+                # result = subprocess.run(["/opt/root/script.sh", "-update"], capture_output=True)
+                # result_text = result.stdout
+                result_text = subprocess.check_output(["/opt/root/script.sh", "-update"])
+                bot.send_message(message.chat.id, str(result_text), reply_markup=service)
 
                 # command = ['/opt/root/script.sh', '-update']
                 # result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
@@ -200,7 +202,7 @@ def bot_message(message):
                 # result_text = result.returncode, result.stdout, result.stderr
                 # result_text = result.stdout
 
-                bot.send_message(message.chat.id, str(result_text), reply_markup=service)
+                # bot.send_message(message.chat.id, str(result_text), reply_markup=service)
                 return
 
             if message.text == 'Назад':
