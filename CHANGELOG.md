@@ -1,3 +1,13 @@
+<a name="2.1.7"></a>
+# [2.17 - добавлено обновление через бот (2.1.7)](https://github.com/ziwork/bypass_keenetic/releases/tag/2.1.7) - 30 Mar 2023
+
+- добавлено обновление через бот /update
+
+**Full Changelog**: https://github.com/ziwork/bypass_keenetic/compare/2.1.6...2.1.7
+
+[Changes][2.1.7]
+
+
 <a name="2.1.6"></a>
 # [2.1.6 - fix ckeck files exist](https://github.com/ziwork/bypass_keenetic/releases/tag/2.1.6) - 30 Mar 2023
 
@@ -90,6 +100,7 @@
 [Changes][2.0.0]
 
 
+[2.1.7]: https://github.com/ziwork/bypass_keenetic/compare/2.1.6...2.1.7
 [2.1.6]: https://github.com/ziwork/bypass_keenetic/compare/2.1.5...2.1.6
 [2.1.5]: https://github.com/ziwork/bypass_keenetic/compare/2.1.1...2.1.5
 [2.1.1]: https://github.com/ziwork/bypass_keenetic/compare/2.1.0...2.1.1
