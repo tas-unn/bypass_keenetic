@@ -250,7 +250,6 @@ if [ "$1" = "update" ]; then
   kill "${bot}"
   sleep 3
   python3 /opt/etc/bot.py &
-
   exit 0
 fi
 
