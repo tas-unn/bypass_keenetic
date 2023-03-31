@@ -365,14 +365,14 @@ def bot_message(message):
                 subprocess.call(["/opt/etc/init.d/S22shadowsocks", "restart"])
                 level = 0
                 bot.send_message(message.chat.id, 'Успешно обновлено', reply_markup=main)
-                return
+                # return
 
             if level == 6:
                 tormanually(message.text)
                 subprocess.call(["/opt/etc/init.d/S35tor", "restart"])
                 level = 0
                 bot.send_message(message.chat.id, 'Успешно обновлено', reply_markup=main)
-                return
+                # return
 
             # if level == 7:
             #     global sid
@@ -630,12 +630,8 @@ def bot_message(message):
                 bot.send_message(message.chat.id, "Скачали основные скрипты разблокировок")
 
                 # получение мостов tor
-                # tor()
-                # bot.send_message(message.chat.id, "Установили мосты tor")
-                # os.chmod(r"/opt/etc/unblock/tor.txt", 0o0755)
-                # f = open("/opt/etc/unblock/tor.txt", 'w')
-                # f.close()
-                # bot.send_message(message.chat.id, "Установили мосты для TOR")
+                tor()
+                bot.send_message(message.chat.id, "Установили мосты tor")
 
                 bot.send_message(message.chat.id,
                                  "Установка завершена. Теперь нужно немного настроить роутер и перейти к "
