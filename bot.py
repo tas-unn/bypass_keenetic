@@ -513,76 +513,36 @@ def bot_message(message):
                 # os.chmod(r"/opt/etc/unblock/vpn.txt", 0o0755)
 
                 bot.send_message(message.chat.id, "Создали файлы под множества")
-                # файл для создания множеств для обхода блокировок
-                # os.chmod(r"/opt/etc/ndm/fs.d/100-ipset.sh", 0o0755)
-                # f = open('/opt/etc/ndm/fs.d/100-ipset.sh', 'w')
+
+                # os.chmod(r"/opt/etc/init.d/S99unblock", 0o0755)
+                # f = open('/opt/etc/init.d/S99unblock', 'w')
                 # f.write('#!/bin/sh\n\
                 # [ "$1" != "start" ] && exit 0\n\
-                # ipset create unblocksh hash:net -exist\n\
-                # ipset create unblocktor hash:net -exist\n\
-                # ipset create unblockvmess hash:net -exist\n\
-                # ipset create unblocktroj hash:net -exist\n\
-                # ipset create unblockvpn hash:net -exist\n\
-                # #script0\n\
-                # #script1\n\
-                # #script2\n\
-                # #script3\n\
-                # exit 0')
+                # /opt/bin/unblock_ipset.sh\n\
+                # python3 /opt/etc/bot.py &')
                 # f.close()
-                # os.chmod(r"/opt/etc/ndm/fs.d/100-ipset.sh", 0o0755)
-                # os.chmod("/opt/etc/ndm/fs.d/100-ipset.sh", stat.S_IRWXU)
+                # os.chmod(r"/opt/etc/init.d/S99unblock", 0o0755)
+                # os.chmod("/opt/etc/init.d/S99unblock", stat.S_IRWXU)
 
-                # os.chmod(r"/opt/bin/unblock_update.sh", 0o0755)
-                # f = open('/opt/bin/unblock_update.sh', 'w')
-                # f.write('#!/bin/sh\n\
-                # ipset flush unblocktor\n\
-                # ipset flush unblocksh\n\
-                # ipset flush unblockvmess\n\
-                # ipset flush unblocktroj\n\
-                # ipset flush unblockvpn\n\
-                # /opt/bin/unblock_dnsmasq.sh\n\
-                # /opt/etc/init.d/S56dnsmasq restart\n\
-                # /opt/bin/unblock_ipset.sh &')
-                # f.close()
-                # os.chmod(r"/opt/bin/unblock_update.sh", 0o0755)
-                # os.chmod("/opt/bin/unblock_update.sh", stat.S_IRWXU)
+                # os.chmod(r"/opt/etc/dnsmasq.conf", 0o0755)
+                url = "https://raw.githubusercontent.com/{0}/bypass_keenetic/main/dnsmasq.conf".format(repo)
+                s = requests.get(url).text
+                s = s.replace("40500", dnsovertlsport).replace("40508", dnsoverhttpsport)
+                s = s.replace("192.168.1.1", routerip)
+                f = open("/opt/etc/dnsmasq.conf", 'w')
+                f.write(s)
+                f.close()
+                os.chmod(r"/opt/etc/dnsmasq.conf", 0o0755)
+                os.chmod('/opt/etc/dnsmasq.conf', stat.S_IRWXU)
 
                 # os.chmod(r"/opt/etc/init.d/S99unblock", 0o0755)
-                f = open('/opt/etc/init.d/S99unblock', 'w')
-                f.write('#!/bin/sh\n\
-                [ "$1" != "start" ] && exit 0\n\
-                /opt/bin/unblock_ipset.sh\n\
-                python3 /opt/etc/bot.py &')
+                url = "https://raw.githubusercontent.com/{0}/bypass_keenetic/main/S99unblock".format(repo)
+                s = requests.get(url).text
+                f = open("/opt/etc/init.d/S99unblock", 'w')
+                f.write(s)
                 f.close()
                 os.chmod(r"/opt/etc/init.d/S99unblock", 0o0755)
-                os.chmod("/opt/etc/init.d/S99unblock", stat.S_IRWXU)
-
-                # os.chmod(r"/opt/etc/init.d/S99unblock", 0o0755)
-                # url = "https://raw.githubusercontent.com/{0}/bypass_keenetic/main/S99unblock".format(repo)
-                # s = requests.get(url).text
-                # f = open("/opt/etc/init.d/S99unblock", 'w')
-                # f.write(s)
-                # f.close()
-                # os.chmod(r"/opt/etc/init.d/S99unblock", 0o0755)
-                # os.chmod('/opt/etc/init.d/S99unblock', stat.S_IRWXU)
-
-                # os.chmod(r"/opt/etc/ndm/fs.d/100-ipset.sh", 0o0755)
-                url = "https://raw.githubusercontent.com/{0}/bypass_keenetic/main/100-ipset.sh".format(repo)
-                s = requests.get(url).text
-                f = open("/opt/etc/ndm/fs.d/100-ipset.sh", 'w')
-                f.write(s)
-                f.close()
-                os.chmod(r"/opt/etc/ndm/fs.d/100-ipset.sh", 0o0755)
-                os.chmod('/opt/etc/ndm/fs.d/100-ipset.sh', stat.S_IRWXU)
-
-                # os.chmod(r"/opt/bin/unblock_update.sh", 0o0755)
-                url = "https://raw.githubusercontent.com/{0}/bypass_keenetic/main/unblock_update.sh".format(repo)
-                s = requests.get(url).text
-                f = open("/opt/bin/unblock_update.sh", 'w')
-                f.write(s)
-                f.close()
-                os.chmod(r"/opt/bin/unblock_update.sh", 0o0755)
-                os.chmod('/opt/bin/unblock_update.sh', stat.S_IRWXU)
+                os.chmod('/opt/etc/init.d/S99unblock', stat.S_IRWXU)
 
                 # os.chmod(r"/opt/etc/crontab", 0o0755)
                 f = open('/opt/etc/crontab')
@@ -599,20 +559,23 @@ def bot_message(message):
                     f.write(newline + '\n')
                 f.close()
 
-                with open('/opt/etc/init.d/S22shadowsock', 'r') as f:
-                    old_data = f.read()
-                new_data = old_data.replace('ss-local', 'ss-redir')
-                with open('/opt/etc/init.d/S22shadowsock', 'w') as f:
-                    f.write(new_data)
+                os.system("sed -i 's/ss-local/ss-redir/g' /opt/etc/init.d/S22shadowsocks")
+                # with open('/opt/etc/init.d/S22shadowsock', 'r') as f:
+                #     old_data = f.read()
+                # new_data = old_data.replace('ss-local', 'ss-redir')
+                # with open('/opt/etc/init.d/S22shadowsock', 'w') as f:
+                #     f.write(new_data)
 
                 bot.send_message(message.chat.id, "Установили изначальные скрипты")
 
-                # получение мостов tor
-                # tor()
-                # bot.send_message(message.chat.id, "Установили мосты tor")
-                # os.chmod(r"/opt/etc/unblock/tor.txt", 0o0755)
-                # f = open("/opt/etc/unblock/tor.txt", 'w')
-                # f.close()
+                # os.chmod(r"/opt/bin/unblock_update.sh", 0o0755)
+                url = "https://raw.githubusercontent.com/{0}/bypass_keenetic/main/unblock_update.sh".format(repo)
+                s = requests.get(url).text
+                f = open("/opt/bin/unblock_update.sh", 'w')
+                f.write(s)
+                f.close()
+                os.chmod(r"/opt/bin/unblock_update.sh", 0o0755)
+                os.chmod('/opt/bin/unblock_update.sh', stat.S_IRWXU)
 
                 # os.chmod(r"/opt/bin/unblock_ipset.sh", 0o0755)
                 url = "https://raw.githubusercontent.com/{0}/bypass_keenetic/main/unblock_ipset.sh".format(repo)
@@ -633,6 +596,15 @@ def bot_message(message):
                 f.close()
                 os.chmod(r"/opt/bin/unblock_dnsmasq.sh", 0o0755)
                 os.chmod('/opt/bin/unblock_dnsmasq.sh', stat.S_IRWXU)
+
+                # os.chmod(r"/opt/etc/ndm/fs.d/100-ipset.sh", 0o0755)
+                url = "https://raw.githubusercontent.com/{0}/bypass_keenetic/main/100-ipset.sh".format(repo)
+                s = requests.get(url).text
+                f = open("/opt/etc/ndm/fs.d/100-ipset.sh", 'w')
+                f.write(s)
+                f.close()
+                os.chmod(r"/opt/etc/ndm/fs.d/100-ipset.sh", 0o0755)
+                os.chmod('/opt/etc/ndm/fs.d/100-ipset.sh', stat.S_IRWXU)
 
                 # os.chmod(r"/opt/etc/ndm/netfilter.d/100-redirect.sh", 0o0755)
                 url = "https://raw.githubusercontent.com/{0}/bypass_keenetic/main/100-redirect.sh".format(repo)
@@ -655,18 +627,15 @@ def bot_message(message):
                 os.chmod(r"/opt/etc/ndm/ifstatechanged.d/100-unblock-vpn", 0o0755)
                 os.chmod('/opt/etc/ndm/ifstatechanged.d/100-unblock-vpn', stat.S_IRWXU)
 
-                # os.chmod(r"/opt/etc/dnsmasq.conf", 0o0755)
-                url = "https://raw.githubusercontent.com/{0}/bypass_keenetic/main/dnsmasq.conf".format(repo)
-                s = requests.get(url).text
-                s = s.replace("40500", dnsovertlsport).replace("40508", dnsoverhttpsport)
-                s = s.replace("192.168.1.1", routerip)
-                f = open("/opt/etc/dnsmasq.conf", 'w')
-                f.write(s)
-                f.close()
-                os.chmod(r"/opt/etc/dnsmasq.conf", 0o0755)
-                os.chmod('/opt/etc/dnsmasq.conf', stat.S_IRWXU)
+                bot.send_message(message.chat.id, "Скачали основные скрипты разблокировок")
 
-                bot.send_message(message.chat.id, "Скачали 4 основных скрипта разблокировок")
+                # получение мостов tor
+                # tor()
+                # bot.send_message(message.chat.id, "Установили мосты tor")
+                # os.chmod(r"/opt/etc/unblock/tor.txt", 0o0755)
+                # f = open("/opt/etc/unblock/tor.txt", 'w')
+                # f.close()
+                # bot.send_message(message.chat.id, "Установили мосты для TOR")
 
                 bot.send_message(message.chat.id,
                                  "Установка завершена. Теперь нужно немного настроить роутер и перейти к "
@@ -675,6 +644,7 @@ def bot_message(message):
                                  "ключи для Tor можно установить автоматически: " 
                                  "Ключи и Мосты -> Tor -> Tor через telegram.",
                                  reply_markup=main)
+
                 bot.send_message(message.chat.id,
                                  "Что бы завершить настройку роутера, Зайдите в меню сервис -> DNS Override -> ВКЛ. "
                                  "Учтите, после выполнения команды, роутер перезагрузится, это займет около 2 минут.",
