@@ -99,10 +99,10 @@ def bot_message(message):
                 return
 
             if message.text == 'Перезагрузить мосты':
-                subprocess.call(["/opt/etc/init.d/S22shadowsocks", "restart"])
-                subprocess.call(["/opt/etc/init.d/S22trojan", "restart"])
-                subprocess.call(["/opt/etc/init.d/S24v2ray", "restart"])
-                subprocess.call(["/opt/etc/init.d/S35tor", "restart"])
+                subprocess.call(["/opt/etc/init.d/S22shadowsocks", "restart", "&"])
+                subprocess.call(["/opt/etc/init.d/S22trojan", "restart", "&"])
+                subprocess.call(["/opt/etc/init.d/S24v2ray", "restart", "&"])
+                subprocess.call(["/opt/etc/init.d/S35tor", "restart", "&"])
                 bot.send_message(message.chat.id, 'Мосты перезагружены!', reply_markup=service)
                 return
 
@@ -195,6 +195,8 @@ def bot_message(message):
                 # result_text = result.stdout
                 result_text = subprocess.check_output(["/opt/root/script.sh", "-update"])
                 bot.send_message(message.chat.id, str(result_text), reply_markup=service)
+
+
 
                 # command = ['/opt/root/script.sh', '-update']
                 # result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
