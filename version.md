@@ -1,3 +1,7 @@
+*2.1.8 (01 Apr 2023) -* [fix update via bot](https://github.com/ziwork/bypass_keenetic/releases/tag/2.1.8) by [@ziwork](https://github.com/ziwork)
+- *Добавлен вывод сообщений при обновлении*
+- *Исправлены мелкие ошибки*
+
 *2.1.7 (30 Mar 2023) -* [added update via bot](https://github.com/ziwork/bypass_keenetic/releases/tag/2.1.7) by [@ziwork](https://github.com/ziwork)
 - *добавлено обновление через бот /update*
 
