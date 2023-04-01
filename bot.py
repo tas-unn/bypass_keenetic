@@ -103,10 +103,10 @@ def bot_message(message):
                 # subprocess.call(["/opt/etc/init.d/S22trojan", "restart", "&"])
                 # subprocess.call(["/opt/etc/init.d/S24v2ray", "restart", "&"])
                 # subprocess.call(["/opt/etc/init.d/S35tor", "restart", "&"])
-                subprocess.run('/opt/etc/init.d/S22shadowsocks restart &', shell=True)
-                subprocess.run('/opt/etc/init.d/S22trojan restart &', shell=True)
-                subprocess.run('/opt/etc/init.d/S24v2ray restart &', shell=True)
-                subprocess.run('/opt/etc/init.d/S35tor restart &', shell=True)
+                subprocess.run('/opt/etc/init.d/S22shadowsocks restart', shell=True)
+                subprocess.run('/opt/etc/init.d/S22trojan restart', shell=True)
+                subprocess.run('/opt/etc/init.d/S24v2ray restart', shell=True)
+                subprocess.run('/opt/etc/init.d/S35tor restart', shell=True)
                 bot.send_message(message.chat.id, 'Мосты перезагружены!', reply_markup=service)
                 return
 
