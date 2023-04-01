@@ -103,15 +103,10 @@ def bot_message(message):
                 # subprocess.call(["/opt/etc/init.d/S22trojan", "restart", "&"])
                 # subprocess.call(["/opt/etc/init.d/S24v2ray", "restart", "&"])
                 # subprocess.call(["/opt/etc/init.d/S35tor", "restart", "&"])
-                # os.system('/bin/bash -c "/opt/etc/init.d/S22shadowsocks restart"')
-                # os.system('/opt/etc/init.d/S22trojan restart')
-                # os.system('/opt/etc/init.d/S24v2ray restart')
-                # os.system('/opt/etc/init.d/S35tor restart')
-                subprocess.Popen(["/opt/etc/init.d/S22shadowsocks", "restart"])
-                subprocess.Popen(["/opt/etc/init.d/S22trojan", "restart"])
-                subprocess.Popen(["/opt/etc/init.d/S24v2ray", "restart"])
-                subprocess.Popen(["/opt/etc/init.d/S35tor", "restart"])
-
+                os.system('/opt/etc/init.d/S22shadowsocks restart')
+                os.system('/opt/etc/init.d/S22trojan restart')
+                os.system('/opt/etc/init.d/S24v2ray restart')
+                os.system('/opt/etc/init.d/S35tor restart')
                 bot.send_message(message.chat.id, 'Мосты перезагружены!', reply_markup=service)
                 return
 
@@ -189,11 +184,8 @@ def bot_message(message):
                 os.chmod(r"/opt/root/script.sh", 0o0755)
                 os.chmod('/opt/root/script.sh', stat.S_IRWXU)
 
-                # result = subprocess.call(["/opt/root/script.sh", "-update"])
-                # result = subprocess.run(["/opt/root/script.sh", "-update"], stdout=subprocess.PIPE, text=True,
-                #                        universal_newlines=True)
                 # p = subprocess.Popen(["/opt/root/script.sh", "-update"], stdout=subprocess.PIPE,
-                #                     stderr=subprocess.PIPE, text=True)
+                #                     stderr=subprocess.PIPE, text=True, universal_newlines=True)
                 # output, errors = p.communicate()
                 # print(output)
 
@@ -325,7 +317,7 @@ def bot_message(message):
                 back = types.KeyboardButton("Назад")
                 markup.row(item1, item2, item3)
                 markup.row(back)
-                subprocess.Popen(["/opt/bin/unblock_update.sh"])
+                subprocess.call(["/opt/bin/unblock_update.sh"])
                 level = 2
                 bot.send_message(message.chat.id, "Меню " + bypass, reply_markup=markup)
                 return
@@ -356,21 +348,23 @@ def bot_message(message):
                 markup.row(item1, item2, item3)
                 markup.row(back)
                 level = 2
-                subprocess.Popen(["/opt/bin/unblock_update.sh"])
+                subprocess.call(["/opt/bin/unblock_update.sh"])
                 bot.send_message(message.chat.id, "Меню " + bypass, reply_markup=markup)
                 return
 
             if level == 5:
                 shadowsocks(message.text)
                 time.sleep(2)
-                subprocess.Popen(["/opt/etc/init.d/S22shadowsocks", "restart"])
+                # subprocess.call(["/opt/etc/init.d/S22shadowsocks", "restart"])
+                os.system('/opt/etc/init.d/S22shadowsocks restart')
                 level = 0
                 bot.send_message(message.chat.id, 'Успешно обновлено', reply_markup=main)
                 # return
 
             if level == 6:
                 tormanually(message.text)
-                subprocess.Popen(["/opt/etc/init.d/S35tor", "restart"])
+                # subprocess.call(["/opt/etc/init.d/S35tor", "restart"])
+                os.system('/opt/etc/init.d/S35tor restart')
                 level = 0
                 bot.send_message(message.chat.id, 'Успешно обновлено', reply_markup=main)
                 # return
@@ -432,13 +426,15 @@ def bot_message(message):
 
             if level == 9:
                 vmess(message.text)
-                subprocess.Popen(["/opt/etc/init.d/S24v2ray", "restart"])
+                # subprocess.call(["/opt/etc/init.d/S24v2ray", "restart"])
+                os.system('/opt/etc/init.d/S24v2ray restart')
                 level = 0
                 bot.send_message(message.chat.id, 'Успешно обновлено', reply_markup=main)
 
             if level == 10:
                 trojan(message.text)
-                subprocess.Popen(["/opt/etc/init.d/S22trojan", "restart"])
+                # subprocess.call(["/opt/etc/init.d/S22trojan", "restart"])
+                os.system('/opt/etc/init.d/S22trojan restart')
                 level = 0
                 bot.send_message(message.chat.id, 'Успешно обновлено', reply_markup=main)
 
@@ -453,7 +449,8 @@ def bot_message(message):
 
             if message.text == 'Tor через telegram':
                 tor()
-                subprocess.Popen(["/opt/etc/init.d/S35tor", "restart"])
+                # subprocess.call(["/opt/etc/init.d/S35tor", "restart"])
+                os.system('/opt/etc/init.d/S35tor restart')
                 level = 0
                 bot.send_message(message.chat.id, 'Успешно обновлено', reply_markup=main)
                 return
@@ -647,7 +644,7 @@ def bot_message(message):
                                  "Учтите, после выполнения команды, роутер перезагрузится, это займет около 2 минут.",
                                  reply_markup=main)
 
-                subprocess.Popen(["/opt/bin/unblock_update.sh"])
+                subprocess.call(["/opt/bin/unblock_update.sh"])
                 # os.system('/opt/bin/unblock_update.sh')
                 return
 
