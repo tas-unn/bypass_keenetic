@@ -197,14 +197,14 @@ fi
 
 if [ "$1" = "-update" ]; then
 	echo "Начинаем обновление"
-	# opkg update > /dev/null 2>&1
-	opkg update
+	opkg update > /dev/null 2>&1
+	# opkg update
 	echo "Пакеты обновлены"
 
-	/opt/etc/init.d/S22shadowsocks stop
-	/opt/etc/init.d/S24v2ray stop
-	/opt/etc/init.d/S22trojan stop
-	/opt/etc/init.d/S35tor stop
+	/opt/etc/init.d/S22shadowsocks stop > /dev/null 2>&1
+	/opt/etc/init.d/S24v2ray stop > /dev/null 2>&1
+	/opt/etc/init.d/S22trojan stop > /dev/null 2>&1
+	/opt/etc/init.d/S35tor stop > /dev/null 2>&1
 	echo "Сервисы остановлены"
 
   now=$(date +"%Y.%m.%d.%H-%M")
@@ -241,14 +241,14 @@ if [ "$1" = "-update" ]; then
   chmod 755 /opt/etc/bot.py
   echo "Обновления скачены, права настроены"
 
-  /opt/etc/init.d/S56dnsmasq restart &
-  /opt/etc/init.d/S22shadowsocks start &
-	/opt/etc/init.d/S24v2ray start &
-	/opt/etc/init.d/S22trojan start &
-	/opt/etc/init.d/S35tor start &
+  /opt/etc/init.d/S56dnsmasq restart > /dev/null 2>&1
+  /opt/etc/init.d/S22shadowsocks start > /dev/null 2>&1
+	/opt/etc/init.d/S24v2ray start > /dev/null 2>&1
+	/opt/etc/init.d/S22trojan start > /dev/null 2>&1
+	/opt/etc/init.d/S35tor start > /dev/null 2>&1
 
-  echo "Обновление выполнено. Сервисы перезапущены. Сейчас будет перезапущен бот."
-  sleep 10
+  echo "Обновление выполнено. Сервисы перезапущены. Сейчас будет перезапущен бот (~15-30 сек)."
+  sleep 5
   # shellcheck disable=SC2009
   # bot=$(ps | grep bot.py | awk '{print $1}' | head -1)
   bot_pid=$(ps | grep bot.py | awk '{print $1}')
