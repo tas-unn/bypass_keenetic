@@ -1,5 +1,21 @@
+<a name="2.1.8"></a>
+# [2.1.8 - fix update via bot, etc](https://github.com/ziwork/bypass_keenetic/releases/tag/2.1.8) - 01 Apr 2023
+
+- Добавлено: вывод сообщений при обновлении
+- Исправлены мелкие ошибки
+
+## What's Changed
+* Update changelog for "2.1.6" by [@github-actions](https://github.com/github-actions) in https://github.com/ziwork/bypass_keenetic/pull/8
+* Update changelog for "2.1.7" by [@github-actions](https://github.com/github-actions) in https://github.com/ziwork/bypass_keenetic/pull/9
+
+
+**Full Changelog**: https://github.com/ziwork/bypass_keenetic/compare/2.1.7...2.1.8
+
+[Changes][2.1.8]
+
+
 <a name="2.1.7"></a>
-# [2.1.7 - added update via bot (2.1.7)](https://github.com/ziwork/bypass_keenetic/releases/tag/2.1.7) - 30 Mar 2023
+# [2.1.7 - added update via bot](https://github.com/ziwork/bypass_keenetic/releases/tag/2.1.7) - 30 Mar 2023
 
 - добавлено обновление через бот /update
 
@@ -100,6 +116,7 @@
 [Changes][2.0.0]
 
 
+[2.1.8]: https://github.com/ziwork/bypass_keenetic/compare/2.1.7...2.1.8
 [2.1.7]: https://github.com/ziwork/bypass_keenetic/compare/2.1.6...2.1.7
 [2.1.6]: https://github.com/ziwork/bypass_keenetic/compare/2.1.5...2.1.6
 [2.1.5]: https://github.com/ziwork/bypass_keenetic/compare/2.1.1...2.1.5
