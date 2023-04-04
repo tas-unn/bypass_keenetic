@@ -1,4 +1,11 @@
 # bypass_keenetic
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/ziwork/bypass_keenetic)
+![GitHub Release Date - Published_At](https://img.shields.io/github/release-date/ziwork/bypass_keenetic)
+![GitHub repo size](https://img.shields.io/github/repo-size/ziwork/bypass_keenetic)
+![GitHub last commit](https://img.shields.io/github/last-commit/ziwork/bypass_keenetic)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/y/ziwork/bypass_keenetic)
+![GitHub top language](https://img.shields.io/github/languages/top/ziwork/bypass_keenetic)
+
 Установка обхода блокировок на роутерах Keenetic с установленной средой OpenWrt через телеграм бот.
 
 ## Что это и зачем
