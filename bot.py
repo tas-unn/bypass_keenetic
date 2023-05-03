@@ -402,7 +402,6 @@ def bot_message(message):
                     keys = requests.get(url).text
                     bot.send_message(message.chat.id, keys, parse_mode='Markdown', disable_web_page_preview=True)
                     level = 8
-                    return
 
                 if message.text == 'Tor':
                     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
