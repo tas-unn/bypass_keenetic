@@ -397,11 +397,17 @@ def bot_message(message):
 
             if level == 8:
                 # значит это ключи и мосты
-                if message.text == 'Где брать ключи?' or message.text == '/keys_free':
+                if message.text == 'Где брать ключи?':
                     url = "https://raw.githubusercontent.com/ziwork/bypass_keenetic/main/keys.md"
                     keys = requests.get(url).text
                     bot.send_message(message.chat.id, keys, parse_mode='Markdown', disable_web_page_preview=True)
                     level = 8
+
+                @bot.message_handler(commands=['keys_free'])
+                def button_message(message):
+                    url = "https://raw.githubusercontent.com/ziwork/bypass_keenetic/main/keys.md"
+                    keys = requests.get(url).text
+                    bot.send_message(message.chat.id, keys, parse_mode='Markdown', disable_web_page_preview=True)
 
                 if message.text == 'Tor':
                     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
