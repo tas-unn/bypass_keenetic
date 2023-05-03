@@ -154,17 +154,16 @@ def bot_message(message):
                 return
 
             if message.text == 'Информация':
-                # service_info = "Раздел в разработке.\n\n" \
-                #                "Основной репозиторий: https://github.com/tas-unn/bypass_keenetic\n\n" \
-                #                "Fork by NetworK: https://github.com/ziwork/bypass_keenetic\n\n" \
-                #                "Тема на форуме: https://forum.keenetic.com/topic/14672-%D0%BE%D0%B1%D1%85%D0%BE%D0%B4%D0%B0-%D0%B1%D0%BB%D0%BE%D0%BA%D0%B8%D1%80%D0%BE%D0%B2%D0%BE%D0%BA-%D0%BC%D0%BD%D0%BE%D0%B3%D0%BE-%D0%BD%D0%B5-%D0%B1%D1%8B%D0%B2%D0%B0%D0%B5%D1%82/\n\n"
-                # bot.send_message(message.chat.id, service_info, reply_markup=service)
-
                 url = "https://raw.githubusercontent.com/ziwork/bypass_keenetic/main/info.md"
                 info_bot = requests.get(url).text
                 bot.send_message(message.chat.id, info_bot, parse_mode='Markdown', disable_web_page_preview=True,
                                  reply_markup=main)
+                return
 
+            if message.text == '/keys_free':
+                url = "https://raw.githubusercontent.com/ziwork/bypass_keenetic/main/keys.md"
+                keys_free = requests.get(url).text
+                bot.send_message(message.chat.id, keys_free, parse_mode='Markdown', disable_web_page_preview=True)
                 return
 
             if message.text == 'Обновления' or message.text == '/check_update':
@@ -402,12 +401,6 @@ def bot_message(message):
                     keys = requests.get(url).text
                     bot.send_message(message.chat.id, keys, parse_mode='Markdown', disable_web_page_preview=True)
                     level = 8
-
-                @bot.message_handler(commands=['keys_free'])
-                def button_message(message):
-                    url = "https://raw.githubusercontent.com/ziwork/bypass_keenetic/main/keys.md"
-                    keys = requests.get(url).text
-                    bot.send_message(message.chat.id, keys, parse_mode='Markdown', disable_web_page_preview=True)
 
                 if message.text == 'Tor':
                     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
