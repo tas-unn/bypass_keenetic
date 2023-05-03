@@ -5,7 +5,7 @@ ipset flush unblockvmess
 ipset flush unblocktroj
 #ipset flush unblockvpn
 
-if ls -d /opt/etc/unblock/vpn1-*.txt >/dev/null 2>&1; then
+if ls -d /opt/etc/unblock/vpn-*.txt >/dev/null 2>&1; then
 for vpn_file_names in /opt/etc/unblock/vpn-*; do
 vpn_file_name=$(echo "$vpn_file_names" | awk -F '/' '{print $5}' | sed 's/.txt//')
 # shellcheck disable=SC2116

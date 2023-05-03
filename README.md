@@ -5,6 +5,7 @@
 ![GitHub last commit](https://img.shields.io/github/last-commit/ziwork/bypass_keenetic)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/y/ziwork/bypass_keenetic)
 ![GitHub top language](https://img.shields.io/github/languages/top/ziwork/bypass_keenetic)
+<a href="https://t.me/bypass_keenetic">![Telegram](https://img.shields.io/badge/bypass_keenetic--black?style=social&logo=telegram&logoColor=blue)</a>
 
 Установка обхода блокировок на роутерах Keenetic с установленной средой OpenWrt через телеграм бот.
 
@@ -38,6 +39,11 @@ https://habr.com/ru/post/669314/
 -->
 
 Поддержать проект:
+* `ziwork aka NetworK`
+* `4817 7603 0990 8527` Сбербанк VISA
+
+
+* `tas-unn aka Masterland`
 * `2204 1201 0098 8217` КАРТА МИР 
 * `410017539693882` Юмани 
 * `bc1qesjaxfad8f8azu2cp4gsvt2j9a4yshsc2swey9` Биткоин кошелёк

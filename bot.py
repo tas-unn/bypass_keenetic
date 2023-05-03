@@ -5,8 +5,18 @@
 #  Данный бот предназначен для управления обхода блокировок на роутерах Keenetic
 #  Демо-бот: https://t.me/keenetic_dns_bot
 #
-#  Файл: bot.py, Версия 2.1.8, последнее изменение: 01.04.2023, 18:25
+#  Файл: bot.py, Версия 2.1.9, последнее изменение: 03.05.2023, 23:13
 #  Доработал: NetworK (https://github.com/ziwork)
+
+# ВЕРСИЯ СКРИПТА 2.1.9
+# ЕСЛИ ВЫ ХОТИТЕ ПОДДЕРЖАТЬ РАЗРАБОТЧИКА - МОЖЕТЕ ОТПРАВИТЬ ДОНАТ НА ЛЮБУЮ СУММУ
+# ziwork aka NetworK
+# 4817 7603 0990 8527 Сбербанк VISA
+
+# tas-unn aka Materland
+# 2204 1201 0098 8217 КАРТА МИР
+# 410017539693882 Юмани
+# bc1qesjaxfad8f8azu2cp4gsvt2j9a4yshsc2swey9  Биткоин кошелёк
 
 import asyncio
 import subprocess
@@ -24,13 +34,6 @@ import shutil
 import requests
 import json
 import bot_config as config
-
-# ВЕРСИЯ СКРИПТА 2.1.8
-
-# ЕСЛИ ВЫ ХОТИТЕ ПОДДЕРЖАТЬ РАЗРАБОТЧИКА - МОЖЕТЕ ОТПРАВИТЬ ДОНАТ НА ЛЮБУЮ СУММУ
-# 2204 1201 0098 8217 КАРТА МИР
-# 410017539693882 Юмани
-# bc1qesjaxfad8f8azu2cp4gsvt2j9a4yshsc2swey9  Биткоин кошелёк
 
 token = config.token
 appapiid = config.appapiid
@@ -73,18 +76,18 @@ def bot_message(message):
         m1 = types.KeyboardButton("Установка и удаление")
         m2 = types.KeyboardButton("Ключи и мосты")
         m3 = types.KeyboardButton("Списки обхода")
-        m4 = types.KeyboardButton("Сервис")
-        main.add(m1, m2, m3, m4)
+        m4 = types.KeyboardButton("Информация")
+        m5 = types.KeyboardButton("Сервис")
+        main.add(m1, m2, m3)
+        main.add(m4, m5)
 
         service = types.ReplyKeyboardMarkup(resize_keyboard=True)
         m1 = types.KeyboardButton("Перезагрузить мосты")
         m2 = types.KeyboardButton("Перезагрузить роутер")
-        m3 = types.KeyboardButton("Информация")
+        m3 = types.KeyboardButton("DNS Override")
         m4 = types.KeyboardButton("Обновления")
-        m5 = types.KeyboardButton("DNS Override")
         back = types.KeyboardButton("Назад")
         service.add(m1, m2)
-        service.add(m5)
         service.add(m3, m4)
         service.add(back)
 
@@ -133,7 +136,7 @@ def bot_message(message):
                     os.system("ndmc -c 'system configuration save'")
                     bot.send_message(message.chat.id, 'DNS Override включен! Роутер перезагружается',
                                      reply_markup=service)
-                    time.sleep(2)
+                    time.sleep(5)
                     os.system("ndmc -c 'system reboot'")
                     return
                 if message.text == "DNS Override ВЫКЛ":
@@ -142,7 +145,7 @@ def bot_message(message):
                     os.system("ndmc -c 'system configuration save'")
                     bot.send_message(message.chat.id, 'DNS Override выключен! Роутер перезагружается',
                                      reply_markup=service)
-                    time.sleep(2)
+                    time.sleep(5)
                     os.system("ndmc -c 'system reboot'")
                     return
 
@@ -151,14 +154,20 @@ def bot_message(message):
                 return
 
             if message.text == 'Информация':
-                service_info = "Раздел в разработке.\n\n" \
-                               "Основной репозиторий: https://github.com/tas-unn/bypass_keenetic\n\n" \
-                               "Fork by NetworK: https://github.com/ziwork/bypass_keenetic\n\n" \
-                               "Тема на форуме: https://forum.keenetic.com/topic/14672-%D0%BE%D0%B1%D1%85%D0%BE%D0%B4%D0%B0-%D0%B1%D0%BB%D0%BE%D0%BA%D0%B8%D1%80%D0%BE%D0%B2%D0%BE%D0%BA-%D0%BC%D0%BD%D0%BE%D0%B3%D0%BE-%D0%BD%D0%B5-%D0%B1%D1%8B%D0%B2%D0%B0%D0%B5%D1%82/\n\n"
-                bot.send_message(message.chat.id, service_info, reply_markup=service)
+                # service_info = "Раздел в разработке.\n\n" \
+                #                "Основной репозиторий: https://github.com/tas-unn/bypass_keenetic\n\n" \
+                #                "Fork by NetworK: https://github.com/ziwork/bypass_keenetic\n\n" \
+                #                "Тема на форуме: https://forum.keenetic.com/topic/14672-%D0%BE%D0%B1%D1%85%D0%BE%D0%B4%D0%B0-%D0%B1%D0%BB%D0%BE%D0%BA%D0%B8%D1%80%D0%BE%D0%B2%D0%BE%D0%BA-%D0%BC%D0%BD%D0%BE%D0%B3%D0%BE-%D0%BD%D0%B5-%D0%B1%D1%8B%D0%B2%D0%B0%D0%B5%D1%82/\n\n"
+                # bot.send_message(message.chat.id, service_info, reply_markup=service)
+
+                url = "https://raw.githubusercontent.com/ziwork/bypass_keenetic/main/info.md"
+                info_bot = requests.get(url).text
+                bot.send_message(message.chat.id, info_bot, parse_mode='Markdown', disable_web_page_preview=True,
+                                 reply_markup=main)
+
                 return
 
-            if message.text == 'Обновления':
+            if message.text == 'Обновления' or message.text == '/check_update':
                 url = "https://raw.githubusercontent.com/ziwork/bypass_keenetic/main/version.md"
                 bot_new_version = requests.get(url).text
 
@@ -388,6 +397,13 @@ def bot_message(message):
 
             if level == 8:
                 # значит это ключи и мосты
+                if message.text == 'Где брать ключи?' or message.text == '/keys':
+                    url = "https://raw.githubusercontent.com/ziwork/bypass_keenetic/main/keys.md"
+                    keys = requests.get(url).text
+                    bot.send_message(message.chat.id, keys, parse_mode='Markdown', disable_web_page_preview=True)
+                    level = 8
+                    return
+
                 if message.text == 'Tor':
                     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
                     item1 = types.KeyboardButton("Tor вручную")
@@ -616,14 +632,14 @@ def bot_message(message):
                 os.chmod(r"/opt/etc/ndm/netfilter.d/100-redirect.sh", 0o0755)
                 os.chmod('/opt/etc/ndm/netfilter.d/100-redirect.sh', stat.S_IRWXU)
 
-                # os.chmod(r"/opt/etc/ndm/ifstatechanged.d/100-unblock-vpn", 0o0755)
+                # os.chmod(r"/opt/etc/ndm/ifstatechanged.d/100-unblock-vpn.sh", 0o0755)
                 url = "https://raw.githubusercontent.com/{0}/bypass_keenetic/main/100-unblock-vpn.sh".format(repo)
                 s = requests.get(url).text
-                f = open("/opt/etc/ndm/ifstatechanged.d/100-unblock-vpn", 'w')
+                f = open("/opt/etc/ndm/ifstatechanged.d/100-unblock-vpn.sh", 'w')
                 f.write(s)
                 f.close()
-                os.chmod(r"/opt/etc/ndm/ifstatechanged.d/100-unblock-vpn", 0o0755)
-                os.chmod('/opt/etc/ndm/ifstatechanged.d/100-unblock-vpn', stat.S_IRWXU)
+                os.chmod(r"/opt/etc/ndm/ifstatechanged.d/100-unblock-vpn.sh", 0o0755)
+                os.chmod('/opt/etc/ndm/ifstatechanged.d/100-unblock-vpn.sh', stat.S_IRWXU)
 
                 bot.send_message(message.chat.id, "Скачали основные скрипты разблокировок")
 
@@ -701,7 +717,10 @@ def bot_message(message):
                 item2 = types.KeyboardButton("Tor")
                 item3 = types.KeyboardButton("Vmess")
                 item4 = types.KeyboardButton("Trojan")
-                markup.add(item1, item2, item3, item4)
+                item5 = types.KeyboardButton("Где брать ключи?")
+                markup.add(item1, item2)
+                markup.add(item3, item4)
+                markup.add(item5)
                 back = types.KeyboardButton("Назад")
                 markup.add(back)
                 bot.send_message(message.chat.id, "Ключи и мосты", reply_markup=markup)

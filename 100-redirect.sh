@@ -5,7 +5,7 @@
 # Данный бот предназначен для управления обхода блокировок на роутерах Keenetic
 # Демо-бот: https://t.me/keenetic_dns_bot
 #
-# Файл: 100-redirect.sh, Версия 2.1.5, последнее изменение: 17.03.2023, 18:52
+# Файл: 100-redirect.sh, Версия 2.1.9, последнее изменение: 03.05.2023, 21:10
 # Доработал: NetworK (https://github.com/ziwork)
 
 #!/bin/sh
@@ -120,7 +120,7 @@ fi
 
 TAG="100-redirect.sh"
 
-if ls -d /opt/etc/unblock/vpn1-*.txt >/dev/null 2>&1; then
+if ls -d /opt/etc/unblock/vpn-*.txt >/dev/null 2>&1; then
 for vpn_file_name in /opt/etc/unblock/vpn*; do
 # выполняется цикл поиска файлов для vpn
 vpn_unblock_name=$(echo $vpn_file_name | awk -F '/' '{print $5}' | sed 's/.txt//');

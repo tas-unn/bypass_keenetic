@@ -5,7 +5,7 @@
 # Данный бот предназначен для управления обхода блокировок на роутерах Keenetic
 # Демо-бот: https://t.me/keenetic_dns_bot
 #
-# Файл: 100-unblock-vpn.sh, Версия 2.1.5, последнее изменение: 17.03.2023, 18:54
+# Файл: 100-unblock-vpn.sh, Версия 2.1.9, последнее изменение: 03.05.2023, 21:12
 # Автор файла: NetworK (https://github.com/ziwork)
 
 TAG="100-unblock-vpn.sh"
@@ -33,7 +33,7 @@ if grep -q "$vpn_table" /opt/etc/iproute2/rt_tables; then
 else
 	  echo "Таблицы нет, создаем"
 	  get_last_fwmark_id=$(tail -1 /opt/etc/iproute2/rt_tables | awk '{print $1}')
-	  if [ -n $get_fwmark_id ]; then counter_new=$(($get_last_fwmark_id + 1)); else counter_new=$((1000 + 1)); fi
+	  if [ -n $get_last_fwmark_id ]; then counter_new=$(($get_last_fwmark_id + 1)); else counter_new=$((1000 + 1)); fi
 	  vpn_table_file=$(echo "$counter_new" "$vpn_table")
 	  echo "$vpn_table_file" >> /opt/etc/iproute2/rt_tables
 fi
@@ -60,11 +60,13 @@ case ${id}-${change}-${connected}-${link}-${up} in
     ${id}-link-yes-up-up)
 	  sleep 2
 	  vpn_ip=$(curl -s localhost:79/rci/show/interface/"$vpn"/address | tr -d \")
-	  vpn_type=$(ip route list | grep "$vpn_ip" | awk '{print $3}' | grep -v "ss")
+	  # vpn_type=$(ip route list | grep "$vpn_ip" | awk '{print $3}' | grep -v "ss")
+	  vpn_type=$(ifconfig | grep "$vpn_ip" -B1 | head -1 |cut -d " " -f1)
 	  vpn_name=$(curl -s localhost:79/rci/show/interface/"$vpn"/description | tr -d \")
 
 	  ip -4 route add table "$vpn_table" default via "$vpn_ip" dev "$vpn_type" 2>/dev/null
-    ip -4 route show table main | grep -Ev ^default | while read -r ROUTE; do ip -4 route add table "$vpn_table" "$ROUTE" 2>/dev/null; done
+    # ip -4 route show table main | grep -Ev ^default | while read -r ROUTE; do ip -4 route add table "$vpn_table" "$ROUTE" 2>/dev/null; done
+    ip -4 route show table main | grep -Ev ^default | while read -r ROUTE; do ip -4 route add table "$vpn_table" $ROUTE 2>/dev/null; done
 	  ip -4 rule add fwmark "$get_fwmark_id" lookup "$vpn_table" priority 1778 2>/dev/null
     ip -4 route flush cache
 	  touch /opt/etc/unblock/vpn-"$vpn_name"-"$vpn".txt

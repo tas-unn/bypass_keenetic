@@ -5,7 +5,7 @@
 # Данный бот предназначен для управления обхода блокировок на роутерах Keenetic
 # Демо-бот: https://t.me/keenetic_dns_bot
 #
-# Файл: script.sh, Версия 2.1.8, последнее изменение: 01.04.2023, 18:02
+# Файл: script.sh, Версия 2.1.9, последнее изменение: 03.05.2023, 22:02
 # Доработал: NetworK (https://github.com/ziwork)
 
 # оригинальный репозиторий
@@ -217,6 +217,7 @@ if [ "$1" = "-update" ]; then
 	mv /opt/etc/ndm/ifstatechanged.d/100-unblock-vpn.sh /opt/root/backup-"${now}"/100-unblock-vpn.sh
 	mv /opt/etc/ndm/netfilter.d/100-redirect.sh /opt/root/backup-"${now}"/100-redirect.sh
 	mv /opt/etc/bot.py /opt/root/backup-"${now}"/bot.py
+	rm -R /opt/etc/ndm/ifstatechanged.d/100-unblock-vpn
 	chmod 755 /opt/root/backup-"${now}"/*
 	echo "Бэкап создан"
 

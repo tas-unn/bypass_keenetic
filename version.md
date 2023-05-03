@@ -1,3 +1,11 @@
+*2.1.9 (03 May 2023) -* [fix vpn service, wireguard](https://github.com/ziwork/bypass_keenetic/releases/tag/2.1.9) by [@ziwork](https://github.com/ziwork)
+- *Исправлены ошибки в скриптах для VPN*
+- *Протестирована и настроена работа с Wireguard*
+- *Исправлены мелкие ошибки*
+- *В бот добавлена информация `где брать ключи`*
+- *Обновлено меню*
+- *Добавлены реквизиты для доната*
+
 *2.1.8 (01 Apr 2023) -* [fix update via bot](https://github.com/ziwork/bypass_keenetic/releases/tag/2.1.8) by [@ziwork](https://github.com/ziwork)
 - *Добавлен вывод сообщений при обновлении*
 - *Исправлены мелкие ошибки*
