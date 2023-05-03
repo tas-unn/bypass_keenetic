@@ -397,7 +397,7 @@ def bot_message(message):
 
             if level == 8:
                 # значит это ключи и мосты
-                if message.text == 'Где брать ключи?' or message.text == '/keys':
+                if message.text == 'Где брать ключи?' or message.text == '/keys_free':
                     url = "https://raw.githubusercontent.com/ziwork/bypass_keenetic/main/keys.md"
                     keys = requests.get(url).text
                     bot.send_message(message.chat.id, keys, parse_mode='Markdown', disable_web_page_preview=True)
