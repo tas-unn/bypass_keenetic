@@ -9,7 +9,7 @@
 
 ## Установка обхода блокировок на роутерах Keenetic с установленной средой OpenWRT, управление через телеграм бот. Обхода блокировок монго не бывает! 
 
-![](bypass_keenetic.png)
+![](bypass_keenetic.jpg)
 
 ## Что это и зачем
 - [Полное описание читайте в вики](https://github.com/ziwork/bypass_keenetic/wiki)
