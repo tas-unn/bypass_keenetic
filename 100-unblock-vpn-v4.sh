@@ -5,7 +5,7 @@
 # Данный бот предназначен для управления обхода блокировок на роутерах Keenetic
 # Демо-бот: https://t.me/keenetic_dns_bot
 #
-# Файл: 100-unblock-vpn.sh, Версия 2.2.0, последнее изменение: 20.08.2023, 20:06
+# Файл: 100-unblock-vpn.sh, Версия 2.2.0, последнее изменение: 20.08.2023, 20:31
 # Автор файла: NetworK (https://github.com/ziwork)
 
 TAG="100-unblock-vpn.sh"
@@ -51,9 +51,19 @@ get_fwmark_id=$(grep "$vpn_table" /opt/etc/iproute2/rt_tables | awk '{print "0xd
 #case ${id}-${change}-${connected}-${link}-${up} in
 #    ${id}-link-no-down-down)
 
+### for test 3.9 and 4.0+
+#case ${id}-${change}-${connected}-${link}-${up} in
+#    ${id}-connected-no-down-down)
+#    ;;
+#    ${id}-connected-yes-up-up)
+#    ;;
+#esac
+
 ### for 4.0+
-case ${connected}-${link}-${up} in
-	  no-down-down)
+#case ${connected}-${link}-${up} in
+#	  no-down-down)
+case ${id}-${change}-${connected}-${link}-${up} in
+    ${id}-connected-no-down-down)
 	  info=$(echo VPN "$vpn" OFF: правила обновлены)
 	  logger -t "$TAG" "$info"
     ip rule del from all table "$vpn_table" priority 1778 2>/dev/null
@@ -68,7 +78,8 @@ case ${connected}-${link}-${up} in
     ### for 3.9.8
     #${id}-link-yes-up-up)
     ### for 4.0+
-    yes-up-up)
+    #yes-up-up)
+    ${id}-connected-yes-up-up)
 	  sleep 2
 	  vpn_ip=$(curl -s localhost:79/rci/show/interface/"$vpn"/address | tr -d \")
 	  # vpn_type=$(ip route list | grep "$vpn_ip" | awk '{print $3}' | grep -v "ss")
