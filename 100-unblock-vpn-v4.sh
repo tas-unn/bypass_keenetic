@@ -87,7 +87,7 @@ case ${id}-${change}-${connected}-${link}-${up} in
 	  vpn_name=$(curl -s localhost:79/rci/show/interface/"$vpn"/description | tr -d \")
 
 	  ip -4 route add table "$vpn_table" default via "$vpn_ip" dev "$vpn_type" 2>/dev/null
-    # ip -4 route show table main | grep -Ev ^default | while read -r ROUTE; do ip -4 route add table "$vpn_table" "$ROUTE" 2>/dev/null; done
+	  # ip -4 route show table main | grep -Ev ^default | while read -r ROUTE; do ip -4 route add table "$vpn_table" "$ROUTE" 2>/dev/null; done
 	  ip -4 route show table main | grep -Ev ^default | while read -r ROUTE; do ip -4 route add table "$vpn_table" $ROUTE 2>/dev/null; done
 	  ip -4 rule add fwmark "$get_fwmark_id" lookup "$vpn_table" priority 1778 2>/dev/null
 	  ip -4 route flush cache
