@@ -66,9 +66,9 @@ case ${id}-${change}-${connected}-${link}-${up} in
     ${id}-connected-no-down-down)
 	  info=$(echo VPN "$vpn" OFF: правила обновлены)
 	  logger -t "$TAG" "$info"
-    ip rule del from all table "$vpn_table" priority 1778 2>/dev/null
-    ip -4 rule del fwmark "$get_fwmark_id" lookup "$vpn_table" priority 1778 2>/dev/null
-    ip -4 route flush table "$vpn_table"
+	  ip rule del from all table "$vpn_table" priority 1778 2>/dev/null
+	  ip -4 rule del fwmark "$get_fwmark_id" lookup "$vpn_table" priority 1778 2>/dev/null
+	  ip -4 route flush table "$vpn_table"
 	  type=iptable table=nat /opt/etc/ndm/netfilter.d/100-redirect.sh
 
 	  #cat /dev/null >| /opt/etc/iproute2/rt_tables
@@ -88,9 +88,9 @@ case ${id}-${change}-${connected}-${link}-${up} in
 
 	  ip -4 route add table "$vpn_table" default via "$vpn_ip" dev "$vpn_type" 2>/dev/null
     # ip -4 route show table main | grep -Ev ^default | while read -r ROUTE; do ip -4 route add table "$vpn_table" "$ROUTE" 2>/dev/null; done
-    ip -4 route show table main | grep -Ev ^default | while read -r ROUTE; do ip -4 route add table "$vpn_table" $ROUTE 2>/dev/null; done
+	  ip -4 route show table main | grep -Ev ^default | while read -r ROUTE; do ip -4 route add table "$vpn_table" $ROUTE 2>/dev/null; done
 	  ip -4 rule add fwmark "$get_fwmark_id" lookup "$vpn_table" priority 1778 2>/dev/null
-    ip -4 route flush cache
+	  ip -4 route flush cache
 	  touch /opt/etc/unblock/vpn-"$vpn_name"-"$vpn".txt
 	  chmod 0755 /opt/etc/unblock/vpn-"$vpn_name"-"$vpn".txt
 
