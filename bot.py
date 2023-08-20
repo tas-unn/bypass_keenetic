@@ -754,7 +754,7 @@ def vmess(key):
 
 
 def trojan(key):
-    # global appapiid, appapihash, password, localportvmess
+    # global appapiid, appapihash, password, localporttrojan
     key = key.split('//')[1]
     pw = key.split('@')[0]
     key = key.replace(pw + "@", "", 1)
