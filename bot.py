@@ -437,15 +437,15 @@ def bot_message(message):
 
             if message.text == '🔰 Установка и удаление':
                 markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-                item1 = types.KeyboardButton("Установка & переустановка")
-                item2 = types.KeyboardButton("Удаление")
+                item1 = types.KeyboardButton("♻️ Установка & переустановка")
+                item2 = types.KeyboardButton("⚠️ Удаление")
                 back = types.KeyboardButton("🔙 Назад")
                 markup.row(item1, item2)
                 markup.row(back)
                 bot.send_message(message.chat.id, '🔰 Установка и удаление', reply_markup=markup)
                 return
 
-            if message.text == 'Установка & переустановка':
+            if message.text == '♻️ Установка & переустановка':
                 markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
                 item1 = types.KeyboardButton("Оригинальная версия")
                 item2 = types.KeyboardButton("Fork by NetworK")
@@ -490,7 +490,7 @@ def bot_message(message):
                 # os.system('/opt/bin/unblock_update.sh')
                 return
 
-            if message.text == 'Удаление':
+            if message.text == '⚠️ Удаление':
                 os.system("curl -s -o /opt/root/script.sh https://raw.githubusercontent.com/ziwork/bypass_keenetic/main/script.sh")
                 os.chmod(r"/opt/root/script.sh", 0o0755)
                 os.chmod('/opt/root/script.sh', stat.S_IRWXU)

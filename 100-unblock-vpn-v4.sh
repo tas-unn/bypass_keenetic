@@ -40,7 +40,6 @@ vpn_table=$(echo "$vpn" | tr [:upper:] [:lower:]) # sed 's/[A-Z]/\L&/g'
   fi
 
   sleep 1
-  unblockvpn=$(echo unblockvpn-"$vpn_name"-"$vpn")
   vpn_table_id=$(grep "$vpn_table" /opt/etc/iproute2/rt_tables | awk '{print $1}')
   get_fwmark_id=$(grep "$vpn_table" /opt/etc/iproute2/rt_tables | awk '{print "0xd"$1}')
   vpn_link_up=$(curl -s localhost:79/rci/show/interface/"$vpn"/connected | tr -d '"')
@@ -64,6 +63,7 @@ vpn_table=$(echo "$vpn" | tr [:upper:] [:lower:]) # sed 's/[A-Z]/\L&/g'
       vpn_ip=$(curl -s localhost:79/rci/show/interface/"$vpn"/address | tr -d \")
       vpn_type=$(ifconfig | grep "$vpn_ip" -B1 | head -1 |cut -d " " -f1)
       vpn_name=$(curl -s localhost:79/rci/show/interface/"$vpn"/description | tr -d \")
+      unblockvpn=$(echo unblockvpn-"$vpn_name"-"$vpn")
 
       ip -4 route add table "$vpn_table_id" default via "$vpn_ip" dev "$vpn_type" 2>/dev/null
       ip -4 route show table main | grep -Ev ^default | while read -r ROUTE; do ip -4 route add table "$vpn_table_id" $ROUTE 2>/dev/null; done
@@ -76,7 +76,11 @@ vpn_table=$(echo "$vpn" | tr [:upper:] [:lower:]) # sed 's/[A-Z]/\L&/g'
       logger -t "$TAG" "$info"
 
       if iptables-save 2>/dev/null | grep -q "$unblockvpn"; then
-      info_ipset=$(echo "ipset уже есть"); logger -t "$TAG" "$info_ipset" else ipset create "$unblockvpn" hash:net -exist; fi
+        info_ipset=$(echo "ipset уже есть");
+        logger -t "$TAG" "$info_ipset";
+      else
+        ipset create "$unblockvpn" hash:net -exist 2>/dev/null;
+      fi
       type=iptable table=nat /opt/etc/ndm/netfilter.d/100-redirect.sh
 
       #/opt/bin/unblock_update.sh

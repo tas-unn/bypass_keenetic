@@ -41,7 +41,6 @@ fi
 #fwmark_id=$(echo 0xd"$counter_new")
 
 sleep 1
-unblockvpn=$(echo unblockvpn-"$vpn_name"-"$vpn")
 get_fwmark_id=$(grep "$vpn_table" /opt/etc/iproute2/rt_tables | awk '{print "0xd"$1}')
 
 case ${id}-${change}-${connected}-${link}-${up} in
@@ -63,6 +62,7 @@ case ${id}-${change}-${connected}-${link}-${up} in
 	  # vpn_type=$(ip route list | grep "$vpn_ip" | awk '{print $3}' | grep -v "ss")
 	  vpn_type=$(ifconfig | grep "$vpn_ip" -B1 | head -1 |cut -d " " -f1)
 	  vpn_name=$(curl -s localhost:79/rci/show/interface/"$vpn"/description | tr -d \")
+	  unblockvpn=$(echo unblockvpn-"$vpn_name"-"$vpn")
 
 	  ip -4 route add table "$vpn_table" default via "$vpn_ip" dev "$vpn_type" 2>/dev/null
     # ip -4 route show table main | grep -Ev ^default | while read -r ROUTE; do ip -4 route add table "$vpn_table" "$ROUTE" 2>/dev/null; done

@@ -47,7 +47,7 @@ done
 
 
 if [ -z "$(iptables-save 2>/dev/null | grep unblocksh)" ]; then
-	ipset create unblocksh hash:net -exist
+	ipset create unblocksh hash:net -exist 2>/dev/null
 
 	# достаточно таких правил, для работы на всех интерфейсах (br0, br1, sstp0, sstp2, etc)
 	iptables -I PREROUTING -w -t nat -p tcp -m set --match-set unblocksh dst -j REDIRECT --to-port 1082
@@ -75,7 +75,7 @@ fi
 
 
 if [ -z "$(iptables-save 2>/dev/null | grep unblocktor)" ]; then
-  ipset create unblocktor hash:net -exist
+  ipset create unblocktor hash:net -exist 2>/dev/null
 	iptables -I PREROUTING -w -t nat -p tcp -m set --match-set unblocktor dst -j REDIRECT --to-port 9141
 	iptables -I PREROUTING -w -t nat -p udp -m set --match-set unblocktor dst -j REDIRECT --to-port 9141
 	#iptables -I PREROUTING -w -t nat -i br0 -p tcp -m set --match-set unblocktor dst -j REDIRECT --to-port 9141
@@ -89,7 +89,7 @@ fi
 
 
 if [ -z "$(iptables-save 2>/dev/null | grep unblockvmess)" ]; then
-  ipset create unblockvmess hash:net -exist
+  ipset create unblockvmess hash:net -exist 2>/dev/null
 	iptables -I PREROUTING -w -t nat -p tcp -m set --match-set unblockvmess dst -j REDIRECT --to-port 10810
 	iptables -I PREROUTING -w -t nat -p udp -m set --match-set unblockvmess dst -j REDIRECT --to-port 10810
 
@@ -104,7 +104,7 @@ fi
 
 
 if [ -z "$(iptables-save 2>/dev/null | grep unblocktroj)" ]; then
-  ipset create unblocktroj hash:net -exist
+  ipset create unblocktroj hash:net -exist 2>/dev/null
 	iptables -I PREROUTING -w -t nat -p tcp -m set --match-set unblocktroj dst -j REDIRECT --to-port 10829
 	iptables -I PREROUTING -w -t nat -p udp -m set --match-set unblocktroj dst -j REDIRECT --to-port 10829
 
@@ -153,7 +153,7 @@ if iptables-save 2>/dev/null | grep -q "$unblockvpn"; then
 	info_vpn_rule=$(echo ipset: "$unblockvpn", mark_id: "$vpn_mark_id")
 	logger -t "$TAG" "$info_vpn_rule"
 
-	ipset create "$unblockvpn" hash:net -exist
+	ipset create "$unblockvpn" hash:net -exist 2>/dev/null
 
 	# проверяем fastnat и ускорители
 	fastnat=$(curl -s localhost:79/rci/show/version | grep ppe)
