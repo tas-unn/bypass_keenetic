@@ -231,17 +231,17 @@ fi
 
 
 if [ "$1" = "-update" ]; then
-    echo "Начинаем обновление"
+    echo "Начинаем обновление."
     opkg update > /dev/null 2>&1
     # opkg update
-    echo "Ваша версия KeenOS" "${keen_os_full}"
-    echo "Пакеты обновлены"
+    echo "Ваша версия KeenOS" "${keen_os_full}."
+    echo "Пакеты обновлены."
 
     /opt/etc/init.d/S22shadowsocks stop > /dev/null 2>&1
     /opt/etc/init.d/S24v2ray stop > /dev/null 2>&1
     /opt/etc/init.d/S22trojan stop > /dev/null 2>&1
     /opt/etc/init.d/S35tor stop > /dev/null 2>&1
-    echo "Сервисы остановлены"
+    echo "Сервисы остановлены."
 
     now=$(date +"%Y.%m.%d.%H-%M")
     mkdir /opt/root/backup-"${now}"
@@ -255,7 +255,7 @@ if [ "$1" = "-update" ]; then
     mv /opt/etc/bot.py /opt/root/backup-"${now}"/bot.py
     rm -R /opt/etc/ndm/ifstatechanged.d/100-unblock-vpn > /dev/null 2>&1
     chmod 755 /opt/root/backup-"${now}"/*
-    echo "Бэкап создан"
+    echo "Бэкап создан."
 
     touch /opt/etc/hosts || chmod 0755 /opt/etc/hosts
     curl -s -o /opt/etc/ndm/fs.d/100-ipset.sh https://raw.githubusercontent.com/${repo}/bypass_keenetic/main/100-ipset.sh
@@ -297,7 +297,7 @@ if [ "$1" = "-update" ]; then
 
     curl -s -o /opt/etc/bot.py https://raw.githubusercontent.com/${repo}/bypass_keenetic/main/bot.py
     chmod 755 /opt/etc/bot.py
-    echo "Обновления скачены, права настроены"
+    echo "Обновления скачены, права настроены."
 
     /opt/etc/init.d/S56dnsmasq restart > /dev/null 2>&1
     /opt/etc/init.d/S22shadowsocks start > /dev/null 2>&1
@@ -305,17 +305,26 @@ if [ "$1" = "-update" ]; then
     /opt/etc/init.d/S22trojan start > /dev/null 2>&1
     /opt/etc/init.d/S35tor start > /dev/null 2>&1
 
-    echo "Версия бота" "${bot_old_version}" "обновлена до" "${bot_new_version}"
+    echo "Версия бота" "${bot_old_version}" "обновлена до" "${bot_new_version}."
     sleep 2
     sed -i "s/${bot_old_version}/${bot_new_version}/g" /opt/etc/bot_config.py
     echo "Обновление выполнено. Сервисы перезапущены. Сейчас будет перезапущен бот (~15-30 сек)."
-    sleep 10
+    sleep 7
     # shellcheck disable=SC2009
     # bot=$(ps | grep bot.py | awk '{print $1}' | head -1)
     bot_pid=$(ps | grep bot.py | awk '{print $1}')
     for bot in ${bot_pid}; do kill "${bot}"; done
     sleep 5
     python3 /opt/etc/bot.py &
+    check_running=$(pidof python3 /opt/etc/bot.py)
+    if [ -z "${check_running}" ]; then
+      for bot in ${bot_pid}; do kill "${bot}"; done
+      sleep 3
+      python3 /opt/etc/bot.py &
+    else
+      echo "Бот запущен. Нажмите сюда: /start";
+    fi
+
     exit 0
 fi
 
