@@ -1,3 +1,33 @@
+<a name="2.2.0"></a>
+# [2.2.0 - Поддержка KeenOS 4+](https://github.com/ziwork/bypass_keenetic/releases/tag/2.2.0) - 01 Oct 2023
+
+- Добавлена поддержка KeenOS 4+
+- Добавлена проверка версии KeenOS при установке и обновлении
+- Обновлены основные скрипты
+- Уменьшен размер бота
+- Установка, обновление и удаление теперь идет через скрипт
+- IP роутера вычисляется автоматически
+- При обновлении через скрипт порты берутся из bot_config.py
+- Добавлен список VPN в bot_config.py
+- Поправлены скрипты для ключей trojan и v2ray
+- Исправлена ошибка, если в имени VPN был дефис
+- Проверена работа VPN на KeenOS 4+
+- Добавлено сообщение перед перезагрузкой мостов
+- Добавлено исправление при превышении списка > 4096 символов
+- Добавлены информационные смайлы в меню
+
+## What's Changed
+* Update changelog for "2.1.9" by [@github-actions](https://github.com/github-actions) in https://github.com/ziwork/bypass_keenetic/pull/13
+* Update README.md by [@ziwork](https://github.com/ziwork) in https://github.com/ziwork/bypass_keenetic/pull/15
+* Update README.md by [@ziwork](https://github.com/ziwork) in https://github.com/ziwork/bypass_keenetic/pull/16
+* Update README.md by [@ziwork](https://github.com/ziwork) in https://github.com/ziwork/bypass_keenetic/pull/17
+
+
+**Full Changelog**: https://github.com/ziwork/bypass_keenetic/compare/2.1.9...2.2.0
+
+[Changes][2.2.0]
+
+
 <a name="2.1.9"></a>
 # [2.1.9 - fix vpn service, wireguard](https://github.com/ziwork/bypass_keenetic/releases/tag/2.1.9) - 03 May 2023
 
@@ -131,6 +161,7 @@
 [Changes][2.0.0]
 
 
+[2.2.0]: https://github.com/ziwork/bypass_keenetic/compare/2.1.9...2.2.0
 [2.1.9]: https://github.com/ziwork/bypass_keenetic/compare/2.1.8...2.1.9
 [2.1.8]: https://github.com/ziwork/bypass_keenetic/compare/2.1.7...2.1.8
 [2.1.7]: https://github.com/ziwork/bypass_keenetic/compare/2.1.6...2.1.7
