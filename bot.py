@@ -168,7 +168,7 @@ def bot_message(message):
                             s = line.replace('# ', '')
                             bot_version = s.strip()
 
-                service_bot_version = "*ВАША ТЕКУЩАЯ " + str(bot_version) + "*\n\n\n"
+                service_bot_version = "*ВАША ТЕКУЩАЯ " + str(bot_version) + "*\n\n"
                 service_new_version = "*ПОСЛЕДНЯЯ ДОСТУПНАЯ ВЕРСИЯ:*\n\n" + str(bot_new_version)
                 service_update_info = service_bot_version + service_new_version
                 # bot.send_message(message.chat.id, service_bot_version, parse_mode='Markdown', reply_markup=service)
