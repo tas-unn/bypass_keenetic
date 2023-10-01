@@ -5,18 +5,13 @@
 #  Данный бот предназначен для управления обхода блокировок на роутерах Keenetic
 #  Демо-бот: https://t.me/keenetic_dns_bot
 #
-#  Файл: bot.py, Версия 2.1.9, последнее изменение: 03.05.2023, 23:13
+#  Файл: bot.py, Версия 2.2.0, последнее изменение: 01.10.2023, 20:03
 #  Доработал: NetworK (https://github.com/ziwork)
 
-# ВЕРСИЯ СКРИПТА 2.1.9
-# ЕСЛИ ВЫ ХОТИТЕ ПОДДЕРЖАТЬ РАЗРАБОТЧИКА - МОЖЕТЕ ОТПРАВИТЬ ДОНАТ НА ЛЮБУЮ СУММУ
-# ziwork aka NetworK
-# 4817 7603 0990 8527 Сбербанк VISA
-
-# tas-unn aka Materland
-# 2204 1201 0098 8217 КАРТА МИР
-# 410017539693882 Юмани
-# bc1qesjaxfad8f8azu2cp4gsvt2j9a4yshsc2swey9  Биткоин кошелёк
+# ВЕРСИЯ СКРИПТА 2.2.0
+# ЕСЛИ ВЫ ХОТИТЕ ПОДДЕРЖАТЬ РАЗРАБОТЧИКОВ - МОЖЕТЕ ОТПРАВИТЬ ДОНАТ НА ЛЮБУЮ СУММУ
+# ziwork aka NetworK - 4817 7603 0990 8527 (Сбербанк VISA)
+# tas-unn aka Materland - 2204 1201 0098 8217 (КАРТА МИР)
 
 import asyncio
 import subprocess
@@ -27,9 +22,9 @@ import time
 import telebot
 from telebot import types
 from telethon.sync import TelegramClient
-from pathlib import Path
 import base64
-import shutil
+# from pathlib import Path
+# import shutil
 # import datetime
 import requests
 import json
@@ -44,8 +39,8 @@ localportsh = config.localportsh
 localporttor = config.localporttor
 localporttrojan = config.localporttrojan
 localportvmess = config.localportvmess
-dnsovertlsport = config.dnsovertlsport
 dnsporttor = config.dnsporttor
+dnsovertlsport = config.dnsovertlsport
 dnsoverhttpsport = config.dnsoverhttpsport
 
 # Начало работы программы
@@ -54,39 +49,39 @@ level = 0
 bypass = -1
 sid = "0"
 
-
+# список смайлов для меню
+#  ✅ ❌ ♻️ 📃 📆 🔑 📄 ❗ ️⚠️ ⚙️ 📝 📆 🗑 📄️⚠️ 🔰 ❔ ‼️ 📑
 @bot.message_handler(commands=['start'])
 def start(message):
     if message.from_user.username not in usernames:
         bot.send_message(message.chat.id, 'Вы не являетесь автором канала')
         return
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    item1 = types.KeyboardButton("Установка и удаление")
-    item2 = types.KeyboardButton("Ключи и мосты")
-    item3 = types.KeyboardButton("Списки обхода")
-    item4 = types.KeyboardButton("Сервис")
+    item1 = types.KeyboardButton("🔰 Установка и удаление")
+    item2 = types.KeyboardButton("🔑 Ключи и мосты")
+    item3 = types.KeyboardButton("📝 Списки обхода")
+    item4 = types.KeyboardButton("⚙️ Сервис")
     markup.add(item1, item2, item3, item4)
-    bot.send_message(message.chat.id, 'Добро пожаловать в меню!', reply_markup=markup)
-
+    bot.send_message(message.chat.id, '✅ Добро пожаловать в меню!', reply_markup=markup)
 
 @bot.message_handler(content_types=['text'])
 def bot_message(message):
     try:
         main = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        m1 = types.KeyboardButton("Установка и удаление")
-        m2 = types.KeyboardButton("Ключи и мосты")
-        m3 = types.KeyboardButton("Списки обхода")
-        m4 = types.KeyboardButton("Информация")
-        m5 = types.KeyboardButton("Сервис")
+        m1 = types.KeyboardButton("🔰 Установка и удаление")
+        m2 = types.KeyboardButton("🔑 Ключи и мосты")
+        m3 = types.KeyboardButton("📝 Списки обхода")
+        m4 = types.KeyboardButton("📄 Информация")
+        m5 = types.KeyboardButton("⚙️ Сервис")
         main.add(m1, m2, m3)
         main.add(m4, m5)
 
         service = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        m1 = types.KeyboardButton("Перезагрузить мосты")
-        m2 = types.KeyboardButton("Перезагрузить роутер")
-        m3 = types.KeyboardButton("DNS Override")
-        m4 = types.KeyboardButton("Обновления")
-        back = types.KeyboardButton("Назад")
+        m1 = types.KeyboardButton("♻️ Перезагрузить сервисы")
+        m2 = types.KeyboardButton("‼️Перезагрузить роутер")
+        m3 = types.KeyboardButton("‼️DNS Override")
+        m4 = types.KeyboardButton("🔄 Обновления")
+        back = types.KeyboardButton("🔙 Назад")
         service.add(m1, m2)
         service.add(m3, m4)
         service.add(back)
@@ -97,63 +92,60 @@ def bot_message(message):
         if message.chat.type == 'private':
             global level, bypass
 
-            if message.text == 'Сервис':
+            if message.text == '⚙️ Сервис':
                 bot.send_message(message.chat.id, 'Сервисное меню!', reply_markup=service)
                 return
 
-            if message.text == 'Перезагрузить мосты':
-                # subprocess.call(["/opt/etc/init.d/S22shadowsocks", "restart", "&"])
-                # subprocess.call(["/opt/etc/init.d/S22trojan", "restart", "&"])
-                # subprocess.call(["/opt/etc/init.d/S24v2ray", "restart", "&"])
-                # subprocess.call(["/opt/etc/init.d/S35tor", "restart", "&"])
+            if message.text == '♻️ Перезагрузить сервисы':
+                bot.send_message(message.chat.id, '🔄 Выполняется перезагрузка сервисов!', reply_markup=service)
                 os.system('/opt/etc/init.d/S22shadowsocks restart')
                 os.system('/opt/etc/init.d/S22trojan restart')
                 os.system('/opt/etc/init.d/S24v2ray restart')
                 os.system('/opt/etc/init.d/S35tor restart')
-                bot.send_message(message.chat.id, 'Мосты перезагружены!', reply_markup=service)
+                bot.send_message(message.chat.id, '✅ Сервисы перезагружены!', reply_markup=service)
                 return
 
-            if message.text == 'Перезагрузить роутер':
+            if message.text == '‼️Перезагрузить роутер':
                 os.system("ndmc -c system reboot")
-                service_router_reboot = "Роутер перезагружается!\nЭто займет около 2 минут."
+                service_router_reboot = "🔄 Роутер перезагружается!\nЭто займет около 2 минут."
                 bot.send_message(message.chat.id, service_router_reboot, reply_markup=service)
                 return
 
             if message.text == 'DNS Override':
                 service = types.ReplyKeyboardMarkup(resize_keyboard=True)
-                m1 = types.KeyboardButton("DNS Override ВКЛ")
-                m2 = types.KeyboardButton("DNS Override ВЫКЛ")
-                back = types.KeyboardButton("Назад")
+                m1 = types.KeyboardButton("✅ DNS Override ВКЛ")
+                m2 = types.KeyboardButton("❌ DNS Override ВЫКЛ")
+                back = types.KeyboardButton("🔙 Назад")
                 service.add(m1, m2)
                 service.add(back)
-                bot.send_message(message.chat.id, 'DNS Override!', reply_markup=service)
+                bot.send_message(message.chat.id, '‼️DNS Override!', reply_markup=service)
                 return
 
-            if message.text == "DNS Override ВКЛ" or message.text == "DNS Override ВЫКЛ":
+            if message.text == "✅ DNS Override ВКЛ" or message.text == "❌ DNS Override ВЫКЛ":
                 if message.text == "DNS Override ВКЛ":
                     os.system("ndmc -c 'opkg dns-override'")
                     time.sleep(2)
                     os.system("ndmc -c 'system configuration save'")
-                    bot.send_message(message.chat.id, 'DNS Override включен! Роутер перезагружается',
+                    bot.send_message(message.chat.id, '✅ DNS Override включен! Роутер перезагружается',
                                      reply_markup=service)
                     time.sleep(5)
                     os.system("ndmc -c 'system reboot'")
                     return
-                if message.text == "DNS Override ВЫКЛ":
+                if message.text == "❌ DNS Override ВЫКЛ":
                     os.system("ndmc -c 'no opkg dns-override'")
                     time.sleep(2)
                     os.system("ndmc -c 'system configuration save'")
-                    bot.send_message(message.chat.id, 'DNS Override выключен! Роутер перезагружается',
+                    bot.send_message(message.chat.id, '✅ DNS Override выключен! Роутер перезагружается',
                                      reply_markup=service)
                     time.sleep(5)
                     os.system("ndmc -c 'system reboot'")
                     return
 
-                service_router_reboot = "Роутер перезагружается!\nЭто займет около 2 минут."
+                service_router_reboot = "🔄 Роутер перезагружается!\nЭто займет около 2 минут."
                 bot.send_message(message.chat.id, service_router_reboot, reply_markup=service)
                 return
 
-            if message.text == 'Информация':
+            if message.text == '📄 Информация':
                 url = "https://raw.githubusercontent.com/ziwork/bypass_keenetic/main/info.md"
                 info_bot = requests.get(url).text
                 bot.send_message(message.chat.id, info_bot, parse_mode='Markdown', disable_web_page_preview=True,
@@ -166,7 +158,7 @@ def bot_message(message):
                 bot.send_message(message.chat.id, keys_free, parse_mode='Markdown', disable_web_page_preview=True)
                 return
 
-            if message.text == 'Обновления' or message.text == '/check_update':
+            if message.text == '🔄 Обновления' or message.text == '/check_update':
                 url = "https://raw.githubusercontent.com/ziwork/bypass_keenetic/main/version.md"
                 bot_new_version = requests.get(url).text
 
@@ -192,22 +184,14 @@ def bot_message(message):
                 os.chmod(r"/opt/root/script.sh", 0o0755)
                 os.chmod('/opt/root/script.sh', stat.S_IRWXU)
 
-                # p = subprocess.Popen(["/opt/root/script.sh", "-update"], stdout=subprocess.PIPE,
-                #                     stderr=subprocess.PIPE, text=True, universal_newlines=True)
-                # output, errors = p.communicate()
-                # print(output)
-
-                # res = subprocess.check_output(['ls', '-l'])
-                # bot.send_message(message.chat.id, res, reply_markup=service)
-
                 update = subprocess.Popen(['/opt/root/script.sh', '-update'], stdout=subprocess.PIPE)
                 for line in update.stdout:
                     results_update = line.decode().strip()
                     bot.send_message(message.chat.id, str(results_update), reply_markup=service)
                 return
 
-            if message.text == 'Назад':
-                bot.send_message(message.chat.id, 'Добро пожаловать в меню!', reply_markup=main)
+            if message.text == '🔙 Назад':
+                bot.send_message(message.chat.id, '✅ Добро пожаловать в меню!', reply_markup=main)
                 level = 0
                 bypass = -1
                 return
@@ -220,10 +204,10 @@ def bot_message(message):
                 for fln in dirfiles:
                     if fln == message.text + '.txt':
                         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-                        item1 = types.KeyboardButton("Показать список")
-                        item2 = types.KeyboardButton("Добавить в список")
-                        item3 = types.KeyboardButton("Удалить из списка")
-                        back = types.KeyboardButton("Назад")
+                        item1 = types.KeyboardButton("📑 Показать список")
+                        item2 = types.KeyboardButton("📝 Добавить в список")
+                        item3 = types.KeyboardButton("🗑 Удалить из списка")
+                        back = types.KeyboardButton("🔙 Назад")
                         markup.row(item1, item2, item3)
                         markup.row(back)
                         level = 2
@@ -232,12 +216,12 @@ def bot_message(message):
                         return
 
                 markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-                back = types.KeyboardButton("Назад")
+                back = types.KeyboardButton("🔙 Назад")
                 markup.add(back)
                 bot.send_message(message.chat.id, "Не найден", reply_markup=markup)
                 return
 
-            if level == 2 and message.text == "Показать список":
+            if level == 2 and message.text == "📑 Показать список":
                 file = open('/opt/etc/unblock/' + bypass + '.txt')
                 flag = True
                 s = ''
@@ -252,36 +236,40 @@ def bot_message(message):
                 if not flag:
                     for line in sites:
                         s = str(s) + '\n' + line.replace("\n", "")
-
-                bot.send_message(message.chat.id, s)
+                if len(s) > 4096:
+                    for x in range(0, len(s), 4096):
+                        bot.send_message(message.chat.id, s[x:x + 4096])
+                else:
+                    bot.send_message(message.chat.id, s)
+                #bot.send_message(message.chat.id, s)
                 markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-                item1 = types.KeyboardButton("Показать список")
-                item2 = types.KeyboardButton("Добавить в список")
-                item3 = types.KeyboardButton("Удалить из списка")
-                back = types.KeyboardButton("Назад")
+                item1 = types.KeyboardButton("📑 Показать список")
+                item2 = types.KeyboardButton("📝 Добавить в список")
+                item3 = types.KeyboardButton("🗑 Удалить из списка")
+                back = types.KeyboardButton("🔙 Назад")
                 markup.row(item1, item2, item3)
                 markup.row(back)
                 bot.send_message(message.chat.id, "Меню " + bypass, reply_markup=markup)
                 return
 
-            if level == 2 and message.text == "Добавить в список":
+            if level == 2 and message.text == "📝 Добавить в список":
                 bot.send_message(message.chat.id,
                                  "Введите имя сайта или домена для разблокировки, "
                                  "либо воспользуйтесь меню для других действий")
                 markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
                 item1 = types.KeyboardButton("Добавить обход блокировок соцсетей")
-                back = types.KeyboardButton("Назад")
+                back = types.KeyboardButton("🔙 Назад")
                 markup.add(item1, back)
                 level = 3
                 bot.send_message(message.chat.id, "Меню " + bypass, reply_markup=markup)
                 return
 
-            if level == 2 and message.text == "Удалить из списка":
+            if level == 2 and message.text == "🗑 Удалить из списка":
                 bot.send_message(message.chat.id,
                                  "Введите имя сайта или домена для удаления из листа разблокировки,"
                                  "либо возвратитесь в главное меню")
                 markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-                back = types.KeyboardButton("Назад")
+                back = types.KeyboardButton("🔙 Назад")
                 markup.add(back)
                 level = 4
                 bot.send_message(message.chat.id, "Меню " + bypass, reply_markup=markup)
@@ -315,14 +303,14 @@ def bot_message(message):
                     f.write(line + '\n')
                 f.close()
                 if k != len(sortlist):
-                    bot.send_message(message.chat.id, "Успешно добавлено")
+                    bot.send_message(message.chat.id, "✅ Успешно добавлено")
                 else:
                     bot.send_message(message.chat.id, "Было добавлено ранее")
                 markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-                item1 = types.KeyboardButton("Показать список")
-                item2 = types.KeyboardButton("Добавить в список")
-                item3 = types.KeyboardButton("Удалить из списка")
-                back = types.KeyboardButton("Назад")
+                item1 = types.KeyboardButton("📑 Показать список")
+                item2 = types.KeyboardButton("📝 Добавить в список")
+                item3 = types.KeyboardButton("🗑 Удалить из списка")
+                back = types.KeyboardButton("🔙 Назад")
                 markup.row(item1, item2, item3)
                 markup.row(back)
                 subprocess.call(["/opt/bin/unblock_update.sh"])
@@ -345,14 +333,14 @@ def bot_message(message):
                     f.write(line + '\n')
                 f.close()
                 if k != len(mylist):
-                    bot.send_message(message.chat.id, "Успешно удалено")
+                    bot.send_message(message.chat.id, "✅ Успешно удалено")
                 else:
                     bot.send_message(message.chat.id, "Не найдено в списке")
                 markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-                item1 = types.KeyboardButton("Показать список")
-                item2 = types.KeyboardButton("Добавить в список")
-                item3 = types.KeyboardButton("Удалить из списка")
-                back = types.KeyboardButton("Назад")
+                item1 = types.KeyboardButton("📑 Показать список")
+                item2 = types.KeyboardButton("📝 Добавить в список")
+                item3 = types.KeyboardButton("🗑 Удалить из списка")
+                back = types.KeyboardButton("🔙 Назад")
                 markup.row(item1, item2, item3)
                 markup.row(back)
                 level = 2
@@ -363,40 +351,21 @@ def bot_message(message):
             if level == 5:
                 shadowsocks(message.text)
                 time.sleep(2)
-                # subprocess.call(["/opt/etc/init.d/S22shadowsocks", "restart"])
                 os.system('/opt/etc/init.d/S22shadowsocks restart')
                 level = 0
-                bot.send_message(message.chat.id, 'Успешно обновлено', reply_markup=main)
+                bot.send_message(message.chat.id, '✅ Успешно обновлено', reply_markup=main)
                 # return
 
             if level == 6:
                 tormanually(message.text)
-                # subprocess.call(["/opt/etc/init.d/S35tor", "restart"])
                 os.system('/opt/etc/init.d/S35tor restart')
                 level = 0
-                bot.send_message(message.chat.id, 'Успешно обновлено', reply_markup=main)
+                bot.send_message(message.chat.id, '✅ Успешно обновлено', reply_markup=main)
                 # return
-
-            # if level == 7:
-            #     global sid
-            #     mydata = {'sid': sid, 'answer': message.text, 'mark': 'Y'}
-            #     req = requests.post('https://hi-l.im/web.php', data=mydata)
-            #     soup = BeautifulSoup(req.text, 'html.parser')
-            #     try:
-            #         mykey = soup.find(attrs={"id": "myInput"})["value"]
-            #         shadowsocks(mykey)
-            #         subprocess.call(["/opt/etc/init.d/S22shadowsocks", "restart"])
-            #         level = 0
-            #         bot.send_message(message.chat.id, 'Успешно обновлено', reply_markup=main)
-            #     except Exception as error:
-            #         level = 0
-            #         bot.send_message(message.chat.id,
-            #                          'Ошибка: ' + str(error) + '. \nПопробуйте ещё раз', reply_markup=main)
-            #     return
 
             if level == 8:
                 # значит это ключи и мосты
-                if message.text == 'Где брать ключи?':
+                if message.text == '❔ Где брать ключи?':
                     url = "https://raw.githubusercontent.com/ziwork/bypass_keenetic/main/keys.md"
                     keys = requests.get(url).text
                     bot.send_message(message.chat.id, keys, parse_mode='Markdown', disable_web_page_preview=True)
@@ -407,83 +376,80 @@ def bot_message(message):
                     item1 = types.KeyboardButton("Tor вручную")
                     item2 = types.KeyboardButton("Tor через telegram")
                     markup.add(item1, item2)
-                    back = types.KeyboardButton("Назад")
+                    back = types.KeyboardButton("🔙 Назад")
                     markup.add(back)
-                    bot.send_message(message.chat.id, 'Добро пожаловать в меню Tor!', reply_markup=markup)
+                    bot.send_message(message.chat.id, '✅ Добро пожаловать в меню Tor!', reply_markup=markup)
 
                 if message.text == 'Shadowsocks':
-                    bot.send_message(message.chat.id, "Скопируйте ключ сюда")
+                    #bot.send_message(message.chat.id, "Скопируйте ключ сюда")
                     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-                    back = types.KeyboardButton("Назад")
+                    back = types.KeyboardButton("🔙 Назад")
                     markup.add(back)
                     level = 5
-                    bot.send_message(message.chat.id, "Меню", reply_markup=markup)
+                    bot.send_message(message.chat.id, "🔑 Скопируйте ключ сюда", reply_markup=markup)
                     return
 
                 if message.text == 'Vmess':
-                    bot.send_message(message.chat.id, "Скопируйте ключ сюда")
+                    #bot.send_message(message.chat.id, "Скопируйте ключ сюда")
                     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-                    back = types.KeyboardButton("Назад")
+                    back = types.KeyboardButton("🔙 Назад")
                     markup.add(back)
                     level = 9
-                    bot.send_message(message.chat.id, "Меню", reply_markup=markup)
+                    bot.send_message(message.chat.id, "🔑 Скопируйте ключ сюда", reply_markup=markup)
                     return
 
                 if message.text == 'Trojan':
-                    bot.send_message(message.chat.id, "Скопируйте ключ сюда")
+                    #bot.send_message(message.chat.id, "Скопируйте ключ сюда")
                     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-                    back = types.KeyboardButton("Назад")
+                    back = types.KeyboardButton("🔙 Назад")
                     markup.add(back)
                     level = 10
-                    bot.send_message(message.chat.id, "Меню", reply_markup=markup)
+                    bot.send_message(message.chat.id, "🔑 Скопируйте ключ сюда", reply_markup=markup)
                     return
 
             if level == 9:
                 vmess(message.text)
-                # subprocess.call(["/opt/etc/init.d/S24v2ray", "restart"])
                 os.system('/opt/etc/init.d/S24v2ray restart')
                 level = 0
-                bot.send_message(message.chat.id, 'Успешно обновлено', reply_markup=main)
+                bot.send_message(message.chat.id, '✅ Успешно обновлено', reply_markup=main)
 
             if level == 10:
                 trojan(message.text)
-                # subprocess.call(["/opt/etc/init.d/S22trojan", "restart"])
                 os.system('/opt/etc/init.d/S22trojan restart')
                 level = 0
-                bot.send_message(message.chat.id, 'Успешно обновлено', reply_markup=main)
+                bot.send_message(message.chat.id, '✅ Успешно обновлено', reply_markup=main)
 
             if message.text == 'Tor вручную':
-                bot.send_message(message.chat.id, "Скопируйте ключ сюда")
+                #bot.send_message(message.chat.id, "Скопируйте ключ сюда")
                 markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-                back = types.KeyboardButton("Назад")
+                back = types.KeyboardButton("🔙 Назад")
                 markup.add(back)
                 level = 6
-                bot.send_message(message.chat.id, "Меню", reply_markup=markup)
+                bot.send_message(message.chat.id, "🔑 Скопируйте ключ сюда", reply_markup=markup)
                 return
 
             if message.text == 'Tor через telegram':
                 tor()
-                # subprocess.call(["/opt/etc/init.d/S35tor", "restart"])
                 os.system('/opt/etc/init.d/S35tor restart')
                 level = 0
-                bot.send_message(message.chat.id, 'Успешно обновлено', reply_markup=main)
+                bot.send_message(message.chat.id, '✅ Успешно обновлено', reply_markup=main)
                 return
 
-            if message.text == 'Установка и удаление':
+            if message.text == '🔰 Установка и удаление':
                 markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
                 item1 = types.KeyboardButton("Установка & переустановка")
                 item2 = types.KeyboardButton("Удаление")
-                back = types.KeyboardButton("Назад")
+                back = types.KeyboardButton("🔙 Назад")
                 markup.row(item1, item2)
                 markup.row(back)
-                bot.send_message(message.chat.id, 'Установка и удаление', reply_markup=markup)
+                bot.send_message(message.chat.id, '🔰 Установка и удаление', reply_markup=markup)
                 return
 
             if message.text == 'Установка & переустановка':
                 markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
                 item1 = types.KeyboardButton("Оригинальная версия")
                 item2 = types.KeyboardButton("Fork by NetworK")
-                back = types.KeyboardButton("Назад")
+                back = types.KeyboardButton("🔙 Назад")
                 markup.row(item1, item2)
                 markup.row(back)
                 bot.send_message(message.chat.id, 'Выберите репозиторий', reply_markup=markup)
@@ -495,155 +461,17 @@ def bot_message(message):
                 else:
                     repo = "ziwork"
 
-                bot.send_message(message.chat.id, "Начинаем установку")
-                # создаём скрипт установки
-                script = '#!/bin/sh'
-                script += '\nopkg update'  # Обновим opkg
-                # установим пакеты
-                script += '\nopkg install curl mc tor tor-geoip bind-dig cron dnsmasq-full ipset iptables obfs4 shadowsocks-libev-ss-redir shadowsocks-libev-config v2ray trojan'
-                script += '\npip install pyTelegramBotAPI telethon pathlib'
-                script += '\nmkdir -p /opt/etc/unblock/'
-                f = open('/opt/etc/install.sh', 'w')
-                f.write(script)
-                f.close()
-                os.chmod('/opt/etc/install.sh', stat.S_IRWXU)
-                subprocess.call(["/opt/etc/install.sh"])
-                os.remove("/opt/etc/install.sh")
-                bot.send_message(message.chat.id, "Установка пакетов завершена. Продолжаем установку")
+                # os.system("curl -s -o /opt/root/script.sh https://raw.githubusercontent.com/ziwork/bypass_keenetic/main/script.sh")
+                url = "https://raw.githubusercontent.com/{0}/bypass_keenetic/main/script.sh".format(repo)
+                os.system("curl -s -o /opt/root/script.sh " + url + "")
+                os.chmod(r"/opt/root/script.sh", 0o0755)
+                os.chmod('/opt/root/script.sh', stat.S_IRWXU)
+                #os.system("sed -i 's/ziwork/" + repo + "/g' /opt/root/script.sh")
 
-                Path('/opt/etc/unblock/tor.txt').touch()
-                Path('/opt/etc/unblock/shadowsocks.txt').touch()
-                Path('/opt/etc/unblock/trojan.txt').touch()
-                Path('/opt/etc/unblock/vmess.txt').touch()
-                # Path('/opt/etc/unblock/vpn.txt').touch()
-                # Path.touch(mode=0o755, exist_ok=True)
-
-                os.chmod(r"/opt/etc/unblock/tor.txt", 0o0755)
-                os.chmod(r"/opt/etc/unblock/shadowsocks.txt", 0o0755)
-                os.chmod(r"/opt/etc/unblock/trojan.txt", 0o0755)
-                os.chmod(r"/opt/etc/unblock/vmess.txt", 0o0755)
-                # os.chmod(r"/opt/etc/unblock/vpn.txt", 0o0755)
-
-                bot.send_message(message.chat.id, "Создали файлы под множества")
-
-                # os.chmod(r"/opt/etc/init.d/S99unblock", 0o0755)
-                # f = open('/opt/etc/init.d/S99unblock', 'w')
-                # f.write('#!/bin/sh\n\
-                # [ "$1" != "start" ] && exit 0\n\
-                # /opt/bin/unblock_ipset.sh\n\
-                # python3 /opt/etc/bot.py &')
-                # f.close()
-                # os.chmod(r"/opt/etc/init.d/S99unblock", 0o0755)
-                # os.chmod("/opt/etc/init.d/S99unblock", stat.S_IRWXU)
-
-                # os.chmod(r"/opt/etc/dnsmasq.conf", 0o0755)
-                url = "https://raw.githubusercontent.com/{0}/bypass_keenetic/main/dnsmasq.conf".format(repo)
-                s = requests.get(url).text
-                s = s.replace("40500", dnsovertlsport).replace("40508", dnsoverhttpsport)
-                s = s.replace("192.168.1.1", routerip)
-                f = open("/opt/etc/dnsmasq.conf", 'w')
-                f.write(s)
-                f.close()
-                os.chmod(r"/opt/etc/dnsmasq.conf", 0o0755)
-                os.chmod('/opt/etc/dnsmasq.conf', stat.S_IRWXU)
-
-                # os.chmod(r"/opt/etc/init.d/S99unblock", 0o0755)
-                url = "https://raw.githubusercontent.com/{0}/bypass_keenetic/main/S99unblock".format(repo)
-                s = requests.get(url).text
-                f = open("/opt/etc/init.d/S99unblock", 'w')
-                f.write(s)
-                f.close()
-                os.chmod(r"/opt/etc/init.d/S99unblock", 0o0755)
-                os.chmod('/opt/etc/init.d/S99unblock', stat.S_IRWXU)
-
-                # os.chmod(r"/opt/etc/crontab", 0o0755)
-                f = open('/opt/etc/crontab')
-                lines = f.readlines()
-                f.close()
-                newline = '00 06 * * * root /opt/bin/unblock_ipset.sh'
-                f = open('/opt/etc/crontab', 'w')
-                isnewline = True
-                for line in lines:
-                    if line.replace("\n", "") == newline:
-                        isnewline = False
-                    f.write(line.replace("\n", "") + '\n')
-                if isnewline:
-                    f.write(newline + '\n')
-                f.close()
-
-                os.system("sed -i 's/ss-local/ss-redir/g' /opt/etc/init.d/S22shadowsocks")
-                # with open('/opt/etc/init.d/S22shadowsock', 'r') as f:
-                #     old_data = f.read()
-                # new_data = old_data.replace('ss-local', 'ss-redir')
-                # with open('/opt/etc/init.d/S22shadowsock', 'w') as f:
-                #     f.write(new_data)
-
-                bot.send_message(message.chat.id, "Установили изначальные скрипты")
-
-                # os.chmod(r"/opt/bin/unblock_update.sh", 0o0755)
-                url = "https://raw.githubusercontent.com/{0}/bypass_keenetic/main/unblock_update.sh".format(repo)
-                s = requests.get(url).text
-                f = open("/opt/bin/unblock_update.sh", 'w')
-                f.write(s)
-                f.close()
-                os.chmod(r"/opt/bin/unblock_update.sh", 0o0755)
-                os.chmod('/opt/bin/unblock_update.sh', stat.S_IRWXU)
-
-                # os.chmod(r"/opt/bin/unblock_ipset.sh", 0o0755)
-                url = "https://raw.githubusercontent.com/{0}/bypass_keenetic/main/unblock_ipset.sh".format(repo)
-                s = requests.get(url).text
-                s = s.replace("40500", dnsovertlsport)
-                f = open("/opt/bin/unblock_ipset.sh", 'w')
-                f.write(s)
-                f.close()
-                os.chmod(r"/opt/bin/unblock_ipset.sh", 0o0755)
-                os.chmod('/opt/bin/unblock_ipset.sh', stat.S_IRWXU)
-
-                # os.chmod(r"/opt/bin/unblock_dnsmasq.sh", 0o0755)
-                url = "https://raw.githubusercontent.com/{0}/bypass_keenetic/main/unblock.dnsmasq".format(repo)
-                s = requests.get(url).text
-                s = s.replace("40500", dnsovertlsport)
-                f = open("/opt/bin/unblock_dnsmasq.sh", 'w')
-                f.write(s)
-                f.close()
-                os.chmod(r"/opt/bin/unblock_dnsmasq.sh", 0o0755)
-                os.chmod('/opt/bin/unblock_dnsmasq.sh', stat.S_IRWXU)
-
-                # os.chmod(r"/opt/etc/ndm/fs.d/100-ipset.sh", 0o0755)
-                url = "https://raw.githubusercontent.com/{0}/bypass_keenetic/main/100-ipset.sh".format(repo)
-                s = requests.get(url).text
-                f = open("/opt/etc/ndm/fs.d/100-ipset.sh", 'w')
-                f.write(s)
-                f.close()
-                os.chmod(r"/opt/etc/ndm/fs.d/100-ipset.sh", 0o0755)
-                os.chmod('/opt/etc/ndm/fs.d/100-ipset.sh', stat.S_IRWXU)
-
-                # os.chmod(r"/opt/etc/ndm/netfilter.d/100-redirect.sh", 0o0755)
-                url = "https://raw.githubusercontent.com/{0}/bypass_keenetic/main/100-redirect.sh".format(repo)
-                s = requests.get(url).text
-                s = s.replace("1082", localportsh).replace("9141", localporttor)
-                s = s.replace("10810", localportvmess).replace("10829", localporttrojan)
-                s = s.replace("192.168.1.1", routerip)
-                f = open("/opt/etc/ndm/netfilter.d/100-redirect.sh", 'w')
-                f.write(s)
-                f.close()
-                os.chmod(r"/opt/etc/ndm/netfilter.d/100-redirect.sh", 0o0755)
-                os.chmod('/opt/etc/ndm/netfilter.d/100-redirect.sh', stat.S_IRWXU)
-
-                # os.chmod(r"/opt/etc/ndm/ifstatechanged.d/100-unblock-vpn.sh", 0o0755)
-                url = "https://raw.githubusercontent.com/{0}/bypass_keenetic/main/100-unblock-vpn.sh".format(repo)
-                s = requests.get(url).text
-                f = open("/opt/etc/ndm/ifstatechanged.d/100-unblock-vpn.sh", 'w')
-                f.write(s)
-                f.close()
-                os.chmod(r"/opt/etc/ndm/ifstatechanged.d/100-unblock-vpn.sh", 0o0755)
-                os.chmod('/opt/etc/ndm/ifstatechanged.d/100-unblock-vpn.sh', stat.S_IRWXU)
-
-                bot.send_message(message.chat.id, "Скачали основные скрипты разблокировок")
-
-                # получение мостов tor
-                tor()
-                bot.send_message(message.chat.id, "Установили мосты tor")
+                install = subprocess.Popen(['/opt/root/script.sh', '-install'], stdout=subprocess.PIPE)
+                for line in install.stdout:
+                    results_install = line.decode().strip()
+                    bot.send_message(message.chat.id, str(results_install), reply_markup=main)
 
                 bot.send_message(message.chat.id,
                                  "Установка завершена. Теперь нужно немного настроить роутер и перейти к "
@@ -663,36 +491,17 @@ def bot_message(message):
                 return
 
             if message.text == 'Удаление':
-                os.remove('/opt/etc/ndm/fs.d/100-ipset.sh')
-                os.remove('/opt/bin/unblock_update.sh')
-                os.remove('/opt/etc/init.d/S99unblock')
-                os.remove('/opt/bin/unblock_ipset.sh')
-                os.remove('/opt/etc/ndm/netfilter.d/100-redirect.sh')
-                os.remove('/opt/etc/ndm/ifstatechanged.d/100-unblock-vpn.sh')
-                os.remove('/opt/bin/unblock_dnsmasq.sh')
-                shutil.rmtree('/opt/etc/unblock/')
-                f = open('/opt/etc/crontab')
-                lines = f.readlines()
-                f.close()
-                f = open('/opt/etc/crontab', 'w')
-                for line in lines:
-                    if line != '00 06 * * * root /opt/bin/unblock_ipset.sh':
-                        f.write(line + '\n')
-                f.close()
-                script = '#!/bin/sh'
-                script += '\nopkg update'  # Обновим opkg
-                # установим пакеты
-                script += '\nopkg remove mc tor tor-geoip bind-dig cron dnsmasq-full ipset iptables obfs4 shadowsocks-libev-ss-redir shadowsocks-libev-config v2ray trojan'
-                f = open('/opt/etc/remove.sh', 'w')
-                f.write(script)
-                f.close()
-                os.chmod('/opt/etc/remove.sh', stat.S_IRWXU)
-                subprocess.call(["/opt/etc/remove.sh"])
-                os.remove("/opt/etc/remove.sh")
-                bot.send_message(message.chat.id, 'Успешно удалено', reply_markup=main)
+                os.system("curl -s -o /opt/root/script.sh https://raw.githubusercontent.com/ziwork/bypass_keenetic/main/script.sh")
+                os.chmod(r"/opt/root/script.sh", 0o0755)
+                os.chmod('/opt/root/script.sh', stat.S_IRWXU)
+
+                remove = subprocess.Popen(['/opt/root/script.sh', '-remove'], stdout=subprocess.PIPE)
+                for line in remove.stdout:
+                    results_remove = line.decode().strip()
+                    bot.send_message(message.chat.id, str(results_remove), reply_markup=service)
                 return
 
-            if message.text == "Списки обхода":
+            if message.text == "📝 Списки обхода":
                 level = 1
                 dirname = '/opt/etc/unblock/'
                 dirfiles = os.listdir(dirname)
@@ -703,25 +512,25 @@ def bot_message(message):
                     btn = fln.replace(".txt", "")
                     markuplist.append(btn)
                 markup.add(*markuplist)
-                back = types.KeyboardButton("Назад")
+                back = types.KeyboardButton("🔙 Назад")
                 markup.add(back)
-                bot.send_message(message.chat.id, "Списки обхода", reply_markup=markup)
+                bot.send_message(message.chat.id, "📝 Списки обхода", reply_markup=markup)
                 return
 
-            if message.text == "Ключи и мосты":
+            if message.text == "🔑 Ключи и мосты":
                 level = 8
                 markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
                 item1 = types.KeyboardButton("Shadowsocks")
                 item2 = types.KeyboardButton("Tor")
                 item3 = types.KeyboardButton("Vmess")
                 item4 = types.KeyboardButton("Trojan")
-                item5 = types.KeyboardButton("Где брать ключи?")
+                item5 = types.KeyboardButton("❔ Где брать ключи?")
                 markup.add(item1, item2)
                 markup.add(item3, item4)
                 markup.add(item5)
-                back = types.KeyboardButton("Назад")
+                back = types.KeyboardButton("🔙 Назад")
                 markup.add(back)
-                bot.send_message(message.chat.id, "Ключи и мосты", reply_markup=markup)
+                bot.send_message(message.chat.id, "🔑 Ключи и мосты", reply_markup=markup)
                 return
 
     except Exception as error:
@@ -730,28 +539,27 @@ def bot_message(message):
         file.close()
         os.chmod(r"/opt/etc/error.log", 0o0755)
 
-
 def vmess(key):
     # global appapiid, appapihash, password, localportvmess
     encodedkey = key[8:]
     s = base64.b64decode(encodedkey).decode('utf8').replace("'", '"')
     jsondata = json.loads(s)
     f = open('/opt/etc/v2ray/config.json', 'w')
-    sh = '{"log":{"access":"","error":"","loglevel":"none"},"inbounds":[{"port":' \
-         + str(localportvmess) + \
-         ',"listen":"::","protocol":"dokodemo-door","settings":{"network":"tcp","followRedirect":true}}],' \
-         '"outbounds":[{"tag":"proxy","protocol":"vmess","settings":{"vnext":[{"address":"' \
-         + str(jsondata["add"]) + '","port":' + str(jsondata["port"]) + ',"users":[{"id":"' \
-         + str(jsondata["id"]) + '","alterId":"' + str(jsondata["aid"]) + \
-         '","email":"t@t.tt","security":"auto"}]}]},"streamSettings":{"network":"ws","security":"tls","tlsSettings":{' \
-         '"allowInsecure":true,"serverName":"' \
-         + str(jsondata["add"]) + '"},"wsSettings":{"path":"/' + str(jsondata["ps"]) + \
-         '","headers":{"Host":"' + str(jsondata["host"]) + \
-         '"}},"tls":"tls"},"mux":{"enabled":false,"concurrency":-1}}],"routing":{"domainStrategy":"IPIfNonMatch",' \
+    sh = '{"log":{"access":"/opt/etc/v2ray/access.log","error":"/opt/etc/v2ray/error.log","loglevel":"info"},' \
+         '"inbounds":[{"port":' + str(localportvmess) + ',"listen":"::","protocol":"dokodemo-door",' \
+         '"settings":{"network":"tcp","followRedirect":true},'\
+         '"sniffing":{"enabled":true,"destOverride":["http","tls"]}}],' \
+         '"outbounds":[{"tag":"proxy","domainStrategy":"UseIPv4","protocol":"vmess",' \
+         '"settings":{"vnext":[{"address":"' + str(jsondata["add"]) + '","port":' + str(jsondata["port"]) + ',' \
+         '"users":[{"id":"' + str(jsondata["id"]) + '","alterId":' + str(jsondata["aid"]) + ',' \
+         '"email":"t@t.tt","security":"auto"}]}]},"streamSettings":{"network":"' + str(jsondata["net"]) + '",' \
+         '"security":"tls","tlsSettings":{"allowInsecure":true,"serverName":"' + str(jsondata["add"]) + '"},' \
+         '"wsSettings":{"path":"' + str(jsondata["path"]) + '","headers":{"Host":"' + str(jsondata["host"]) + '"}},' \
+         '"tls":"' + str(jsondata["tls"]) + '"},"mux":{"enabled":true,"concurrency":-1,"xudpConcurrency": 16,"xudpProxyUDP443":"reject"}}],' \
+         '"routing":{"domainStrategy":"IPIfNonMatch",' \
          '"rules":[{"type":"field","port":"0-65535","outboundTag":"proxy","enabled":true}]}}'
     f.write(sh)
     f.close()
-
 
 def trojan(key):
     # global appapiid, appapihash, password, localporttrojan
@@ -760,14 +568,13 @@ def trojan(key):
     key = key.replace(pw + "@", "", 1)
     host = key.split(':')[0]
     key = key.replace(host + ":", "", 1)
-    port = key.split('?')[0]
+    port = key.split('?')[0].split('#')[0]
     f = open('/opt/etc/trojan/config.json', 'w')
     sh = '{"run_type":"nat","local_addr":"::","local_port":' \
          + str(localporttrojan) + ',"remote_addr":"' + host + '","remote_port":' + port + \
          ',"password":["' + pw + '"],"ssl":{"verify":false,"verify_hostname":false}}'
     f.write(sh)
     f.close()
-
 
 def shadowsocks(key=None):
     # global appapiid, appapihash, password, localportsh
@@ -784,7 +591,6 @@ def shadowsocks(key=None):
          + str(localportsh) + ', "fast_open": false,    "ipv6_first": true}'
     f.write(sh)
     f.close()
-
 
 def tormanually(bridges):
     # global localporttor, dnsporttor
@@ -806,7 +612,6 @@ AutomapHostsOnResolve 1\n\
 UseBridges 1\n\
 ClientTransportPlugin obfs4 exec /opt/sbin/obfs4proxy managed\n' + bridges.replace("obfs4", "Bridge obfs4"))
     f.close()
-
 
 def tor():
     # global appapiid, appapihash

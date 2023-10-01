@@ -127,7 +127,8 @@ vpn_unblock_name=$(echo $vpn_file_name | awk -F '/' '{print $5}' | sed 's/.txt//
 unblockvpn=$(echo unblock"$vpn_unblock_name");
 
 # проверяем есть ли подключенный линк к vpn
-vpn_type=$(echo "$unblockvpn" | awk -F '-' '{print $3}')
+#vpn_type=$(echo "$unblockvpn" | awk -F '-' '{print $3}') # old version
+vpn_type=$(echo "$unblockvpn" | sed 's/-/ /g' | awk '{print $NF}')
 vpn_link_up=$(curl -s localhost:79/rci/show/interface/"$vpn_type"/link | tr -d '"')
 if [ "$vpn_link_up" = "up" ]; then
 
@@ -136,7 +137,7 @@ get_vpn_fwmark_id=$(grep "$vpn_type_lower" /opt/etc/iproute2/rt_tables | awk '{p
 
 # проверка на особый случай, когда файл vpn с сайтами есть, подключение есть, а таблицы с fwmark под него нет
 #vpn_table_id=$((1000 + 1));
-if [ -n $get_vpn_fwmark_id ]; then vpn_table_id=$get_vpn_fwmark_id; else break; fi
+if [ -n "${get_vpn_fwmark_id}" ]; then vpn_table_id=$get_vpn_fwmark_id; else break; fi
 vpn_mark_id=$(echo 0xd"$vpn_table_id")
 
 #не работает должным образом
@@ -145,6 +146,7 @@ vpn_mark_id=$(echo 0xd"$vpn_table_id")
 # проверяем есть ли правила vpn для множества
 if iptables-save 2>/dev/null | grep -q "$unblockvpn"; then
 	vpn_rule_ok=$(echo Правила для "$unblockvpn" уже есть.)
+	echo "$vpn_rule_ok"
 	#logger -t "$TAG" "$vpn_rule_ok"
 
 	else

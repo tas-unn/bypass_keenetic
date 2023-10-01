@@ -7,7 +7,7 @@
 ![GitHub top language](https://img.shields.io/github/languages/top/ziwork/bypass_keenetic)
 <a href="https://t.me/bypass_keenetic">![Telegram](https://img.shields.io/badge/bypass_keenetic--black?style=social&logo=telegram&logoColor=blue)</a>
 
-## Установка обхода блокировок на роутерах Keenetic с установленной средой OpenWRT, управление через телеграм бот. Обхода блокировок много не бывает! 
+## Установка обхода блокировок на роутерах Keenetic с установленной средой Entware, управление через телеграм бот. Обхода блокировок много не бывает! 
 
 ![](bypass_keenetic.jpg)
 
