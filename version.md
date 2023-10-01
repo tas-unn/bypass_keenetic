@@ -1,3 +1,19 @@
+*2.2.0 (01 Oct 2023) -* [Поддержка KeenOS 4+](https://github.com/ziwork/bypass_keenetic/releases/tag/2.2.0) by [@ziwork](https://github.com/ziwork)
+- *Добавлена поддержка KeenOS 4+*
+- *Добавлена проверка версии KeenOS при установке и обновлении*
+- *Обновлены основные скрипты*
+- *Уменьшен размер бота*
+- *Установка, обновление и удаление теперь идет через скрипт*
+- *IP роутера вычисляется автоматически*
+- *При обновлении через скрипт порты берутся из bot_config.py*
+- *Добавлен список VPN в bot_config.py*
+- *Поправлены скрипты для ключей trojan и v2ray*
+- *Исправлена ошибка, если в имени VPN был дефис*
+- *Проверена работа VPN на KeenOS 4+*
+- *Добавлено сообщение перед перезагрузкой мостов*
+- *Добавлено исправление при превышении списка > 4096 символов*
+- *Добавлены информационные смайлы в меню*
+
 *2.1.9 (03 May 2023) -* [fix vpn service, wireguard](https://github.com/ziwork/bypass_keenetic/releases/tag/2.1.9) by [@ziwork](https://github.com/ziwork)
 - *Исправлены ошибки в скриптах для VPN*
 - *Протестирована и настроена работа с Wireguard*
@@ -6,6 +22,7 @@
 - *Обновлено меню*
 - *Добавлены реквизиты для доната*
 
+<!--
 *2.1.8 (01 Apr 2023) -* [fix update via bot](https://github.com/ziwork/bypass_keenetic/releases/tag/2.1.8) by [@ziwork](https://github.com/ziwork)
 - *Добавлен вывод сообщений при обновлении*
 - *Исправлены мелкие ошибки*
@@ -47,3 +64,4 @@
 *2.0.0 (01 Mar 2023) -* [first release bot 2.0](https://github.com/ziwork/bypass_keenetic/releases/tag/2.0.0)
 - *Добавлены сервисы v2ray. trojan vpn*
 - *обновлены скрипты*
+-->
