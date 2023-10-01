@@ -13,3 +13,5 @@
 - *Добавлено сообщение перед перезагрузкой мостов*
 - *Добавлено исправление при превышении списка > 4096 символов*
 - *Добавлены информационные смайлы в меню*
+
+- [Releases](https://github.com/ziwork/bypass_keenetic/releases) | [Changelog](https://github.com/ziwork/bypass_keenetic/blob/main/CHANGELOG.md)
