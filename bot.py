@@ -122,26 +122,27 @@ def bot_message(message):
                 return
 
             if message.text == "✅ DNS Override ВКЛ" or message.text == "❌ DNS Override ВЫКЛ":
-                if message.text == "DNS Override ВКЛ":
+                if message.text == "✅ DNS Override ВКЛ":
                     os.system("ndmc -c 'opkg dns-override'")
                     time.sleep(2)
                     os.system("ndmc -c 'system configuration save'")
-                    bot.send_message(message.chat.id, '✅ DNS Override включен! Роутер перезагружается',
-                                     reply_markup=service)
-                    time.sleep(5)
-                    os.system("ndmc -c 'system reboot'")
-                    return
-                if message.text == "❌ DNS Override ВЫКЛ":
-                    os.system("ndmc -c 'no opkg dns-override'")
-                    time.sleep(2)
-                    os.system("ndmc -c 'system configuration save'")
-                    bot.send_message(message.chat.id, '✅ DNS Override выключен! Роутер перезагружается',
+                    bot.send_message(message.chat.id, '✅ DNS Override включен!\n🔄 Роутер перезагружается.',
                                      reply_markup=service)
                     time.sleep(5)
                     os.system("ndmc -c 'system reboot'")
                     return
 
-                service_router_reboot = "🔄 Роутер перезагружается!\nЭто займет около 2 минут."
+                if message.text == "❌ DNS Override ВЫКЛ":
+                    os.system("ndmc -c 'no opkg dns-override'")
+                    time.sleep(2)
+                    os.system("ndmc -c 'system configuration save'")
+                    bot.send_message(message.chat.id, '✅ DNS Override выключен!\n🔄 Роутер перезагружается.',
+                                     reply_markup=service)
+                    time.sleep(5)
+                    os.system("ndmc -c 'system reboot'")
+                    return
+
+                service_router_reboot = "🔄 Роутер перезагружается!\n⏳ Это займет около 2 минут."
                 bot.send_message(message.chat.id, service_router_reboot, reply_markup=service)
                 return
 
@@ -190,7 +191,7 @@ def bot_message(message):
                     bot.send_message(message.chat.id, str(results_update), reply_markup=service)
                 return
 
-            if message.text == '🔙 Назад':
+            if message.text == '🔙 Назад' or message.text == "Назад":
                 bot.send_message(message.chat.id, '✅ Добро пожаловать в меню!', reply_markup=main)
                 level = 0
                 bypass = -1
