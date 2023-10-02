@@ -5,10 +5,10 @@
 #  Данный бот предназначен для управления обхода блокировок на роутерах Keenetic
 #  Демо-бот: https://t.me/keenetic_dns_bot
 #
-#  Файл: bot.py, Версия 2.2.0, последнее изменение: 01.10.2023, 20:03
+#  Файл: bot.py, Версия 2.2.1, последнее изменение: 02.10.2023, 00:55
 #  Доработал: NetworK (https://github.com/ziwork)
 
-# ВЕРСИЯ СКРИПТА 2.2.0
+# ВЕРСИЯ СКРИПТА 2.2.1
 # ЕСЛИ ВЫ ХОТИТЕ ПОДДЕРЖАТЬ РАЗРАБОТЧИКОВ - МОЖЕТЕ ОТПРАВИТЬ ДОНАТ НА ЛЮБУЮ СУММУ
 # ziwork aka NetworK - 4817 7603 0990 8527 (Сбербанк VISA)
 # tas-unn aka Materland - 2204 1201 0098 8217 (КАРТА МИР)
@@ -96,7 +96,7 @@ def bot_message(message):
                 bot.send_message(message.chat.id, 'Сервисное меню!', reply_markup=service)
                 return
 
-            if message.text == '♻️ Перезагрузить сервисы':
+            if message.text == '♻️ Перезагрузить сервисы' or message.text == 'Перезагрузить сервисы':
                 bot.send_message(message.chat.id, '🔄 Выполняется перезагрузка сервисов!', reply_markup=service)
                 os.system('/opt/etc/init.d/S22shadowsocks restart')
                 os.system('/opt/etc/init.d/S22trojan restart')
@@ -105,13 +105,13 @@ def bot_message(message):
                 bot.send_message(message.chat.id, '✅ Сервисы перезагружены!', reply_markup=service)
                 return
 
-            if message.text == '‼️Перезагрузить роутер':
+            if message.text == '‼️Перезагрузить роутер' or message.text == 'Перезагрузить роутер':
                 os.system("ndmc -c system reboot")
                 service_router_reboot = "🔄 Роутер перезагружается!\nЭто займет около 2 минут."
                 bot.send_message(message.chat.id, service_router_reboot, reply_markup=service)
                 return
 
-            if message.text == '‼️DNS Override':
+            if message.text == '‼️DNS Override' or message.text == 'DNS Override':
                 service = types.ReplyKeyboardMarkup(resize_keyboard=True)
                 m1 = types.KeyboardButton("✅ DNS Override ВКЛ")
                 m2 = types.KeyboardButton("❌ DNS Override ВЫКЛ")

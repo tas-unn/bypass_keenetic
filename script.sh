@@ -24,8 +24,6 @@ dnsovertlsport=$(grep "dnsovertlsport" /opt/etc/bot_config.py | grep -Eo "[0-9]{
 dnsoverhttpsport=$(grep "dnsoverhttpsport" /opt/etc/bot_config.py | grep -Eo "[0-9]{1,5}")
 keen_os_full=$(curl -s localhost:79/rci/show/version/title | tr -d \",)
 keen_os_short=$(curl -s localhost:79/rci/show/version/title | tr -d \", | cut -b 1)
-bot_old_version=$(grep "ВЕРСИЯ" /opt/etc/bot_config.py | grep -Eo "[0-9].{1,}")
-bot_new_version=$(grep "ВЕРСИЯ" /opt/etc/bot.py | grep -Eo "[0-9].{1,}")
 
 if [ "$1" = "-remove" ]; then
     echo "Начинаем удаление"
@@ -304,6 +302,9 @@ if [ "$1" = "-update" ]; then
     /opt/etc/init.d/S24v2ray start > /dev/null 2>&1
     /opt/etc/init.d/S22trojan start > /dev/null 2>&1
     /opt/etc/init.d/S35tor start > /dev/null 2>&1
+
+    bot_old_version=$(grep "ВЕРСИЯ" /opt/etc/bot_config.py | grep -Eo "[0-9].{1,}")
+    bot_new_version=$(grep "ВЕРСИЯ" /opt/etc/bot.py | grep -Eo "[0-9].{1,}")
 
     echo "Версия бота" "${bot_old_version}" "обновлена до" "${bot_new_version}."
     sleep 2
