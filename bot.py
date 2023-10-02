@@ -111,7 +111,7 @@ def bot_message(message):
                 bot.send_message(message.chat.id, service_router_reboot, reply_markup=service)
                 return
 
-            if message.text == 'DNS Override':
+            if message.text == '‼️DNS Override':
                 service = types.ReplyKeyboardMarkup(resize_keyboard=True)
                 m1 = types.KeyboardButton("✅ DNS Override ВКЛ")
                 m2 = types.KeyboardButton("❌ DNS Override ВЫКЛ")
