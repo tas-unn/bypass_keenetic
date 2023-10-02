@@ -93,7 +93,7 @@ def bot_message(message):
             global level, bypass
 
             if message.text == '⚙️ Сервис':
-                bot.send_message(message.chat.id, 'Сервисное меню!', reply_markup=service)
+                bot.send_message(message.chat.id, '⚙️ Сервисное меню!', reply_markup=service)
                 return
 
             if message.text == '♻️ Перезагрузить сервисы' or message.text == 'Перезагрузить сервисы':
