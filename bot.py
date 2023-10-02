@@ -366,7 +366,7 @@ def bot_message(message):
 
             if level == 8:
                 # значит это ключи и мосты
-                if message.text == '❔ Где брать ключи?':
+                if message.text == 'Где брать ключи❔':
                     url = "https://raw.githubusercontent.com/ziwork/bypass_keenetic/main/keys.md"
                     keys = requests.get(url).text
                     bot.send_message(message.chat.id, keys, parse_mode='Markdown', disable_web_page_preview=True)
@@ -525,7 +525,7 @@ def bot_message(message):
                 item2 = types.KeyboardButton("Tor")
                 item3 = types.KeyboardButton("Vmess")
                 item4 = types.KeyboardButton("Trojan")
-                item5 = types.KeyboardButton("❔ Где брать ключи?")
+                item5 = types.KeyboardButton("Где брать ключи❔")
                 markup.add(item1, item2)
                 markup.add(item3, item4)
                 markup.add(item5)
