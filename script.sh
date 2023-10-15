@@ -30,12 +30,21 @@ if [ "$1" = "-remove" ]; then
     # opkg remove curl mc tor tor-geoip bind-dig cron dnsmasq-full ipset iptables obfs4 shadowsocks-libev-ss-redir shadowsocks-libev-config
     opkg remove tor tor-geoip bind-dig cron dnsmasq-full ipset iptables obfs4 shadowsocks-libev-ss-redir shadowsocks-libev-config v2ray trojan
     echo "Пакеты удалены, удаляем папки, файлы и настройки"
+    ipset flush testset
     ipset flush unblocktor
     ipset flush unblocksh
     ipset flush unblockvmess
     ipset flush unblocktroj
-    ipset flush unblockvpn
-    ipset flush testset
+    #ipset flush unblockvpn
+    if ls -d /opt/etc/unblock/vpn-*.txt >/dev/null 2>&1; then
+     for vpn_file_names in /opt/etc/unblock/vpn-*; do
+     vpn_file_name=$(echo "$vpn_file_names" | awk -F '/' '{print $5}' | sed 's/.txt//')
+     # shellcheck disable=SC2116
+     unblockvpn=$(echo unblock"$vpn_file_name")
+     ipset flush "$unblockvpn"
+     done
+    fi
+
     chmod 777 /opt/root/get-pip.py || rm -Rfv /opt/root/get-pip.py
     chmod 777 /opt/etc/crontab || rm -Rfv /opt/etc/crontab
     chmod 777 /opt/etc/init.d/S22shadowsocks || rm -Rfv /opt/etc/init.d/S22shadowsocks
@@ -80,19 +89,21 @@ if [ "$1" = "-install" ]; then
     curl -O https://bootstrap.pypa.io/get-pip.py
     sleep 3
     python get-pip.py
-    pip install pyTelegramBotAPI telethon pathlib
+    pip install pyTelegramBotAPI telethon
     #pip install telethon
     #pip install pathlib
     #pip install --upgrade pip
     #pip install pytelegrambotapi
     #pip install paramiko
     echo "Установка пакетов завершена. Продолжаем установку"
-    ipset flush unblocktor
-    ipset flush unblocksh
-    ipset flush unblockvmess
-    ipset flush unblocktroj
-    ipset flush testset
-    ipset flush unblockvpn
+
+    #ipset flush unblocktor
+    #ipset flush unblocksh
+    #ipset flush unblockvmess
+    #ipset flush unblocktroj
+    #ipset flush testset
+    #ipset flush unblockvpn
+
     # есть поддержка множества hash:net или нет, если нет, то при этом вы потеряете возможность разблокировки по диапазону и CIDR
     set_type="hash:net"
     ipset create testset hash:net -exist > /dev/null 2>&1
@@ -104,35 +115,37 @@ if [ "$1" = "-install" ]; then
     echo "Переменные роутера найдены"
     # создания множеств IP-адресов unblock
     # rm -rf /opt/etc/ndm/fs.d/100-ipset.sh
-    chmod 777 /opt/etc/nmd/fs.d/100-ipset.sh || rm -rfv /opt/etc/nmd/fs.d/100-ipset.sh
+    # chmod 777 /opt/etc/nmd/fs.d/100-ipset.sh || rm -rfv /opt/etc/nmd/fs.d/100-ipset.sh
     curl -o /opt/etc/ndm/fs.d/100-ipset.sh https://raw.githubusercontent.com/${repo}/bypass_keenetic/main/100-ipset.sh
     chmod 755 /opt/etc/ndm/fs.d/100-ipset.sh || chmod +x /opt/etc/ndm/fs.d/100-ipset.sh
     sed -i "s/hash:net/${set_type}/g" /opt/etc/ndm/fs.d/100-ipset.sh
     echo "Созданы файлы под множества"
 
-    chmod 777 /opt/tmp/tor || rm -Rfv /opt/tmp/tor
-    chmod 777 /opt/etc/tor/torrc || rm -Rfv /opt/etc/tor/torrc
-    mkdir /opt/tmp/tor
+    # chmod 777 /opt/tmp/tor || rm -Rfv /opt/tmp/tor
+    # chmod 777 /opt/etc/tor/torrc || rm -Rfv /opt/etc/tor/torrc
+    mkdir -p /opt/tmp/tor
     curl -o /opt/etc/tor/torrc https://raw.githubusercontent.com/${repo}/bypass_keenetic/main/torrc
     sed -i "s/hash:net/${set_type}/g" /opt/etc/tor/torrc
     echo "Установлены настройки Tor"
 
-    chmod 777 /opt/etc/shadowsocks.json || rm -Rfv /opt/etc/shadowsocks.json
-    chmod 777 /opt/etc/init.d/S22shadowsocks
+    # chmod 777 /opt/etc/shadowsocks.json || rm -Rfv /opt/etc/shadowsocks.json
+    # chmod 777 /opt/etc/init.d/S22shadowsocks
     curl -o /opt/etc/shadowsocks.json https://raw.githubusercontent.com/${repo}/bypass_keenetic/main/shadowsocks.json
     echo "Установлены настройки Shadowsocks"
     sed -i "s/ss-local/${ssredir}/g" /opt/etc/init.d/S22shadowsocks
     chmod 0755 /opt/etc/shadowsocks.json || chmod 755 /opt/etc/init.d/S22shadowsocks || chmod +x /opt/etc/init.d/S22shadowsocks
     echo "Установлен параметр ss-redir для Shadowsocks"
 
-    chmod 777 /opt/etc/v2ray/config.json || rm -Rfv /opt/etc/v2ray/config.json
+    # chmod 777 /opt/etc/v2ray/config.json || rm -Rfv /opt/etc/v2ray/config.json
     curl -o /opt/etc/v2ray/config.json https://raw.githubusercontent.com/${repo}/bypass_keenetic/main/vmessconfig.json
 
-    chmod 777 /opt/etc/trojan/config.json || rm -Rfv /opt/etc/trojan/config.json
+    # chmod 777 /opt/etc/trojan/config.json || rm -Rfv /opt/etc/trojan/config.json
     curl -o /opt/etc/trojan/config.json https://raw.githubusercontent.com/${repo}/bypass_keenetic/main/trojanconfig.json
     chmod 755 /opt/etc/init.d/S24v2ray || chmod +x /opt/etc/init.d/S24v2ray
     sed -i 's|ARGS="-confdir /opt/etc/v2ray"|ARGS="run -c /opt/etc/v2ray/config.json"|g' /opt/etc/init.d/S24v2ray > /dev/null 2>&1
 
+    # unblock folder and files
+    mkdir -p /opt/etc/unblock
     touch /opt/etc/hosts || chmod 0755 /opt/etc/hosts
     touch /opt/etc/unblock/shadowsocks.txt || chmod 0755 /opt/etc/unblock/shadowsocks.txt
     touch /opt/etc/unblock/tor.txt || chmod 0755 /opt/etc/unblock/tor.txt
@@ -141,30 +154,35 @@ if [ "$1" = "-install" ]; then
     touch /opt/etc/unblock/vpn.txt || chmod 0755 /opt/etc/unblock/vpn.txt
     echo "Созданы файлы под сайты и ip-адреса для обхода блокировок для SS, Tor, Trojan и v2ray, VPN"
 
-    chmod 777 /opt/bin/unblock_ipset.sh || rm -rfv /opt/bin/unblock_ipset.sh
+    # unblock_ipset.sh
+    # chmod 777 /opt/bin/unblock_ipset.sh || rm -rfv /opt/bin/unblock_ipset.sh
     curl -o /opt/bin/unblock_ipset.sh https://raw.githubusercontent.com/${repo}/bypass_keenetic/main/unblock_ipset.sh
     chmod 755 /opt/bin/unblock_ipset.sh || chmod +x /opt/bin/unblock_ipset.sh
     sed -i "s/40500/${dnsovertlsport}/g" /opt/bin/unblock_ipset.sh
     echo "Установлен скрипт для заполнения множеств unblock IP-адресами заданного списка доменов"
 
-    chmod 777 /opt/bin/unblock_dnsmasq.sh || rm -rfv /opt/bin/unblock_dnsmasq.sh
-    curl -o /opt/bin/unblock_dnsmasq.sh https://raw.githubusercontent.com/${repo}/bypass_keenetic/main/unblock_dnsmasq
+    # unblock_dnsmasq.sh
+    # chmod 777 /opt/bin/unblock_dnsmasq.sh || rm -rfv /opt/bin/unblock_dnsmasq.sh
+    curl -o /opt/bin/unblock_dnsmasq.sh https://raw.githubusercontent.com/${repo}/bypass_keenetic/main/unblock.dnsmasq
     chmod 755 /opt/bin/unblock_dnsmasq.sh || chmod +x /opt/bin/unblock_dnsmasq.sh
     sed -i "s/40500/${dnsovertlsport}/g" /opt/bin/unblock_dnsmasq.sh
     /opt/bin/unblock_dnsmasq.sh
     echo "Установлен скрипт для формирования дополнительного конфигурационного файла dnsmasq из заданного списка доменов и его запуск"
 
-    chmod 777 /opt/bin/unblock_update.sh || rm -rfv /opt/bin/unblock_update.sh
+    # unblock_update.sh
+    # chmod 777 /opt/bin/unblock_update.sh || rm -rfv /opt/bin/unblock_update.sh
     curl -o /opt/bin/unblock_update.sh https://raw.githubusercontent.com/${repo}/bypass_keenetic/main/unblock_update.sh
     chmod 755 /opt/bin/unblock_update.sh || chmod +x /opt/bin/unblock_update.sh
     echo "Установлен скрипт ручного принудительного обновления системы после редактирования списка доменов"
 
-    chmod 777 /opt/etc/init.d/S99unblock || rm -Rfv /opt/etc/init.d/S99unblock
+    # s99unblock
+    # chmod 777 /opt/etc/init.d/S99unblock || rm -Rfv /opt/etc/init.d/S99unblock
     curl -o /opt/etc/init.d/S99unblock https://raw.githubusercontent.com/${repo}/bypass_keenetic/main/S99unblock
     chmod 755 /opt/etc/init.d/S99unblock || chmod +x /opt/etc/init.d/S99unblock
     echo "Установлен cкрипт автоматического заполнения множества unblock при загрузке маршрутизатора"
 
-    chmod 777 /opt/etc/ndm/netfilter.d/100-redirect.sh || rm -rfv /opt/etc/ndm/netfilter.d/100-redirect.sh
+    # 100-redirect.sh
+    # chmod 777 /opt/etc/ndm/netfilter.d/100-redirect.sh || rm -rfv /opt/etc/ndm/netfilter.d/100-redirect.sh
     curl -o /opt/etc/ndm/netfilter.d/100-redirect.sh https://raw.githubusercontent.com/${repo}/bypass_keenetic/main/100-redirect.sh
     chmod 755 /opt/etc/ndm/netfilter.d/100-redirect.sh || chmod +x /opt/etc/ndm/netfilter.d/100-redirect.sh
     sed -i "s/hash:net/${set_type}/g" /opt/etc/ndm/netfilter.d/100-redirect.sh
@@ -175,8 +193,8 @@ if [ "$1" = "-install" ]; then
     sed -i "s/10829/${localporttrojan}/g" /opt/etc/ndm/netfilter.d/100-redirect.sh
     echo "Установлено перенаправление пакетов с адресатами из unblock в: Tor, Shadowsocks, VPN, Trojan, v2ray"
 
-    chmod 777 /opt/etc/ndm/ifstatechanged.d/100-unblock-vpn.sh || rm -rfv /opt/etc/ndm/ifstatechanged.d/100-unblock-vpn.sh
-
+    # VPN script
+    # chmod 777 /opt/etc/ndm/ifstatechanged.d/100-unblock-vpn.sh || rm -rfv /opt/etc/ndm/ifstatechanged.d/100-unblock-vpn.sh
     if [ "${keen_os_short}" = "4" ]; then
       echo "VPN для KeenOS 4+";
       curl -s -o /opt/etc/ndm/ifstatechanged.d/100-unblock-vpn.sh https://raw.githubusercontent.com/${repo}/bypass_keenetic/main/100-unblock-vpn-v4.sh
@@ -191,6 +209,7 @@ if [ "$1" = "-install" ]; then
     chmod 755 /opt/etc/ndm/ifstatechanged.d/100-unblock-vpn.sh || chmod +x /opt/etc/ndm/ifstatechanged.d/100-unblock-vpn.sh
     echo "Установлен скрипт проверки подключения и остановки VPN"
 
+    # dnsmasq.conf
     #rm -rf /opt/etc/dnsmasq.conf
     chmod 777 /opt/etc/dnsmasq.conf || rm -rfv /opt/etc/dnsmasq.conf
     curl -o /opt/etc/dnsmasq.conf https://raw.githubusercontent.com/${repo}/bypass_keenetic/main/dnsmasq.conf
@@ -200,6 +219,7 @@ if [ "$1" = "-install" ]; then
     sed -i "s/40508/${dnsoverhttpsport}/g" /opt/etc/dnsmasq.conf
     echo "Установлена настройка dnsmasq и подключение дополнительного конфигурационного файла к dnsmasq"
 
+    # cron file
     #rm -rf /opt/etc/crontab
     chmod 777 /opt/etc/crontab || rm -Rfv /opt/etc/crontab
     curl -o /opt/etc/crontab https://raw.githubusercontent.com/${repo}/bypass_keenetic/main/crontab
@@ -220,10 +240,16 @@ if [ "$1" = "-install" ]; then
 fi
 
 if [ "$1" = "-reinstall" ]; then
+    curl -s -o /opt/root/script.sh https://raw.githubusercontent.com/ziwork/bypass_keenetic/main/script.sh
+    chmod 755 /opt/root/script.sh || chmod +x /opt/root/script.sh
     echo "Начинаем переустановку"
-    # opkg remove curl mc tor tor-geoip bind-dig cron dnsmasq-full ipset iptables obfs4 shadowsocks-libev-ss-redir shadowsocks-libev-config
-    opkg update
-    echo "В разработке"
+    #opkg update
+    echo "Удаляем установленные пакеты и созданные файлы"
+    /bin/sh /opt/root/script.sh -remove
+    echo "Удаление завершено"
+    echo "Выполняем установку"
+    /bin/sh /opt/root/script.sh -install
+    echo "Установка выполнена."
     exit 0
 fi
 
