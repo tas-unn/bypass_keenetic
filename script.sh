@@ -368,15 +368,30 @@ if [ "$1" = "-version" ]; then
     echo "Ваша версия KeenOS" "${keen_os_full}"
 fi
 
-if [ -n "$1" ]; then
-    echo not found "$1".
-    echo "-install - use for install all needs for work"
-    echo "-remove - use for remove all files script"
-    echo "-update - use for get update files"
-    echo "-reinstall - use for reinstall all files script"
-else
+if [ "$1" = "-help" ]; then
     echo "-install - use for install all needs for work"
     echo "-remove - use for remove all files script"
     echo "-update - use for get update files"
     echo "-reinstall - use for reinstall all files script"
 fi
+
+if [ -z "$1" ]; then
+    #echo not found "$1".
+    echo "-install - use for install all needs for work"
+    echo "-remove - use for remove all files script"
+    echo "-update - use for get update files"
+    echo "-reinstall - use for reinstall all files script"
+fi
+
+#if [ -n "$1" ]; then
+#    echo not found "$1".
+#    echo "-install - use for install all needs for work"
+#    echo "-remove - use for remove all files script"
+#    echo "-update - use for get update files"
+#    echo "-reinstall - use for reinstall all files script"
+#else
+#    echo "-install - use for install all needs for work"
+#    echo "-remove - use for remove all files script"
+#    echo "-update - use for get update files"
+#    echo "-reinstall - use for reinstall all files script"
+#fi
