@@ -1,0 +1,6 @@
+!/.env
+venv
+.idea
+__pycache__/
+.env
+bot_2.1.9.py
